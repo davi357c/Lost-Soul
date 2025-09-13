@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 28
-  productGUID: 548f93c1bc712d547a23e776b69d2ce9
+  productGUID: 3a7dfd9074375d44cbf75b139bf937cd
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -673,10 +673,10 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 2e93641a-ce73-4edf-bb77-f54f1016d83e
+  cloudProjectId: 8001e1b9-1e08-4116-88a4-725cf2e50066
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Lost Soul 1.0
+  projectName: Lost Soul 1.0 2025-09-13_18-07-28
   organizationId: davicamilocaetano2008
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
