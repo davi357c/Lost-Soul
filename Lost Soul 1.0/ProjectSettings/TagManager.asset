@@ -33,10 +33,10 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - Background4
+  - Background3
+  - Background2
+  - Background1
   m_SortingLayers:
   - name: Default
     uniqueID: 0
