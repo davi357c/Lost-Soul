@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -8,10 +9,10 @@ public class PlayerMovement : MonoBehaviour
     private bool isFacingRight = true;
 
     [Header("Pulo")]
-    public float jumpForce = 10f;
+    public float jumpForce = 14f; // aumentei a força do pulo
     private bool isGrounded;
 
-    [Header("Checagem de ch�o")]
+    [Header("Checagem de chão")]
     public Transform groundCheck;
     public float checkRadius = 0.2f;
     public LayerMask whatIsGround;
@@ -20,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator;
     private SpriteRenderer spriteRenderer;
 
+    private bool isAttacking = false;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -27,32 +30,42 @@ public class PlayerMovement : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         if (groundCheck == null)
-            Debug.LogError("GroundCheck n�o foi atribu�do no Inspector!");
+            Debug.LogError("GroundCheck não foi atribuído no Inspector!");
     }
 
     void Update()
     {
-       
+        // Movimento horizontal
         moveInput = Input.GetAxisRaw("Horizontal");
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y); // corrigido
 
+        // Flip
         if (moveInput > 0 && !isFacingRight)
             Flip();
         else if (moveInput < 0 && isFacingRight)
             Flip();
 
+        // Pulo
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce); // corrigido
         }
 
+        // Cortar pulo se soltar botão
         if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f); // corrigido
         }
 
-       
-        UpdateAnimations();
+        // Ataque
+        if (Input.GetMouseButtonDown(0) && !isAttacking)
+        {
+            StartCoroutine(AttackRoutine());
+        }
+
+        // Animações
+        animator.SetFloat("Speed", Mathf.Abs(moveInput));
+        animator.SetBool("isGrounded", isGrounded);
     }
 
     void FixedUpdate()
@@ -66,9 +79,11 @@ public class PlayerMovement : MonoBehaviour
         spriteRenderer.flipX = !spriteRenderer.flipX;
     }
 
-    void UpdateAnimations()
+    IEnumerator AttackRoutine()
     {
-        animator.SetFloat("Speed", Mathf.Abs(moveInput));
-        animator.SetBool("isGrounded", isGrounded);
+        isAttacking = true;
+        animator.SetTrigger("Attack");
+        yield return new WaitForSeconds(0.3f); // tempo da animação
+        isAttacking = false;
     }
 }
