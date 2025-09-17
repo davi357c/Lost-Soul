@@ -1,0 +1,1417 @@
+fileFormatVersion: 2
+guid: 710a4268ca80ceb49992897c682a6efe
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 341810915096729763
+    second: Gotas de chuva azuis estilizadas_0
+  - first:
+      213: 6329529201619572931
+    second: Gotas de chuva azuis estilizadas_1
+  - first:
+      213: -2051255345877031862
+    second: Gotas de chuva azuis estilizadas_2
+  - first:
+      213: -3971552495875644941
+    second: Gotas de chuva azuis estilizadas_3
+  - first:
+      213: 6411684691837579711
+    second: Gotas de chuva azuis estilizadas_4
+  - first:
+      213: -6674541931382712544
+    second: Gotas de chuva azuis estilizadas_5
+  - first:
+      213: -2132836331696652233
+    second: Gotas de chuva azuis estilizadas_6
+  - first:
+      213: 7956211188836480760
+    second: Gotas de chuva azuis estilizadas_7
+  - first:
+      213: -3863069947944166032
+    second: Gotas de chuva azuis estilizadas_8
+  - first:
+      213: -2985186554103895467
+    second: Gotas de chuva azuis estilizadas_9
+  - first:
+      213: -823606293006770539
+    second: Gotas de chuva azuis estilizadas_10
+  - first:
+      213: 1086958409927672637
+    second: Gotas de chuva azuis estilizadas_11
+  - first:
+      213: -5288230616165851834
+    second: Gotas de chuva azuis estilizadas_12
+  - first:
+      213: -1035489334381939658
+    second: Gotas de chuva azuis estilizadas_13
+  - first:
+      213: 5133148711878368763
+    second: Gotas de chuva azuis estilizadas_14
+  - first:
+      213: -7935980242041478960
+    second: Gotas de chuva azuis estilizadas_15
+  - first:
+      213: 1352736151176040784
+    second: Gotas de chuva azuis estilizadas_16
+  - first:
+      213: -8212278787262084878
+    second: Gotas de chuva azuis estilizadas_17
+  - first:
+      213: 299375879399363435
+    second: Gotas de chuva azuis estilizadas_18
+  - first:
+      213: -3609058738525794293
+    second: Gotas de chuva azuis estilizadas_19
+  - first:
+      213: 1330725407990927999
+    second: Gotas de chuva azuis estilizadas_20
+  - first:
+      213: -6376697976613366611
+    second: Gotas de chuva azuis estilizadas_21
+  - first:
+      213: 3442481526585484085
+    second: Gotas de chuva azuis estilizadas_22
+  - first:
+      213: 3051611559480797718
+    second: Gotas de chuva azuis estilizadas_23
+  - first:
+      213: 4559815098502888902
+    second: Gotas de chuva azuis estilizadas_24
+  - first:
+      213: 1185342863171772100
+    second: Gotas de chuva azuis estilizadas_25
+  - first:
+      213: 3915660551321421402
+    second: Gotas de chuva azuis estilizadas_26
+  - first:
+      213: 1111176828965473296
+    second: Gotas de chuva azuis estilizadas_27
+  - first:
+      213: -4940616975320946122
+    second: Gotas de chuva azuis estilizadas_28
+  - first:
+      213: 8006390949304623503
+    second: Gotas de chuva azuis estilizadas_29
+  - first:
+      213: 2544781992739905630
+    second: Gotas de chuva azuis estilizadas_30
+  - first:
+      213: 456432038273363105
+    second: Gotas de chuva azuis estilizadas_31
+  - first:
+      213: 7530193322236700897
+    second: Gotas de chuva azuis estilizadas_32
+  - first:
+      213: 1570402604411770165
+    second: Gotas de chuva azuis estilizadas_33
+  - first:
+      213: -6266003758656395206
+    second: Gotas de chuva azuis estilizadas_34
+  - first:
+      213: -7243680006012089652
+    second: Gotas de chuva azuis estilizadas_35
+  - first:
+      213: 3773426064770491465
+    second: Gotas de chuva azuis estilizadas_36
+  - first:
+      213: -6953955825288396671
+    second: Gotas de chuva azuis estilizadas_37
+  - first:
+      213: 1150971971782445104
+    second: Gotas de chuva azuis estilizadas_38
+  - first:
+      213: -3977885151191144453
+    second: Gotas de chuva azuis estilizadas_39
+  - first:
+      213: -7811456033150859428
+    second: Gotas de chuva azuis estilizadas_40
+  - first:
+      213: 3343522994793578467
+    second: Gotas de chuva azuis estilizadas_41
+  - first:
+      213: -434397292994158295
+    second: Gotas de chuva azuis estilizadas_42
+  - first:
+      213: 5428439073357755632
+    second: Gotas de chuva azuis estilizadas_43
+  - first:
+      213: 4495581356538497042
+    second: Gotas de chuva azuis estilizadas_44
+  - first:
+      213: 6537133801975835854
+    second: Gotas de chuva azuis estilizadas_45
+  - first:
+      213: -3181307896947197195
+    second: Gotas de chuva azuis estilizadas_46
+  - first:
+      213: -809431122732581010
+    second: Gotas de chuva azuis estilizadas_47
+  - first:
+      213: -7602181832485644754
+    second: Gotas de chuva azuis estilizadas_48
+  - first:
+      213: -4376082976960178267
+    second: Gotas de chuva azuis estilizadas_49
+  - first:
+      213: 8961583403235520424
+    second: Gotas de chuva azuis estilizadas_50
+  - first:
+      213: -1225721607704827466
+    second: Gotas de chuva azuis estilizadas_51
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_0
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 738
+        width: 54
+        height: 177
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a811be573b5eb400800000000000000
+      internalID: 341810915096729763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_1
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 882
+        width: 139
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c81ff9064107d750800000000000000
+      internalID: 6329529201619572931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_2
+      rect:
+        serializedVersion: 2
+        x: 287
+        y: 839
+        width: 56
+        height: 175
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a44e065812a7883e0800000000000000
+      internalID: -2051255345877031862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_3
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 910
+        width: 37
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f124841c0632e8c0800000000000000
+      internalID: -3971552495875644941
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_4
+      rect:
+        serializedVersion: 2
+        x: 478
+        y: 881
+        width: 91
+        height: 143
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb1f9c4b141eaf850800000000000000
+      internalID: 6411684691837579711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_5
+      rect:
+        serializedVersion: 2
+        x: 615
+        y: 769
+        width: 63
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 027db750a734f53a0800000000000000
+      internalID: -6674541931382712544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_6
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 809
+        width: 81
+        height: 210
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7308c2518a4a662e0800000000000000
+      internalID: -2132836331696652233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_7
+      rect:
+        serializedVersion: 2
+        x: 918
+        y: 659
+        width: 82
+        height: 365
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f636942ce32a6e60800000000000000
+      internalID: 7956211188836480760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_8
+      rect:
+        serializedVersion: 2
+        x: 1035
+        y: 789
+        width: 62
+        height: 234
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07d1d4a895e936ac0800000000000000
+      internalID: -3863069947944166032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_9
+      rect:
+        serializedVersion: 2
+        x: 1118
+        y: 801
+        width: 99
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55a6d5e25ac7296d0800000000000000
+      internalID: -2985186554103895467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_10
+      rect:
+        serializedVersion: 2
+        x: 1262
+        y: 901
+        width: 102
+        height: 116
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59e1e8ea076f194f0800000000000000
+      internalID: -823606293006770539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_11
+      rect:
+        serializedVersion: 2
+        x: 1409
+        y: 786
+        width: 96
+        height: 219
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d33cc553ae6a51f00800000000000000
+      internalID: 1086958409927672637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_12
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 481
+        width: 87
+        height: 259
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64dd619d54e6c96b0800000000000000
+      internalID: -5288230616165851834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_13
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 707
+        width: 56
+        height: 174
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6347577cfe331a1f0800000000000000
+      internalID: -1035489334381939658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_14
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 639
+        width: 63
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfd93ce8e8b9c3740800000000000000
+      internalID: 5133148711878368763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_15
+      rect:
+        serializedVersion: 2
+        x: 439
+        y: 513
+        width: 58
+        height: 363
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d06998340cbdd190800000000000000
+      internalID: -7935980242041478960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_16
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 599
+        width: 80
+        height: 202
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0515da5cc52e5c210800000000000000
+      internalID: 1352736151176040784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_17
+      rect:
+        serializedVersion: 2
+        x: 698
+        y: 685
+        width: 52
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f884c814ff180e80800000000000000
+      internalID: -8212278787262084878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_18
+      rect:
+        serializedVersion: 2
+        x: 808
+        y: 537
+        width: 56
+        height: 259
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b635be1b6c8972400800000000000000
+      internalID: 299375879399363435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_19
+      rect:
+        serializedVersion: 2
+        x: 902
+        y: 481
+        width: 67
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0096ace23c0aedc0800000000000000
+      internalID: -3609058738525794293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_20
+      rect:
+        serializedVersion: 2
+        x: 997
+        y: 443
+        width: 146
+        height: 339
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f72d2e445bfa77210800000000000000
+      internalID: 1330725407990927999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_21
+      rect:
+        serializedVersion: 2
+        x: 1189
+        y: 599
+        width: 84
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da41208b9fa6187a0800000000000000
+      internalID: -6376697976613366611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_22
+      rect:
+        serializedVersion: 2
+        x: 1294
+        y: 583
+        width: 67
+        height: 226
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 533e8f995b626cf20800000000000000
+      internalID: 3442481526585484085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_23
+      rect:
+        serializedVersion: 2
+        x: 1447
+        y: 574
+        width: 66
+        height: 206
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61a24539b80895a20800000000000000
+      internalID: 3051611559480797718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_24
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 443
+        width: 59
+        height: 194
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6cd3ab35ca7b74f30800000000000000
+      internalID: 4559815098502888902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_25
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 393
+        width: 70
+        height: 236
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ced568cd0f237010800000000000000
+      internalID: 1185342863171772100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_26
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 249
+        width: 61
+        height: 259
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a56068e7688375630800000000000000
+      internalID: 3915660551321421402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_27
+      rect:
+        serializedVersion: 2
+        x: 590
+        y: 481
+        width: 70
+        height: 189
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 01cc12d4071bb6f00800000000000000
+      internalID: 1111176828965473296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_28
+      rect:
+        serializedVersion: 2
+        x: 686
+        y: 389
+        width: 73
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63aeab699076f6bb0800000000000000
+      internalID: -4940616975320946122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_29
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 321
+        width: 74
+        height: 199
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f816432162a6c1f60800000000000000
+      internalID: 8006390949304623503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_30
+      rect:
+        serializedVersion: 2
+        x: 1043
+        y: 323
+        width: 102
+        height: 286
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e50a2145db1e05320800000000000000
+      internalID: 2544781992739905630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_31
+      rect:
+        serializedVersion: 2
+        x: 1189
+        y: 319
+        width: 84
+        height: 269
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ac24614582955600800000000000000
+      internalID: 456432038273363105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_32
+      rect:
+        serializedVersion: 2
+        x: 1331
+        y: 392
+        width: 64
+        height: 211
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e8efed0eee908860800000000000000
+      internalID: 7530193322236700897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_33
+      rect:
+        serializedVersion: 2
+        x: 1439
+        y: 308
+        width: 66
+        height: 224
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 535df4e29d03bc510800000000000000
+      internalID: 1570402604411770165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_34
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 287
+        width: 117
+        height: 186
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a38e50cb7ceaa09a0800000000000000
+      internalID: -6266003758656395206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_35
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 229
+        width: 63
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccacc07c967497b90800000000000000
+      internalID: -7243680006012089652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_36
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 113
+        width: 59
+        height: 182
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94468d07307ed5430800000000000000
+      internalID: 3773426064770491465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_37
+      rect:
+        serializedVersion: 2
+        x: 539
+        y: 217
+        width: 118
+        height: 215
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1804de145069e7f90800000000000000
+      internalID: -6953955825288396671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_38
+      rect:
+        serializedVersion: 2
+        x: 635
+        y: 104
+        width: 101
+        height: 207
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 038068409e219ff00800000000000000
+      internalID: 1150971971782445104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_39
+      rect:
+        serializedVersion: 2
+        x: 793
+        y: 9
+        width: 88
+        height: 299
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf763fdd786bbc8c0800000000000000
+      internalID: -3977885151191144453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_40
+      rect:
+        serializedVersion: 2
+        x: 943
+        y: 1
+        width: 65
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c57067def12289390800000000000000
+      internalID: -7811456033150859428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_41
+      rect:
+        serializedVersion: 2
+        x: 1017
+        y: 43
+        width: 104
+        height: 267
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ef7503f274966e20800000000000000
+      internalID: 3343522994793578467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_42
+      rect:
+        serializedVersion: 2
+        x: 1189
+        y: 124
+        width: 100
+        height: 193
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92121bba6f5b8f9f0800000000000000
+      internalID: -434397292994158295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_43
+      rect:
+        serializedVersion: 2
+        x: 1323
+        y: 88
+        width: 62
+        height: 207
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f4f65c7390b55b40800000000000000
+      internalID: 5428439073357755632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_44
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 16
+        width: 150
+        height: 268
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2188857dc63836e30800000000000000
+      internalID: 4495581356538497042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_45
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 3
+        width: 49
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ecce7f3ce8098ba50800000000000000
+      internalID: 6537133801975835854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_46
+      rect:
+        serializedVersion: 2
+        x: 431
+        y: 1
+        width: 88
+        height: 243
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5fa3151b259b9d3d0800000000000000
+      internalID: -3181307896947197195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_47
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 0
+        width: 66
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6ff063bea254c4f0800000000000000
+      internalID: -809431122732581010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_48
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 0
+        width: 96
+        height: 132
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e26d3c4c6ef9f7690800000000000000
+      internalID: -7602181832485644754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_49
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 7
+        width: 56
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a797aac7b70543c0800000000000000
+      internalID: -4376082976960178267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_50
+      rect:
+        serializedVersion: 2
+        x: 1089
+        y: 0
+        width: 184
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8afa3eeef90fd5c70800000000000000
+      internalID: 8961583403235520424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gotas de chuva azuis estilizadas_51
+      rect:
+        serializedVersion: 2
+        x: 1436
+        y: 9
+        width: 77
+        height: 248
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b9ab3321bc5dfee0800000000000000
+      internalID: -1225721607704827466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable: {}
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

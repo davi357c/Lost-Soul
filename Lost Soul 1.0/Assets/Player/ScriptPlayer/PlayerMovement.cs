@@ -83,7 +83,9 @@ public class PlayerMovement : MonoBehaviour
     {
         isAttacking = true;
         animator.SetTrigger("Attack");
+
         yield return new WaitForSeconds(0.3f); // tempo da animação
+
         isAttacking = false;
     }
 }
