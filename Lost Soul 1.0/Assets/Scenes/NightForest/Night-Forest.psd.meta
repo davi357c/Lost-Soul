@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Night-Forest_0: 7104228882438353027
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

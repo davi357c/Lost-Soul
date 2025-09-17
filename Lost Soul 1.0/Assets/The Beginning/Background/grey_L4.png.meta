@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: d3716c1d5985d3142a480bfea0d9b184
+guid: 2114a2dc07a9ee84381ecf49a0ca6472
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6470460504253458178
-    second: 3_0
+      213: 4664835362969507868
+    second: grey_L4_0
   - first:
-      213: 6623151957235123224
-    second: 3_1
+      213: 5135162896986267827
+    second: grey_L4_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -103,13 +103,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 3_0
+      name: grey_L4_0
       rect:
         serializedVersion: 2
-        x: 27
-        y: 0
-        width: 299
-        height: 360
+        x: 0
+        y: 170
+        width: 640
+        height: 80
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -118,20 +118,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ef817ce047e4436a0800000000000000
-      internalID: -6470460504253458178
+      spriteID: c185a791c03dcb040800000000000000
+      internalID: 4664835362969507868
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 3_1
+      name: grey_L4_1
       rect:
         serializedVersion: 2
-        x: 341
+        x: 0
         y: 0
-        width: 279
-        height: 360
+        width: 640
+        height: 67
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,8 +140,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 814ce683d992aeb50800000000000000
-      internalID: 6623151957235123224
+      spriteID: 3b0e1a29273c34740800000000000000
+      internalID: 5135162896986267827
       vertices: []
       indices: 
       edges: []
@@ -159,9 +159,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      3_0: -6470460504253458178
-      3_1: 6623151957235123224
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
