@@ -4,14 +4,16 @@ public class Spike : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Verifica se quem tocou é o player
         if (collision.CompareTag("Player"))
         {
-            PlayerMovement player = collision.GetComponent<PlayerMovement>();
-            if (player != null)
-            {
-                player.Respawn();
-            }
+            PlayerHealth health = collision.GetComponent<PlayerHealth>();
+            PlayerMovement movement = collision.GetComponent<PlayerMovement>();
+
+            if (health != null)
+                health.TakeDamage();
+
+            if (movement != null)
+                movement.Respawn(); // só o espinho faz o respawn
         }
     }
 }
