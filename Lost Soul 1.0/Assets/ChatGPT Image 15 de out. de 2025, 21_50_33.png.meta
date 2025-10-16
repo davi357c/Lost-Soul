@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2f2e5fe0de76c5241b0c3c1c681f1961
+guid: 249bf31bf051b544d877bef25af6b385
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2546757870057634713
-    second: Warrior_Idle_1_0
+      213: 9085168016835078455
+    second: ChatGPT Image 15 de out. de 2025, 21_50_33_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Warrior_Idle_1_0
+      name: ChatGPT Image 15 de out. de 2025, 21_50_33_0
       rect:
         serializedVersion: 2
-        x: 17
+        x: 3
         y: 0
-        width: 20
-        height: 35
+        width: 1019
+        height: 1019
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 99b37bd1ac6e75320800000000000000
-      internalID: 2546757870057634713
+      spriteID: 739e1301d20051e70800000000000000
+      internalID: 9085168016835078455
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Warrior_Idle_1_0: 2546757870057634713
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

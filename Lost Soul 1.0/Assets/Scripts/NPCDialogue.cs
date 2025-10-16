@@ -3,7 +3,7 @@ using UnityEngine;
 public class NPCInteraction : MonoBehaviour
 {
     public float interactionRange = 3f;
-    public string[] dialogueLines;
+    public DialogueLine[] dialogueLines;
 
     private Transform player;
     private DialogueManager dialogueManager;
@@ -20,7 +20,6 @@ public class NPCInteraction : MonoBehaviour
 
         if (distance <= interactionRange && Input.GetKeyDown(KeyCode.E))
         {
-            // Só inicia diálogo se não estiver ativo
             if (dialogueManager != null && !dialogueManager.IsDialogueActive())
             {
                 dialogueManager.StartDialogue(dialogueLines);

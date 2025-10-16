@@ -23,11 +23,11 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isAttacking = false;
 
-    // Última posição segura
     private Vector2 lastSafePosition;
 
-    [Header("Respawn Offset")]
-    public Vector2 respawnOffset = new Vector2(0, 0.5f); // sobe 0.5 unidades na hora do respawn
+    [Header("Respawn")]
+    public Vector2 respawnOffset = new Vector2(0, 0.5f);
+    public float edgePadding = 0.3f;
 
     void Start()
     {
@@ -46,24 +46,20 @@ public class PlayerMovement : MonoBehaviour
         moveInput = Input.GetAxisRaw("Horizontal");
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 
-        // Flip do sprite
         if (moveInput > 0 && !isFacingRight)
             Flip();
         else if (moveInput < 0 && isFacingRight)
             Flip();
 
-        // Pulo
         if (Input.GetButtonDown("Jump") && isGrounded)
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
 
         if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0)
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
 
-        // Ataque
         if (Input.GetMouseButtonDown(0) && !isAttacking)
             StartCoroutine(AttackRoutine());
 
-        // Animações
         animator.SetFloat("Speed", Mathf.Abs(moveInput));
         animator.SetBool("isGrounded", isGrounded);
     }
@@ -72,7 +68,6 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
 
-        // Atualiza posição segura só quando no chão
         if (isGrounded)
             lastSafePosition = transform.position;
     }
@@ -91,22 +86,21 @@ public class PlayerMovement : MonoBehaviour
         isAttacking = false;
     }
 
-    // Chamado pelos espinhos
+    // Respawn seguro sem borda
     public void Respawn()
     {
         Vector2 spawnPos = lastSafePosition;
+        spawnPos.y += 0.5f; // mantém o offset original para não nascer dentro do chão
 
-        // Ajusta X para não nascer colado na borda
-        float offsetX = 1f; // 0.5 unidades dentro da plataforma
-
-        // Se o player estava à direita do centro do lastSafePosition, respawna para a esquerda
-        if (transform.position.x > lastSafePosition.x)
-            spawnPos.x -= offsetX;
-        else
-            spawnPos.x += offsetX;
-
-        // Sobe um pouco para não nascer dentro do chão
-        spawnPos.y += 0.5f;
+        // Raycast para baixo só para pegar a plataforma e seus limites
+        RaycastHit2D hit = Physics2D.Raycast(spawnPos, Vector2.down, 5f, whatIsGround);
+        if (hit.collider != null)
+        {
+            // ajusta horizontal para ficar dentro da plataforma
+            float leftEdge = hit.collider.bounds.min.x + edgePadding;
+            float rightEdge = hit.collider.bounds.max.x - edgePadding;
+            spawnPos.x = Mathf.Clamp(lastSafePosition.x, leftEdge, rightEdge);
+        }
 
         transform.position = spawnPos;
         rb.linearVelocity = Vector2.zero;

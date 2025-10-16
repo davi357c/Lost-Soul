@@ -2,29 +2,50 @@ using UnityEngine;
 
 public class ChestScriptOpen : MonoBehaviour
 {
-    public float interactDistance = 2f;  // distância máxima para interagir
-    public KeyCode interactKey = KeyCode.E;  // tecla para interagir
+    public float interactDistance = 2f;
+    public KeyCode interactKey = KeyCode.E;
 
     private Animator animator;
     private Transform player;
     private bool isOpen = false;
 
+    [Header("Moedas")]
+    public GameObject coinPrefab;
+    public int coinsToSpawn = 10;
+    public float spawnRadius = 0.5f;
+    public Vector2 forceX = new Vector2(-2f, 2f);
+    public Vector2 forceY = new Vector2(4f, 7f);
+
     void Start()
     {
         animator = GetComponent<Animator>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;  // Assumindo que seu jogador tem a tag "Player"
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     void Update()
     {
         float distance = Vector3.Distance(player.position, transform.position);
 
-        if (distance <= interactDistance)
+        if (distance <= interactDistance && Input.GetKeyDown(interactKey) && !isOpen)
         {
-            if (Input.GetKeyDown(interactKey) && !isOpen)
+            animator.SetTrigger("Open");
+            isOpen = true;
+            SpawnCoins();
+        }
+    }
+
+    void SpawnCoins()
+    {
+        for (int i = 0; i < coinsToSpawn; i++)
+        {
+            Vector2 spawnPos = (Vector2)transform.position + Random.insideUnitCircle * spawnRadius;
+            GameObject coin = Instantiate(coinPrefab, spawnPos, Quaternion.identity);
+
+            Rigidbody2D rb = coin.GetComponent<Rigidbody2D>();
+            if (rb != null)
             {
-                animator.SetTrigger("Open");  // ativa o trigger para abrir
-                isOpen = true;
+                Vector2 force = new Vector2(Random.Range(forceX.x, forceX.y), Random.Range(forceY.x, forceY.y));
+                rb.AddForce(force, ForceMode2D.Impulse);
             }
         }
     }

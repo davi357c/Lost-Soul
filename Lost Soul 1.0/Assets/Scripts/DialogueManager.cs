@@ -1,76 +1,110 @@
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using TMPro;
+using System.Collections;
 
 public class DialogueManager : MonoBehaviour
 {
-    public GameObject dialoguePanel;
     public TextMeshProUGUI dialogueText;
-    public float typingSpeed = 0.05f;
+    public TextMeshProUGUI speakerNameText;
+    public GameObject dialogueBox;
 
-    private string[] sentences;
-    private int index;
+    private DialogueLine[] currentLines;
+    private int currentIndex = 0;
+    private bool isActive = false;
     private bool isTyping = false;
-    private bool dialogueActive = false;
+    private Coroutine typingCoroutine;
+
+    public AudioClip voiceFemale;
+    public AudioClip voiceMale;
+    private AudioSource audioSource;
+
+
+    public float typingSpeed = 0.03f;
+
+    public void StartDialogue(DialogueLine[] lines)
+    {
+        currentLines = lines;
+        currentIndex = 0;
+        isActive = true;
+        dialogueBox.SetActive(true);
+        ShowCurrentLine();
+    }
+
+    void ShowCurrentLine()
+    {
+        if (currentIndex < currentLines.Length)
+        {
+            speakerNameText.text = currentLines[currentIndex].speakerName;
+
+            if (typingCoroutine != null)
+                StopCoroutine(typingCoroutine);
+
+            typingCoroutine = StartCoroutine(TypeText(currentLines[currentIndex].text));
+        }
+        else
+        {
+            EndDialogue();
+        }
+    }
+
+    IEnumerator TypeText(string line)
+    {
+        isTyping = true;
+        dialogueText.text = "";
+
+        AudioClip currentVoice = null;
+
+        // Escolhe a voz com base no personagem
+        string speaker = currentLines[currentIndex].speakerName.ToLower();
+        if (speaker.Contains("guerreira"))
+            currentVoice = voiceFemale;
+        else if (speaker.Contains("alma"))
+            currentVoice = voiceMale;
+
+        foreach (char c in line)
+        {
+            dialogueText.text += c;
+
+            if (currentVoice != null && !char.IsWhiteSpace(c))
+                audioSource.PlayOneShot(currentVoice);
+
+            yield return new WaitForSeconds(typingSpeed);
+        }
+
+        isTyping = false;
+    }
+
 
     void Update()
     {
-        if (!dialogueActive)
-            return;
-
-        if (Input.GetMouseButtonDown(0)) 
+        if (isActive && Input.GetMouseButtonDown(0)) // Botão esquerdo do mouse
         {
             if (isTyping)
             {
-                StopAllCoroutines();
-                dialogueText.text = sentences[index];
+                // Completa instantaneamente
+                if (typingCoroutine != null)
+                    StopCoroutine(typingCoroutine);
+
+                dialogueText.text = currentLines[currentIndex].text;
                 isTyping = false;
             }
             else
             {
-                NextSentence();
+                // Avança para a próxima linha
+                currentIndex++;
+                ShowCurrentLine();
             }
         }
     }
 
-    public void StartDialogue(string[] newSentences)
+    public void EndDialogue()
     {
-        sentences = newSentences;
-        index = 0;
-        dialoguePanel.SetActive(true);
-        dialogueActive = true;
-        StartCoroutine(TypeSentence());
+        isActive = false;
+        dialogueBox.SetActive(false);
     }
 
-    IEnumerator TypeSentence()
-    {
-        isTyping = true;
-        dialogueText.text = "";
-        foreach (char letter in sentences[index].ToCharArray())
-        {
-            dialogueText.text += letter;
-            yield return new WaitForSeconds(typingSpeed);
-        }
-        isTyping = false;
-    }
-
-    public void NextSentence()
-    {
-        index++;
-        if (index < sentences.Length)
-        {
-            StartCoroutine(TypeSentence());
-        }
-        else
-        {
-            dialoguePanel.SetActive(false);
-            dialogueActive = false;
-        }
-    }
     public bool IsDialogueActive()
     {
-        return dialogueActive;
+        return isActive;
     }
-
 }
