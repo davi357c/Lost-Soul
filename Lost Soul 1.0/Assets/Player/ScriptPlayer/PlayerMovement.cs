@@ -22,12 +22,19 @@ public class PlayerMovement : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     private bool isAttacking = false;
+    private bool isLookingDown = false;
+    private float holdTimeS = 0f;
+    private float requiredHoldTime = 3f;
 
     private Vector2 lastSafePosition;
 
     [Header("Respawn")]
     public Vector2 respawnOffset = new Vector2(0, 0.5f);
     public float edgePadding = 0.3f;
+
+    [Header("Ataque")]
+    public float downAttackRange = 0.5f; // alcance do ataque para baixo
+    public LayerMask enemyLayer;         // camada dos inimigos
 
     void Start()
     {
@@ -57,11 +64,22 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0)
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
 
+        // Ataque normal, para baixo (só se não estiver no chão) ou para cima
         if (Input.GetMouseButtonDown(0) && !isAttacking)
-            StartCoroutine(AttackRoutine());
+        {
+            if (Input.GetKey(KeyCode.S) && !isGrounded) // ataque para baixo só no ar
+                StartCoroutine(DownAttackRoutine());
+            else if (Input.GetKey(KeyCode.W)) // ataque para cima
+                StartCoroutine(UpAttackRoutine());
+            else // ataque normal
+                StartCoroutine(AttackRoutine());
+        }
+
+        HandleLookDown();
 
         animator.SetFloat("Speed", Mathf.Abs(moveInput));
         animator.SetBool("isGrounded", isGrounded);
+        animator.SetBool("lookDown", isLookingDown);
     }
 
     void FixedUpdate()
@@ -86,17 +104,94 @@ public class PlayerMovement : MonoBehaviour
         isAttacking = false;
     }
 
-    // Respawn seguro sem borda
+    // Ataque para baixo
+    IEnumerator DownAttackRoutine()
+    {
+        isAttacking = true;
+        animator.SetTrigger("DownAttack");
+        yield return new WaitForSeconds(0.3f);
+        isAttacking = false;
+    }
+
+    // Animation Event: chamada no frame do ataque para baixo
+    public void CheckDownAttackHit()
+    {
+        Collider2D hit = Physics2D.OverlapCircle(transform.position + Vector3.down * 0.5f, downAttackRange, enemyLayer);
+        if (hit != null)
+        {
+            // Impulso para cima só se acertar inimigo
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * 0.7f);
+
+            // Aplica dano no inimigo
+            // hit.GetComponent<Enemy>().TakeDamage(1);
+        }
+    }
+
+    // Ataque para cima
+    IEnumerator UpAttackRoutine()
+    {
+        isAttacking = true;
+        animator.SetTrigger("UpAttack");
+        yield return new WaitForSeconds(0.3f);
+        isAttacking = false;
+    }
+
+    // Animation Event: chamada no frame do ataque para cima
+    public void CheckUpAttackHit()
+    {
+        Collider2D hit = Physics2D.OverlapCircle(transform.position + Vector3.up * 0.5f, downAttackRange, enemyLayer);
+        if (hit != null)
+        {
+            // Aplica dano no inimigo
+            // hit.GetComponent<Enemy>().TakeDamage(1);
+        }
+    }
+
+    void HandleLookDown()
+    {
+        bool canLookDown = isGrounded && moveInput == 0 && !isAttacking && Mathf.Abs(rb.linearVelocity.y) < 0.01f;
+
+        if (Input.GetKey(KeyCode.S) && canLookDown)
+        {
+            holdTimeS += Time.deltaTime;
+
+            if (holdTimeS >= requiredHoldTime)
+            {
+                if (!isLookingDown)
+                {
+                    isLookingDown = true;
+                    animator.SetBool("lookDown", true);
+
+                    CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
+                    if (cam != null)
+                        cam.LookDown(true);
+                }
+            }
+        }
+        else
+        {
+            holdTimeS = 0f;
+
+            if (isLookingDown)
+            {
+                isLookingDown = false;
+                animator.SetBool("lookDown", false);
+
+                CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
+                if (cam != null)
+                    cam.LookDown(false);
+            }
+        }
+    }
+
     public void Respawn()
     {
         Vector2 spawnPos = lastSafePosition;
-        spawnPos.y += 0.5f; // mantém o offset original para não nascer dentro do chão
+        spawnPos.y += 0.5f;
 
-        // Raycast para baixo só para pegar a plataforma e seus limites
         RaycastHit2D hit = Physics2D.Raycast(spawnPos, Vector2.down, 5f, whatIsGround);
         if (hit.collider != null)
         {
-            // ajusta horizontal para ficar dentro da plataforma
             float leftEdge = hit.collider.bounds.min.x + edgePadding;
             float rightEdge = hit.collider.bounds.max.x - edgePadding;
             spawnPos.x = Mathf.Clamp(lastSafePosition.x, leftEdge, rightEdge);
@@ -105,5 +200,4 @@ public class PlayerMovement : MonoBehaviour
         transform.position = spawnPos;
         rb.linearVelocity = Vector2.zero;
     }
-
 }

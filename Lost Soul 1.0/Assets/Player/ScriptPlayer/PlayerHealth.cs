@@ -1,14 +1,11 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [Header("Configurações de Vida")]
     public int maxLives = 5;
     public int currentLives;
 
-    [Header("UI dos Corações")]
-    public Image[] hearts; // arraste as 5 imagens no inspector
+    public Animator[] hearts; // Arraste os animators dos corações
 
     void Start()
     {
@@ -22,20 +19,19 @@ public class PlayerHealth : MonoBehaviour
 
         currentLives--;
         UpdateHeartsUI();
-
-        if (currentLives <= 0)
-        {
-            // Player morreu — pode colocar algo tipo "Game Over"
-            Debug.Log("Player morreu!");
-        }
     }
 
     void UpdateHeartsUI()
     {
         for (int i = 0; i < hearts.Length; i++)
         {
-            // mostra apenas o número atual de corações
-            hearts[i].enabled = i < currentLives;
+            bool isAlive = i < currentLives;
+
+            // Ativa/desativa o coração
+            hearts[i].gameObject.SetActive(isAlive);
+
+            // (opcional) se quiser manter o Animator ativo e só parar a animação:
+            // hearts[i].SetBool("isAlive", isAlive);
         }
     }
 }
