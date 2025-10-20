@@ -2,21 +2,20 @@ using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour
 {
-    public GameObject playerPrefab;      // Arraste o prefab do player aqui
-    public Transform cameraTargetPoint;  // Um Empty que a câmera já está seguindo
+    public GameObject playerPrefab;
+    public Transform cameraTargetPoint;
 
     void Start()
     {
-        // Instancia o player no spawn
-        GameObject player = Instantiate(playerPrefab, transform.position, Quaternion.identity);
-
-        // Move o placeholder da câmera para o player
-        if (cameraTargetPoint != null)
+        if (GameObject.FindWithTag("Player") == null)
         {
-            cameraTargetPoint.position = player.transform.position;
+            GameObject player = Instantiate(playerPrefab, transform.position, Quaternion.identity);
 
-            // Faz o placeholder seguir o player
-            cameraTargetPoint.parent = player.transform;
+            if (cameraTargetPoint != null)
+            {
+                cameraTargetPoint.position = player.transform.position;
+                cameraTargetPoint.parent = player.transform;
+            }
         }
     }
 }
