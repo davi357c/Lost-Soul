@@ -8,7 +8,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Ground
@@ -32,7 +32,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - LightPad
   - Background4
   - Background3
   - Background2
