@@ -6,8 +6,8 @@ using UnityEngine.Rendering.Universal;   // Light2D (URP)
 public class RandomDisappearHierarchy : MonoBehaviour
 {
     [Header("Intervalo (s)")]
-    [SerializeField] float minInterval = 0.5f;
-    [SerializeField] float maxInterval = 3f;
+    [SerializeField] float minInterval = 2f;
+    [SerializeField] float maxInterval = 8f;
 
     Renderer[] renderers;
     Collider[] colliders3D;
