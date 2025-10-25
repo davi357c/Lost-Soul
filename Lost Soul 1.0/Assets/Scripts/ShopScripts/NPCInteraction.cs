@@ -1,34 +1,47 @@
 using UnityEngine;
 
-
-public class NPCInteraction : MonoBehaviour
+public class NpcInteraction : MonoBehaviour
 {
-    public KeyCode interactKey = KeyCode.E;
-    public float interactionRange = 2f;
-    public Transform player;
-    public bool playerNearby = false;
+    public ShopManager shopManager;
+    private bool playerNearby;
+    private float lastInteractTime;
+    private float interactCooldown = 0.3f; // tempo mínimo entre apertos
 
-
-    void Update()
+    private void Update()
     {
-        if (player == null) return;
-        float d = Vector3.Distance(player.position, transform.position);
-        playerNearby = d <= interactionRange;
-
-
-        if (playerNearby && Input.GetKeyDown(interactKey))
+        if (playerNearby && Input.GetKeyDown(KeyCode.E))
         {
-            if (ShopManager.Instance != null)
+            Debug.Log("Tentando abrir loja. ShopManager: " + shopManager);
+            Debug.Log("Painel: " + (shopManager != null ? shopManager.shopPanel : null));
+
+            if (shopManager == null || shopManager.shopPanel == null)
             {
-                ShopManager.Instance.OpenShop();
+                Debug.LogWarning("ShopManager ou ShopPanel não atribuído!");
+                return;
             }
+
+            if (shopManager.shopPanel.activeSelf)
+                shopManager.CloseShop();
+            else
+                shopManager.OpenShop();
         }
     }
 
 
-    private void OnDrawGizmosSelected()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, interactionRange);
+        if (other.CompareTag("Player"))
+            playerNearby = true;
     }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerNearby = false;
+            if (shopManager != null && shopManager.shopPanel != null)
+                shopManager.CloseShop();
+        }
+    }
+    
 }

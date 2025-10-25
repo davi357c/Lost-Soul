@@ -15,7 +15,7 @@ public class CoinManager : MonoBehaviour
 
     private void Awake()
     {
-        // Evita duplicatas
+        // Evita duplicatas e mantém o objeto entre cenas
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -67,7 +67,6 @@ public class CoinManager : MonoBehaviour
         fadeCoroutine = StartCoroutine(FadeText());
     }
 
-
     private IEnumerator FadeText()
     {
         if (coinText == null) yield break;
@@ -102,7 +101,6 @@ public class CoinManager : MonoBehaviour
             coinText.gameObject.SetActive(false);
     }
 
-
     public void ResetCoins()
     {
         totalCoins = 0;
@@ -111,7 +109,7 @@ public class CoinManager : MonoBehaviour
         UpdateUI();
     }
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
         if (coinText != null)
         {

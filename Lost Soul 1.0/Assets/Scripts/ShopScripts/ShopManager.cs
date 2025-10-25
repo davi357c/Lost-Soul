@@ -1,91 +1,68 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-using NUnit.Framework.Interfaces;
+using System.Collections;
 
 public class ShopManager : MonoBehaviour
 {
-    public static ShopManager Instance { get; private set; }
+    public GameObject shopPanel;
+    public TextMeshProUGUI coinsText;
+    public Transform contentParent;
+    public GameObject shopItemPrefab;
 
-    [Header("UI")]
-    public GameObject shopPanel; // Painel da loja
-    public TMP_Text coinsText;   // Texto que mostra as moedas
-    public Transform contentParent; // Content do ScrollView
-    public GameObject shopItemPrefab; // Prefab do item
-
-    [Header("Itens da Loja")]
-    public List<ItemData> storeItems = new List<ItemData>();
-
-    private void Awake()
+    [System.Serializable]
+    public class ShopItem
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        public string name;
+        public string description;
+        public int price;
+        public Sprite icon;
     }
 
-    private void Start()
+    public List<ShopItem> items = new List<ShopItem>();
+
+    private IEnumerator Start()
     {
+        // Espera até o CoinManager realmente existir
+        yield return new WaitUntil(() => CoinManager.Instance != null);
+
         UpdateCoinsUI();
         PopulateShop();
         shopPanel.SetActive(false);
     }
 
+
+    private void UpdateCoinsUI()
+    {
+        coinsText.text = "Moedas: " + CoinManager.Instance.totalCoins;
+    }
+
+    private void PopulateShop()
+    {
+        foreach (Transform child in contentParent)
+            Destroy(child.gameObject);
+
+        foreach (ShopItem item in items)
+        {
+            GameObject newItem = Instantiate(shopItemPrefab, contentParent);
+            newItem.GetComponent<ShopItemUI>().Setup(item.icon, item.name, item.description, item.price);
+        }
+    }
+
+    // Dentro do ShopManager
     public void OpenShop()
     {
-        UpdateCoinsUI();
         shopPanel.SetActive(true);
-        // opcional: Time.timeScale = 0;
+        shopPanel.transform.SetAsLastSibling();
+        UpdateCoinsUI();
+        // Time.timeScale = 0f; // teste: desativa isso
     }
 
     public void CloseShop()
     {
         shopPanel.SetActive(false);
-        // opcional: Time.timeScale = 1;
+        // Time.timeScale = 1f; // teste: desativa isso
     }
 
-    public void UpdateCoinsUI()
-    {
-        if (coinsText != null && CoinManager.Instance != null)
-        {
-            coinsText.text = "Moedas: " + CoinManager.Instance.totalCoins.ToString();
-        }
-    }
 
-    void PopulateShop()
-    {
-        foreach (Transform t in contentParent)
-            Destroy(t.gameObject);
-
-        for (int i = 0; i < storeItems.Count; i++)
-        {
-            var data = storeItems[i];
-            GameObject go = Instantiate(shopItemPrefab, contentParent);
-            var ui = go.GetComponent<ShopItemUI>();
-            if (ui != null)
-                ui.Setup(data, i);
-        }
-    }
-
-    public void TryBuy(int index)
-    {
-        if (index < 0 || index >= storeItems.Count) return;
-        var data = storeItems[index];
-
-        if (CoinManager.Instance.totalCoins >= data.price)
-        {
-            // Compra aprovada
-            CoinManager.Instance.totalCoins -= data.price;
-            PlayerPrefs.SetInt("TotalCoins", CoinManager.Instance.totalCoins);
-            PlayerPrefs.Save();
-            UpdateCoinsUI();
-
-            Debug.Log("Comprou: " + data.itemName);
-            // Aqui você pode dar o item ao jogador (ex: Inventory.AddItem(data))
-        }
-        else
-        {
-            Debug.Log("Sem moedas suficientes para " + data.itemName);
-            // Pode mostrar um popup de aviso na UI
-        }
-    }
 }
