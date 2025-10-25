@@ -200,4 +200,10 @@ public class PlayerMovement : MonoBehaviour
         transform.position = spawnPos;
         rb.linearVelocity = Vector2.zero;
     }
+
+    void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
 }

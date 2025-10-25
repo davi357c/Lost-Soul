@@ -3,18 +3,32 @@ using UnityEngine;
 public class PlayerSpawner : MonoBehaviour
 {
     public GameObject playerPrefab;
-    public Transform cameraTargetPoint;
 
     void Start()
     {
-        if (GameObject.FindWithTag("Player") == null)
+        // Evita duplicar o player
+        GameObject existingPlayer = GameObject.FindWithTag("Player");
+        if (existingPlayer == null)
         {
+            // Cria o novo player
             GameObject player = Instantiate(playerPrefab, transform.position, Quaternion.identity);
 
-            if (cameraTargetPoint != null)
+            // Conecta a câmera persistente ao novo player
+            CameraFollow cameraFollow = FindObjectOfType<CameraFollow>();
+            if (cameraFollow != null)
             {
-                cameraTargetPoint.position = player.transform.position;
-                cameraTargetPoint.parent = player.transform;
+                cameraFollow.SetTarget(player.transform);
+            }
+        }
+        else
+        {
+            // Se já existe, só reposiciona no ponto certo
+            existingPlayer.transform.position = transform.position;
+
+            CameraFollow cameraFollow = FindObjectOfType<CameraFollow>();
+            if (cameraFollow != null)
+            {
+                cameraFollow.SetTarget(existingPlayer.transform);
             }
         }
     }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CameraFollow : MonoBehaviour
 {
@@ -12,23 +13,36 @@ public class CameraFollow : MonoBehaviour
 
     private void Awake()
     {
-        // Faz a câmera não ser destruída ao trocar de cena
         DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded; // <- reconecta toda vez que trocar de cena
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void Start()
     {
-        // Tenta achar o player automaticamente ao iniciar a cena
+        FindPlayer();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Espera 1 frame pra garantir que o player foi instanciado
+        StartCoroutine(FindPlayerNextFrame());
+    }
+
+    private System.Collections.IEnumerator FindPlayerNextFrame()
+    {
+        yield return null;
         FindPlayer();
     }
 
     private void Update()
     {
         if (target == null)
-        {
-            FindPlayer(); // caso o player ainda não tenha sido instanciado
             return;
-        }
 
         Vector3 targetPosition = target.position + offset;
         if (isLookingDown)
@@ -46,8 +60,11 @@ public class CameraFollow : MonoBehaviour
     {
         GameObject playerObj = GameObject.FindWithTag("Player");
         if (playerObj != null)
-        {
             target = playerObj.transform;
-        }
     }
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+    }
+
 }
