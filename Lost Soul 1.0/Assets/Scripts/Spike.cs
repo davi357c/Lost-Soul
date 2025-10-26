@@ -15,15 +15,19 @@ public class Spike : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             PlayerHealth health = collision.GetComponent<PlayerHealth>();
-            PlayerMovement movement = collision.GetComponent<PlayerMovement>();
 
             if (health != null)
-                health.TakeDamage();
+            {
+                // Calcula direção do knockback: da spike pro player
+                Vector2 hitDir = (collision.transform.position - transform.position).normalized;
 
-            if (movement != null)
-                StartCoroutine(RespawnWithDelay(movement));
+                // Aplica dano + knockback + respawn com delay
+                health.TakeDamage(hitDir);
+            }
         }
     }
+
+
 
     private IEnumerator RespawnWithDelay(PlayerMovement movement)
     {

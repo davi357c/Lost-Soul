@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 8827162856331174155}
   - component: {fileID: 5103669593941704784}
   - component: {fileID: 8407295381999299900}
+  - component: {fileID: 1557547359232427441}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -62,7 +63,7 @@ Transform:
   m_GameObject: {fileID: 9109485486292069624}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.44, y: -2.01, z: 0}
+  m_LocalPosition: {x: 25.2, y: 1.7, z: 0}
   m_LocalScale: {x: 6, y: 6, z: 6}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -112,7 +113,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 3713219614965599903, guid: 23996b983775d4745af674f85180e7ca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -165,6 +166,20 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
+  respawnOffset: {x: -1, y: 0.5}
+  edgePadding: 0.3
+  attackRange: 1
+  downAttackRange: 0.5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  attackDamage: 1
+  knockbackForce: 5
+  dashDistance: 3
+  dashDuration: 0.1
+  dashThroughWalls:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!50 &8827162856331174155
 Rigidbody2D:
   serializedVersion: 5
@@ -325,3 +340,26 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1557547359232427441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9109485486292069624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82373e536d1eec346bef07cb89c52db2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxLives: 5
+  currentLives: 0
+  hearts:
+  - {fileID: 6611496235034116908, guid: 2ec57d5e320ae51499a0569ac6d8a052, type: 3}
+  - {fileID: 686835227872689521, guid: 83e0949fb07c09c469b6901b19cd0388, type: 3}
+  - {fileID: 4865903481512539659, guid: dbfe20b0bddffc745aa237180a87fd37, type: 3}
+  - {fileID: 4564245589886648908, guid: 37750263b10a90c429abb3a6911a3a63, type: 3}
+  - {fileID: 3199640900022772406, guid: bb76920b0a8a7ee4b83ec191c88b36d7, type: 3}
+  heartsPrefab: {fileID: 1877018499976964415, guid: 2ec57d5e320ae51499a0569ac6d8a052, type: 3}
+  invulnerableTime: 1
+  knockbackForce: 5

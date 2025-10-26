@@ -33,8 +33,17 @@ public class PlayerMovement : MonoBehaviour
     public float edgePadding = 0.3f;
 
     [Header("Ataque")]
-    public float downAttackRange = 0.5f; // alcance do ataque para baixo
-    public LayerMask enemyLayer;         // camada dos inimigos
+    public float attackRange = 1f;          // horizontal
+    public float downAttackRange = 0.5f;    // vertical
+    public LayerMask enemyLayer;
+    public int attackDamage = 1;
+    public float knockbackForce = 5f;
+
+    [Header("Dash")]
+    public float dashDistance = 5f;
+    public float dashDuration = 0.2f;
+    public LayerMask dashThroughWalls;
+    private bool isDashing = false;
 
     void Start()
     {
@@ -50,32 +59,39 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        moveInput = Input.GetAxisRaw("Horizontal");
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
-
-        if (moveInput > 0 && !isFacingRight)
-            Flip();
-        else if (moveInput < 0 && isFacingRight)
-            Flip();
-
-        if (Input.GetButtonDown("Jump") && isGrounded)
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-
-        if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0)
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
-
-        // Ataque normal, para baixo (só se não estiver no chão) ou para cima
-        if (Input.GetMouseButtonDown(0) && !isAttacking)
+        if (!isDashing)
         {
-            if (Input.GetKey(KeyCode.S) && !isGrounded) // ataque para baixo só no ar
-                StartCoroutine(DownAttackRoutine());
-            else if (Input.GetKey(KeyCode.W)) // ataque para cima
-                StartCoroutine(UpAttackRoutine());
-            else // ataque normal
-                StartCoroutine(AttackRoutine());
-        }
+            moveInput = Input.GetAxisRaw("Horizontal");
+            rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 
-        HandleLookDown();
+            if (moveInput > 0 && !isFacingRight) Flip();
+            else if (moveInput < 0 && isFacingRight) Flip();
+
+            if (Input.GetButtonDown("Jump") && isGrounded)
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
+            if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0)
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
+
+            // Ataque
+            if (Input.GetMouseButtonDown(0) && !isAttacking)
+            {
+                if (Input.GetKey(KeyCode.S) && !isGrounded)
+                    StartCoroutine(DownAttackRoutine());
+                else if (Input.GetKey(KeyCode.W))
+                    StartCoroutine(UpAttackRoutine());
+                else
+                    StartCoroutine(AttackRoutine());
+            }
+
+            HandleLookDown();
+
+            // Dash
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                StartCoroutine(DashRoutine());
+            }
+        }
 
         animator.SetFloat("Speed", Mathf.Abs(moveInput));
         animator.SetBool("isGrounded", isGrounded);
@@ -96,55 +112,110 @@ public class PlayerMovement : MonoBehaviour
         spriteRenderer.flipX = !spriteRenderer.flipX;
     }
 
+    private IEnumerator DashRoutine()
+    {
+        isDashing = true;
+        animator.SetTrigger("Dash");
+
+        Vector2 dashDir = isFacingRight ? Vector2.right : Vector2.left;
+        float dashSpeed = dashDistance / dashDuration;
+        float elapsed = 0f;
+
+        // Desliga colisão apenas com a layer dashThroughWalls
+        int playerLayer = gameObject.layer;
+        Physics2D.IgnoreLayerCollision(playerLayer, LayerMaskToLayer(dashThroughWalls), true);
+
+        while (elapsed < dashDuration)
+        {
+            rb.linearVelocity = dashDir * dashSpeed;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        rb.linearVelocity = Vector2.zero;
+
+        // Restaura colisão
+        Physics2D.IgnoreLayerCollision(playerLayer, LayerMaskToLayer(dashThroughWalls), false);
+
+        isDashing = false;
+    }
+
+    public bool IsDashing()
+    {
+        return isDashing;
+    }
+
+
+    // Converte LayerMask em Layer (suporta apenas 1 layer ativa no mask)
+    private int LayerMaskToLayer(LayerMask mask)
+    {
+        int layer = 0;
+        int maskValue = mask.value;
+        while (maskValue > 1)
+        {
+            maskValue = maskValue >> 1;
+            layer++;
+        }
+        return layer;
+    }
+
+
     IEnumerator AttackRoutine()
     {
         isAttacking = true;
         animator.SetTrigger("Attack");
         yield return new WaitForSeconds(0.3f);
+
+        Vector2 attackPos = transform.position + (isFacingRight ? Vector3.right : Vector3.left) * attackRange;
+        DamageEnemies(attackPos);
+
         isAttacking = false;
     }
 
-    // Ataque para baixo
     IEnumerator DownAttackRoutine()
     {
         isAttacking = true;
         animator.SetTrigger("DownAttack");
         yield return new WaitForSeconds(0.3f);
+
+        Vector2 attackPos = transform.position + Vector3.down * downAttackRange;
+        bool hitEnemy = DamageEnemies(attackPos);
+
+        if (hitEnemy)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * 0.7f);
+        }
+
         isAttacking = false;
     }
 
-    // Animation Event: chamada no frame do ataque para baixo
-    public void CheckDownAttackHit()
-    {
-        Collider2D hit = Physics2D.OverlapCircle(transform.position + Vector3.down * 0.5f, downAttackRange, enemyLayer);
-        if (hit != null)
-        {
-            // Impulso para cima só se acertar inimigo
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * 0.7f);
-
-            // Aplica dano no inimigo
-            // hit.GetComponent<Enemy>().TakeDamage(1);
-        }
-    }
-
-    // Ataque para cima
     IEnumerator UpAttackRoutine()
     {
         isAttacking = true;
         animator.SetTrigger("UpAttack");
         yield return new WaitForSeconds(0.3f);
+
+        Vector2 attackPos = transform.position + Vector3.up * downAttackRange;
+        DamageEnemies(attackPos);
+
         isAttacking = false;
     }
 
-    // Animation Event: chamada no frame do ataque para cima
-    public void CheckUpAttackHit()
+    private bool DamageEnemies(Vector2 attackPosition)
     {
-        Collider2D hit = Physics2D.OverlapCircle(transform.position + Vector3.up * 0.5f, downAttackRange, enemyLayer);
-        if (hit != null)
+        bool hitEnemy = false;
+        Collider2D[] hits = Physics2D.OverlapCircleAll(attackPosition, attackRange, enemyLayer);
+        foreach (Collider2D hit in hits)
         {
-            // Aplica dano no inimigo
-            // hit.GetComponent<Enemy>().TakeDamage(1);
+            EnemyHealth enemy = hit.GetComponent<EnemyHealth>();
+            if (enemy != null)
+            {
+                Vector2 dir = (hit.transform.position - transform.position).normalized;
+                enemy.TakeDamage(dir, attackDamage);
+                hitEnemy = true;
+            }
         }
+        return hitEnemy;
     }
 
     void HandleLookDown()
@@ -154,38 +225,39 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.S) && canLookDown)
         {
             holdTimeS += Time.deltaTime;
-
-            if (holdTimeS >= requiredHoldTime)
+            if (holdTimeS >= requiredHoldTime && !isLookingDown)
             {
-                if (!isLookingDown)
-                {
-                    isLookingDown = true;
-                    animator.SetBool("lookDown", true);
+                isLookingDown = true;
+                animator.SetBool("lookDown", true);
 
-                    CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
-                    if (cam != null)
-                        cam.LookDown(true);
-                }
+                CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
+                if (cam != null) cam.LookDown(true);
             }
         }
         else
         {
             holdTimeS = 0f;
-
             if (isLookingDown)
             {
                 isLookingDown = false;
                 animator.SetBool("lookDown", false);
 
                 CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
-                if (cam != null)
-                    cam.LookDown(false);
+                if (cam != null) cam.LookDown(false);
             }
         }
     }
 
-    public void Respawn()
+    public void Respawn(float delay = 0.3f)
     {
+        StartCoroutine(RespawnRoutine(delay));
+    }
+
+    private IEnumerator RespawnRoutine(float delay)
+    {
+        enabled = false;
+        yield return new WaitForSeconds(delay);
+
         Vector2 spawnPos = lastSafePosition;
         spawnPos.y += 0.5f;
 
@@ -199,11 +271,11 @@ public class PlayerMovement : MonoBehaviour
 
         transform.position = spawnPos;
         rb.linearVelocity = Vector2.zero;
+        enabled = true;
     }
 
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
     }
-
 }
