@@ -6,10 +6,13 @@ public class PlayerHealth : MonoBehaviour
 {
     [Header("Vidas")]
     public int maxLives = 5;
-    public int currentLives;
+    public int currentLives = -1; // inicia com -1 pra sabermos se já foi inicializado
 
     [Header("UI de Corações")]
     public Animator[] hearts;
+
+    [Header("Opcional: Prefab do HeartsContainer (UI)")]
+    public GameObject heartsPrefab; // arrasta aqui o prefab com o Canvas + ObjectAleatorio
 
     [Header("Configurações de Dano")]
     public float invulnerableTime = 1f;
@@ -22,36 +25,67 @@ public class PlayerHealth : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerMovement movement;
 
+    private static PlayerHealth instance;
+
     void Awake()
     {
-        // Garante que só exista um PlayerHealth na cena
-        if (FindObjectsOfType<PlayerHealth>().Length > 1)
+        // Singleton robusto (só 1 PlayerHealth existe)
+        if (instance != null && instance != this)
         {
+            Debug.Log("[PlayerHealth] Outro PlayerHealth encontrado - destruindo este.");
             Destroy(gameObject);
             return;
         }
 
+        instance = this;
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void Start()
     {
-        currentLives = maxLives;
+        // Só define a vida se ainda não foi inicializada
+        if (currentLives <= 0)
+            currentLives = maxLives;
+
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         movement = GetComponent<PlayerMovement>();
 
+        Debug.Log($"[PlayerHealth] Start - currentLives={currentLives}, heartsArrayLength={hearts?.Length ?? 0}");
         UpdateHeartsUI();
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Reatribui os corações da nova cena
-        GameObject container = GameObject.Find("HeartsContainer");
+        Debug.Log("[PlayerHealth] Cena carregada: " + scene.name);
+
+        // Tenta encontrar o container da cena atual (ajustado para "ObjectAleatorio")
+        GameObject container = GameObject.Find("ObjectAleatorio");
         if (container != null)
         {
             hearts = container.GetComponentsInChildren<Animator>();
+            Debug.Log("[PlayerHealth] ObjectAleatorio encontrado. Hearts count = " + hearts.Length);
+            UpdateHeartsUI();
+            return;
+        }
+
+        Debug.LogWarning("[PlayerHealth] ObjectAleatorio não encontrado na cena.");
+
+        // Se não encontrar e tiver prefab, instancia (apenas uma vez)
+        if (heartsPrefab != null && GameObject.Find(heartsPrefab.name) == null)
+        {
+            GameObject heartsObj = Instantiate(heartsPrefab);
+            heartsObj.name = heartsPrefab.name;
+            DontDestroyOnLoad(heartsObj);
+
+            Transform containerTransform = heartsObj.transform.Find("ObjectAleatorio");
+            if (containerTransform != null)
+                hearts = containerTransform.GetComponentsInChildren<Animator>();
+            else
+                hearts = heartsObj.GetComponentsInChildren<Animator>();
+
+            Debug.Log("[PlayerHealth] Hearts prefab instanciado via código. Hearts count = " + hearts.Length);
             UpdateHeartsUI();
         }
     }
@@ -69,17 +103,26 @@ public class PlayerHealth : MonoBehaviour
             return;
         }
 
-        animator.SetTrigger("Hit");
+        if (animator != null) animator.SetTrigger("Hit");
         StartCoroutine(InvulnerabilityRoutine());
 
-        rb.linearVelocity = Vector2.zero;
-        rb.AddForce(new Vector2(hitDirection.x * knockbackForce, knockbackForce), ForceMode2D.Impulse);
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.AddForce(new Vector2(hitDirection.x * knockbackForce, knockbackForce), ForceMode2D.Impulse);
+        }
 
-        movement.Respawn(0.3f);
+        if (movement != null) movement.Respawn(0.3f);
     }
 
     void UpdateHeartsUI()
     {
+        if (hearts == null || hearts.Length == 0)
+        {
+            Debug.LogWarning("[PlayerHealth] UpdateHeartsUI: hearts array vazio.");
+            return;
+        }
+
         for (int i = 0; i < hearts.Length; i++)
         {
             bool isAlive = i < currentLives;
@@ -92,10 +135,13 @@ public class PlayerHealth : MonoBehaviour
         if (isDead) return;
         isDead = true;
 
-        animator.SetTrigger("Die");
-        movement.enabled = false;
-        rb.linearVelocity = Vector2.zero;
-        rb.simulated = false;
+        if (animator != null) animator.SetTrigger("Die");
+        if (movement != null) movement.enabled = false;
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.simulated = false;
+        }
     }
 
     IEnumerator InvulnerabilityRoutine()
@@ -106,16 +152,17 @@ public class PlayerHealth : MonoBehaviour
         float timer = 0f;
         while (timer < invulnerableTime)
         {
-            sr.enabled = !sr.enabled;
+            if (sr != null) sr.enabled = !sr.enabled;
             yield return new WaitForSeconds(blinkInterval);
             timer += blinkInterval;
         }
-        sr.enabled = true;
+        if (sr != null) sr.enabled = true;
         isInvulnerable = false;
     }
 
     void OnDestroy()
     {
+        if (instance == this) instance = null;
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

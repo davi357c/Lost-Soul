@@ -39,6 +39,12 @@ public class PlayerMovement : MonoBehaviour
     public int attackDamage = 1;
     public float knockbackForce = 5f;
 
+    [Header("Dash")]
+    public float dashDistance = 5f;
+    public float dashDuration = 0.2f;
+    public LayerMask dashThroughWalls;
+    private bool isDashing = false;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -53,30 +59,39 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        moveInput = Input.GetAxisRaw("Horizontal");
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
-
-        if (moveInput > 0 && !isFacingRight) Flip();
-        else if (moveInput < 0 && isFacingRight) Flip();
-
-        if (Input.GetButtonDown("Jump") && isGrounded)
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-
-        if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0)
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
-
-        // Ataque
-        if (Input.GetMouseButtonDown(0) && !isAttacking)
+        if (!isDashing)
         {
-            if (Input.GetKey(KeyCode.S) && !isGrounded)
-                StartCoroutine(DownAttackRoutine());
-            else if (Input.GetKey(KeyCode.W))
-                StartCoroutine(UpAttackRoutine());
-            else
-                StartCoroutine(AttackRoutine());
-        }
+            moveInput = Input.GetAxisRaw("Horizontal");
+            rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 
-        HandleLookDown();
+            if (moveInput > 0 && !isFacingRight) Flip();
+            else if (moveInput < 0 && isFacingRight) Flip();
+
+            if (Input.GetButtonDown("Jump") && isGrounded)
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
+            if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0)
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
+
+            // Ataque
+            if (Input.GetMouseButtonDown(0) && !isAttacking)
+            {
+                if (Input.GetKey(KeyCode.S) && !isGrounded)
+                    StartCoroutine(DownAttackRoutine());
+                else if (Input.GetKey(KeyCode.W))
+                    StartCoroutine(UpAttackRoutine());
+                else
+                    StartCoroutine(AttackRoutine());
+            }
+
+            HandleLookDown();
+
+            // Dash
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                StartCoroutine(DashRoutine());
+            }
+        }
 
         animator.SetFloat("Speed", Mathf.Abs(moveInput));
         animator.SetBool("isGrounded", isGrounded);
@@ -96,6 +111,54 @@ public class PlayerMovement : MonoBehaviour
         isFacingRight = !isFacingRight;
         spriteRenderer.flipX = !spriteRenderer.flipX;
     }
+
+    private IEnumerator DashRoutine()
+    {
+        isDashing = true;
+        animator.SetTrigger("Dash");
+
+        Vector2 dashDir = isFacingRight ? Vector2.right : Vector2.left;
+        float dashSpeed = dashDistance / dashDuration;
+        float elapsed = 0f;
+
+        // Desliga colisão apenas com a layer dashThroughWalls
+        int playerLayer = gameObject.layer;
+        Physics2D.IgnoreLayerCollision(playerLayer, LayerMaskToLayer(dashThroughWalls), true);
+
+        while (elapsed < dashDuration)
+        {
+            rb.linearVelocity = dashDir * dashSpeed;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        rb.linearVelocity = Vector2.zero;
+
+        // Restaura colisão
+        Physics2D.IgnoreLayerCollision(playerLayer, LayerMaskToLayer(dashThroughWalls), false);
+
+        isDashing = false;
+    }
+
+    public bool IsDashing()
+    {
+        return isDashing;
+    }
+
+
+    // Converte LayerMask em Layer (suporta apenas 1 layer ativa no mask)
+    private int LayerMaskToLayer(LayerMask mask)
+    {
+        int layer = 0;
+        int maskValue = mask.value;
+        while (maskValue > 1)
+        {
+            maskValue = maskValue >> 1;
+            layer++;
+        }
+        return layer;
+    }
+
 
     IEnumerator AttackRoutine()
     {
