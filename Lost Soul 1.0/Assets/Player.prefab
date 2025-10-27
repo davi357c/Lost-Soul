@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1186355928279310315
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 482717491584887158}
+  m_Layer: 0
+  m_Name: WallCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &482717491584887158
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1186355928279310315}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.055, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6287257045387228969}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8381261248621768553
 GameObject:
   m_ObjectHideFlags: 0
@@ -44,9 +75,9 @@ GameObject:
   - component: {fileID: 8886809351381709753}
   - component: {fileID: 2153905889577079749}
   - component: {fileID: 8827162856331174155}
-  - component: {fileID: 5103669593941704784}
   - component: {fileID: 8407295381999299900}
   - component: {fileID: 1557547359232427441}
+  - component: {fileID: 5663195781222956821}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -68,6 +99,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3805995954499315404}
+  - {fileID: 482717491584887158}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1479644617481820853
@@ -166,6 +198,15 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
+  wallCheck: {fileID: 482717491584887158}
+  wallCheckDistance: 0.4
+  whatIsWall:
+    serializedVersion: 2
+    m_Bits: 1024
+  wallSlideSpeed: 1.5
+  wallJumpForce: 14
+  wallJumpDirection: {x: 1, y: 1.2}
+  wallJumpTime: 0.2
   respawnOffset: {x: -1, y: 0.5}
   edgePadding: 0.3
   attackRange: 1
@@ -207,42 +248,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &5103669593941704784
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9109485486292069624}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: 4dc138f933d748b4780dde658b1dd9b6, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: -0.009846171, y: -0.019692352}
-  m_Radius: 0.13702564
 --- !u!82 &8407295381999299900
 AudioSource:
   m_ObjectHideFlags: 0
@@ -264,7 +269,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 1.0485973
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -355,11 +360,48 @@ MonoBehaviour:
   maxLives: 5
   currentLives: 0
   hearts:
-  - {fileID: 6611496235034116908, guid: 2ec57d5e320ae51499a0569ac6d8a052, type: 3}
-  - {fileID: 686835227872689521, guid: 83e0949fb07c09c469b6901b19cd0388, type: 3}
-  - {fileID: 4865903481512539659, guid: dbfe20b0bddffc745aa237180a87fd37, type: 3}
-  - {fileID: 4564245589886648908, guid: 37750263b10a90c429abb3a6911a3a63, type: 3}
-  - {fileID: 3199640900022772406, guid: bb76920b0a8a7ee4b83ec191c88b36d7, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   heartsPrefab: {fileID: 1877018499976964415, guid: 2ec57d5e320ae51499a0569ac6d8a052, type: 3}
   invulnerableTime: 1
   knockbackForce: 5
+--- !u!70 &5663195781222956821
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9109485486292069624}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 4dc138f933d748b4780dde658b1dd9b6, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.01164341, y: -0.018224161}
+  m_Size: {x: 0.1569945, y: 0.2835517}
+  m_Direction: 0

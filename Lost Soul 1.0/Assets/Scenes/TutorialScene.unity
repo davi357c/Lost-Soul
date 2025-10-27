@@ -50752,6 +50752,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 482717491584887158, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.0039
+      objectReference: {fileID: 0}
     - target: {fileID: 1557547359232427441, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
       propertyPath: 'hearts.Array.data[0]'
       value: 
