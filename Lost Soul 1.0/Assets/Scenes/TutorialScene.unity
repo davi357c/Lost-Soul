@@ -50487,7 +50487,7 @@ PrefabInstance:
       objectReference: {fileID: 1592250598}
     - target: {fileID: 2153905889577079749, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
       propertyPath: whatIsWall.m_Bits
-      value: 0
+      value: 1024
       objectReference: {fileID: 0}
     - target: {fileID: 6287257045387228969, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
       propertyPath: m_LocalPosition.x
