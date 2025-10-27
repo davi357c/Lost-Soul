@@ -1,19 +1,16 @@
 fileFormatVersion: 2
-guid: dda2e852e6b0c8d4db2932f6cf38ff72
+guid: f555c90f6e37f6f488ca63bf38060313
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2791142785530751433
-    second: Enemy3-Hit_0
+      213: -3553768683937651634
+    second: Sprite-0002 1_0
   - first:
-      213: -45276988288526582
-    second: Enemy3-Hit_1
+      213: 7129192584156713585
+    second: Sprite-0002 1_1
   - first:
-      213: -3716970660002070686
-    second: Enemy3-Hit_2
-  - first:
-      213: 8890902332390889796
-    second: Enemy3-Hit_3
+      213: 4751096148239674478
+    second: Sprite-0002 1_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +43,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -109,89 +106,67 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Enemy3-Hit_0
+      name: Lever_0
       rect:
         serializedVersion: 2
-        x: 10
-        y: 6
-        width: 43
-        height: 55
+        x: 0
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7369b07bc6ed349d0800000000000000
-      internalID: -2791142785530751433
+      spriteID: 9dff1fa35aae4ca478421a43ef8bb248
+      internalID: -2017980795
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Enemy3-Hit_1
+      name: Lever_1
       rect:
         serializedVersion: 2
-        x: 77
-        y: 8
-        width: 45
-        height: 50
+        x: 32
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a07109ca1d42f5ff0800000000000000
-      internalID: -45276988288526582
+      spriteID: 89d553ad12db1e24c8b1ce099c99ff94
+      internalID: 1211782524
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Enemy3-Hit_2
+      name: Lever_2
       rect:
         serializedVersion: 2
-        x: 142
-        y: 8
-        width: 45
-        height: 51
+        x: 64
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 26ff60ac0eaaa6cc0800000000000000
-      internalID: -3716970660002070686
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3-Hit_3
-      rect:
-        serializedVersion: 2
-        x: 203
-        y: 6
-        width: 43
-        height: 55
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 449d9d6b094d26b70800000000000000
-      internalID: 8890902332390889796
+      spriteID: 88153b9c0a4ebdb4facc0bf9bbb31fb3
+      internalID: -531124384
       vertices: []
       indices: 
       edges: []
@@ -200,7 +175,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: da663f5bd4d8acf439be5461b6d7050f
     internalID: 0
     vertices: []
     indices: 
@@ -210,10 +185,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Enemy3-Hit_0: -2791142785530751433
-      Enemy3-Hit_1: -45276988288526582
-      Enemy3-Hit_2: -3716970660002070686
-      Enemy3-Hit_3: 8890902332390889796
+      Lever_0: -2017980795
+      Lever_1: 1211782524
+      Lever_2: -531124384
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

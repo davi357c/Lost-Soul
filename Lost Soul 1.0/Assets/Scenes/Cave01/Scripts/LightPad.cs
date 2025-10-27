@@ -1,52 +1,72 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 
-[RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(Collider2D))]
 public class LightPad : MonoBehaviour
 {
-    [Header("Identificação")]
+    [Tooltip("Ordem lógica deste pad (0..N).")]
     public int id;
 
-    [Header("Sprites")]
-    public Sprite spriteApagado;
-    public Sprite spriteVerde;
-    public Sprite spriteVermelho;
+    [Header("Visual")]
+    public SpriteRenderer sr;
+    public Sprite spriteOff;
+    public Sprite spriteGreen;
+    public Sprite spriteRed;
 
-    private SpriteRenderer _sr;
+    bool _interactable;
+    PuzzleManager _manager;
 
-    private void Awake()
+    void Reset()
     {
-        _sr = GetComponent<SpriteRenderer>();
-        SetApagado();
+        if (TryGetComponent(out Collider2D col)) col.isTrigger = false;
+        if (!sr) sr = GetComponentInChildren<SpriteRenderer>(true);
     }
 
-    public void SetApagado()
+    void Awake()
     {
-        if (_sr && spriteApagado) _sr.sprite = spriteApagado;
+        if (!sr) sr = GetComponentInChildren<SpriteRenderer>(true);
+        SetOff();
     }
 
-    public void SetVermelho()
+    public void Bind(PuzzleManager m) => _manager = m;
+    public void SetInteractable(bool v) => _interactable = v;
+
+    public void SetOff()
     {
-        if (_sr && spriteVermelho) _sr.sprite = spriteVermelho;
+        if (sr && spriteOff) sr.sprite = spriteOff;
     }
 
-    public void SetVerde()
+    public void FlashGreen(float time = 0.2f)
     {
-        if (_sr && spriteVerde) _sr.sprite = spriteVerde;
+        StopAllCoroutines();
+        StartCoroutine(FlashSprite(spriteGreen, time));
     }
 
-    public IEnumerator FlashVermelho(float duracao)
+    public void FlashRed(float time = 0.35f)
     {
-        SetVermelho();
-        yield return new WaitForSeconds(duracao);
-        SetApagado();
+        StopAllCoroutines();
+        StartCoroutine(FlashSprite(spriteRed, time));
     }
 
-    public IEnumerator FlashVerde(float duracao)
+    /// <summary>Usado para EXIBIR a sequência (sempre em vermelho).</summary>
+    public void ShowRed(float time)
     {
-        SetVerde();
-        yield return new WaitForSeconds(duracao);
-        SetApagado();
+        StopAllCoroutines();
+        StartCoroutine(FlashSprite(spriteRed, time));
+    }
+
+    IEnumerator FlashSprite(Sprite s, float t)
+    {
+        if (!sr) yield break;
+        var prev = sr.sprite;
+        sr.sprite = s;
+        yield return new WaitForSeconds(t);
+        sr.sprite = spriteOff ? spriteOff : prev;
+    }
+
+    void OnMouseDown()
+    {
+        if (_interactable && _manager != null)
+            _manager.OnPadClicked(this);
     }
 }

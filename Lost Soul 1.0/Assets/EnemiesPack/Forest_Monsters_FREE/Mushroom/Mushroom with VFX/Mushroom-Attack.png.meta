@@ -359,7 +359,17 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Mushroom-Attack_0: 5827293808285669160
+      Mushroom-Attack_1: 395788944090898754
+      Mushroom-Attack_2: -2431859481363569845
+      Mushroom-Attack_3: 3975243271130314681
+      Mushroom-Attack_4: -2976413451591195025
+      Mushroom-Attack_5: -7849148733371855069
+      Mushroom-Attack_6: 9200555057208211610
+      Mushroom-Attack_7: 1760042231434011034
+      Mushroom-Attack_8: -8702807064431453006
+      Mushroom-Attack_9: -827034603758580982
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

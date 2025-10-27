@@ -1,213 +1,192 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using UnityEngine.Events;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using System.Collections;
 
 public class PuzzleManager : MonoBehaviour
 {
-    [Header("Referências")]
-    public List<LightPad> pads = new List<LightPad>(); // arraste os 5 aqui
-
-    [Header("Timings")]
-    [Tooltip("Quanto tempo cada passo da sequência fica ACESO em vermelho.")]
-    public float sequenceStepOn = 0.5f;
-    [Tooltip("Pausa apagado entre passos da sequência.")]
-    public float sequenceStepOff = 0.25f;
-    [Tooltip("Intervalo para piscadas simultâneas (erro e vitória).")]
-    public float globalBlinkInterval = 0.5f;
-    [Tooltip("Duração do verde quando o jogador acerta um clique.")]
-    public float hitGreenDuration = 0.2f;
+    [Header("Pads (preencha ou eu encontro)")]
+    public List<LightPad> pads = new List<LightPad>();
 
     [Header("Regras")]
-    public int totalRounds = 5;           // 5 rodadas
-    public int blinksOnError = 3;         // quantas piscadas vermelhas no erro
-    public int blinksOnFinalWin = 3;      // quantas piscadas verdes na vitória
+    [Tooltip("Total de rodadas (1..N). Cada rodada adiciona +1 passo à sequência.")]
+    public int totalRounds = 5;
 
-    // Estado interno
-    private List<int> _sequence = new List<int>();
-    private int _currentRound = 1;
-    private int _playerIndex = 0;
-    private bool _inputEnabled = false;
-    private System.Random _rng;
+    [Header("Tempos")]
+    [Tooltip("Quanto tempo cada pad fica aceso ao mostrar a sequência (vermelho).")]
+    public float litTime = 0.35f;
+    [Tooltip("Intervalo entre cada passo da sequência.")]
+    public float showDelay = 0.55f;
+    [Tooltip("Intervalo para as piscadas simultâneas (erro/sucesso final).")]
+    public float blinkInterval = 0.5f;
 
-    private Camera _cam;
+    [Header("Eventos")]
+    public UnityEvent onPuzzleStart;
+    public UnityEvent onPuzzleSuccess;
+    public UnityEvent onPuzzleFail; // dispara em ERRO (antes de resetar)
 
-    private void Start()
+    List<int> sequence = new List<int>();
+    int currentRoundLength = 1;
+    int inputIndex = 0;
+    bool active;
+    bool showing;
+
+    void Awake()
+    {
+        if (pads == null || pads.Count == 0)
+            pads = FindObjectsOfType<LightPad>(true).OrderBy(p => p.id).ToList();
+
+        foreach (var p in pads)
+        {
+            p.Bind(this);
+            p.SetOff();
+        }
+    }
+
+    // Chamado pela alavanca
+    public void ActivatePuzzle()
     {
         if (pads == null || pads.Count == 0)
         {
-            Debug.LogError("PuzzleManager: arraste os LightPads na lista 'pads'.");
-            enabled = false;
+            Debug.LogError("[Puzzle] Sem pads. Adicione LightPad na cena e configure IDs.");
             return;
         }
 
-        foreach (var p in pads) p.SetApagado();
+        StopAllCoroutines();
+        foreach (var p in pads) { p.SetInteractable(false); p.SetOff(); }
 
-        _rng = new System.Random();
-        _cam = Camera.main;
+        currentRoundLength = 1;
+        inputIndex = 0;
+        active = true;
+        onPuzzleStart?.Invoke();
 
-        StartCoroutine(GameLoop());
+        StartCoroutine(BeginRoundAfter(0.3f));
     }
 
-    private void Update()
+    IEnumerator BeginRoundAfter(float delay)
     {
-        // Lê "ataque": clique esquerdo exatamente em cima de um pad
-        if (_inputEnabled && Input.GetMouseButtonDown(0))
-        {
-            var pad = GetPadUnderMouse();
-            if (pad != null)
-            {
-                HandlePadClicked(pad);
-            }
-        }
+        yield return new WaitForSeconds(delay);
+        StartRound();
     }
 
-    private LightPad GetPadUnderMouse()
+    void StartRound()
     {
-        if (_cam == null) return null;
-        Vector3 mouseWorld = _cam.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 point2D = new Vector2(mouseWorld.x, mouseWorld.y);
-
-        // Detecta qualquer collider no ponto do mouse
-        Collider2D col = Physics2D.OverlapPoint(point2D);
-        if (!col) return null;
-
-        return col.GetComponent<LightPad>();
+        BuildSequence(currentRoundLength);
+        inputIndex = 0;
+        StartCoroutine(ShowSequenceRed());
     }
 
-    private IEnumerator GameLoop()
+    void BuildSequence(int length)
     {
-        while (true)
-        {
-            yield return StartCoroutine(PlayAllRounds());
-            // Vitória final: todas verdes simultaneamente
-            yield return StartCoroutine(BlinkAllGreen(blinksOnFinalWin, globalBlinkInterval));
-            yield return new WaitForSeconds(0.75f);
-        }
-    }
-
-    private IEnumerator PlayAllRounds()
-    {
-        _currentRound = 1;
-
-        while (_currentRound <= totalRounds)
-        {
-            GenerateSequence(_currentRound);       // nova sequência com tamanho = número da rodada
-            yield return StartCoroutine(ShowSequence()); // mostra em vermelho (input desabilitado)
-
-            _playerIndex = 0;
-            _inputEnabled = true;
-
-            // Espera até acertar toda a sequência (ou errar)
-            while (_inputEnabled && _playerIndex < _sequence.Count)
-            {
-                yield return null;
-            }
-
-            // Se erro, _inputEnabled vira false em HandleFail() e reiniciamos TUDO
-            if (!_inputEnabled)
-            {
-                yield break; // sai para GameLoop → recomeça
-            }
-
-            // Concluiu a rodada
-            _currentRound++;
-            yield return new WaitForSeconds(0.5f);
-        }
-    }
-
-    private void GenerateSequence(int length)
-    {
-        _sequence.Clear();
+        sequence.Clear();
+        var rnd = new System.Random();
         for (int i = 0; i < length; i++)
-        {
-            int padId = _rng.Next(0, pads.Count); // 0..(n-1)
-            _sequence.Add(padId);
-        }
+            sequence.Add(rnd.Next(0, pads.Count));
+
+        Debug.Log($"[Puzzle] Round {currentRoundLength}/{totalRounds} - Seq: {string.Join(",", sequence)}");
     }
 
-    private IEnumerator ShowSequence()
+    IEnumerator ShowSequenceRed()
     {
-        _inputEnabled = false;
+        showing = true;
+        foreach (var p in pads) { p.SetInteractable(false); p.SetOff(); }
 
-        // Garante tudo apagado
-        SetAllOff();
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.35f);
 
-        // Exibe passo a passo em vermelho
-        for (int i = 0; i < _sequence.Count; i++)
+        for (int i = 0; i < sequence.Count; i++)
         {
-            var pad = pads[_sequence[i]];
-            pad.SetVermelho();
-            yield return new WaitForSeconds(sequenceStepOn);
-            pad.SetApagado();
-            yield return new WaitForSeconds(sequenceStepOff);
+            int idx = sequence[i];
+            var pad = pads[idx];
+            pad.ShowRed(litTime);
+            yield return new WaitForSeconds(litTime + showDelay);
         }
+
+        foreach (var p in pads) p.SetInteractable(true);
+        showing = false;
+        Debug.Log("[Puzzle] Sua vez! Clique na ordem.");
     }
 
-    private void HandlePadClicked(LightPad pad)
+    public void OnPadClicked(LightPad pad)
     {
-        // Verifica se é o pad esperado
-        int expectedPadId = _sequence[_playerIndex];
-        if (pad.id == expectedPadId)
+        if (!active || showing) return;
+
+        int expectedIdx = sequence[inputIndex];
+        int clickedIdx = pads.IndexOf(pad);
+
+        if (clickedIdx == expectedIdx)
         {
-            // Acertou este passo → feedback verde
-            StartCoroutine(pad.FlashVerde(hitGreenDuration));
-            _playerIndex++;
-            // Se completar a sequência da rodada, o loop principal avança
+            pad.FlashGreen(0.2f);
+            inputIndex++;
+
+            // Completou a rodada atual?
+            if (inputIndex >= currentRoundLength)
+            {
+                // Acabou o puzzle (5ª rodada)?
+                if (currentRoundLength >= totalRounds)
+                {
+                    StartCoroutine(WinSequence());
+                }
+                else
+                {
+                    // Próxima rodada (aumenta +1 passo)
+                    foreach (var p in pads) p.SetInteractable(false);
+                    currentRoundLength++;
+                    inputIndex = 0;
+                    StartCoroutine(BeginRoundAfter(0.8f));
+                }
+            }
         }
         else
         {
-            // Errou → falha geral
-            StartCoroutine(HandleFail());
+            // Errou: todas piscam vermelho simultâneo (intervalo 0.5s)
+            StartCoroutine(LoseSequence());
         }
     }
 
-    private IEnumerator HandleFail()
+    IEnumerator WinSequence()
     {
-        _inputEnabled = false;
+        active = false;
+        foreach (var p in pads) p.SetInteractable(false);
 
-        // Pisca todas em vermelho simultâneo com intervalo de 0.5s
-        yield return StartCoroutine(BlinkAllRed(blinksOnError, globalBlinkInterval));
+        // Todas VERDE simultâneo com intervalo de 0.5s (3 piscadas)
+        yield return StartCoroutine(BlinkAll(sprite: "green", times: 3, interval: blinkInterval));
 
-        // Pequena pausa e reinicia as rodadas do começo
-        yield return new WaitForSeconds(0.5f);
+        onPuzzleSuccess?.Invoke();
 
-        StopAllCoroutines();       // interrompe qualquer exibição corrente
-        StartCoroutine(GameLoop()); // recomeça
+        // Depois do sucesso, garante tudo apagado
+        foreach (var p in pads) p.SetOff();
     }
 
-    private IEnumerator BlinkAllRed(int times, float interval)
+    IEnumerator LoseSequence()
+    {
+        active = false;
+        foreach (var p in pads) p.SetInteractable(false);
+
+        onPuzzleFail?.Invoke();
+
+        // Todas VERMELHO simultâneo com intervalo de 0.5s (3 piscadas)
+        yield return StartCoroutine(BlinkAll(sprite: "red", times: 3, interval: blinkInterval));
+
+        // Reset TOTAL: volta para a rodada 1
+        foreach (var p in pads) p.SetOff();
+        currentRoundLength = 1;
+        inputIndex = 0;
+        active = true;
+
+        yield return new WaitForSeconds(0.6f);
+        StartRound();
+    }
+
+    IEnumerator BlinkAll(string sprite, int times, float interval)
     {
         for (int i = 0; i < times; i++)
         {
-            SetAllRed();
+            if (sprite == "red") foreach (var p in pads) p.FlashRed(interval * 0.9f);
+            if (sprite == "green") foreach (var p in pads) p.FlashGreen(interval * 0.9f);
             yield return new WaitForSeconds(interval);
-            SetAllOff();
-            yield return new WaitForSeconds(interval);
+            foreach (var p in pads) p.SetOff();
+            yield return new WaitForSeconds(0.05f); // pequeno respiro
         }
-    }
-
-    private IEnumerator BlinkAllGreen(int times, float interval)
-    {
-        for (int i = 0; i < times; i++)
-        {
-            SetAllGreen();
-            yield return new WaitForSeconds(interval);
-            SetAllOff();
-            yield return new WaitForSeconds(interval);
-        }
-    }
-
-    private void SetAllOff()
-    {
-        foreach (var p in pads) p.SetApagado();
-    }
-    private void SetAllRed()
-    {
-        foreach (var p in pads) p.SetVermelho();
-    }
-    private void SetAllGreen()
-    {
-        foreach (var p in pads) p.SetVerde();
     }
 }
