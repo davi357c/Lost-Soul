@@ -1,61 +1,59 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemyHealth : MonoBehaviour
 {
-    [Header("Vida")]
+    [Header("Vida do Inimigo")]
     public int maxHealth = 3;
     private int currentHealth;
 
-    [Header("Knockback")]
+    [Header("Feedback de Dano")]
     public float knockbackForce = 5f;
+    public float hitFlashTime = 0.1f;
 
-    private Animator animator;
     private Rigidbody2D rb;
-    private EnemyMovement movement;
-
-    [HideInInspector] public bool isDead = false;
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
+    private EnemyAI ai;
 
     void Start()
     {
         currentHealth = maxHealth;
-        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        movement = GetComponent<EnemyMovement>();
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        ai = GetComponent<EnemyAI>();
     }
 
-    public void TakeDamage(Vector2 hitDir, int damage = 1)
+    public void TakeDamage(Vector2 hitDirection, int damage)
     {
-        if (isDead) return;
-
         currentHealth -= damage;
 
-        // animação de hit
-        animator.SetTrigger("Hit");
+        if (animator != null)
+            animator.SetTrigger("Hit");
 
-        // knockback
-        rb.linearVelocity = Vector2.zero;
-        rb.AddForce(new Vector2(hitDir.x * knockbackForce, knockbackForce), ForceMode2D.Impulse);
+        StartCoroutine(FlashRoutine());
 
-        // se morreu
-        if (currentHealth <= 0)
+        if (rb != null)
         {
-            Die();
+            rb.linearVelocity = Vector2.zero;
+            rb.AddForce(new Vector2(hitDirection.x * knockbackForce, knockbackForce), ForceMode2D.Impulse);
         }
+
+        if (currentHealth <= 0)
+            Die();
+    }
+
+    IEnumerator FlashRoutine()
+    {
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(hitFlashTime);
+        spriteRenderer.color = Color.white;
     }
 
     void Die()
     {
-        if (isDead) return;
-        isDead = true;
-
-        animator.SetBool("isDead", true);
-        rb.linearVelocity = Vector2.zero;
-        rb.simulated = false;
-
-        if (movement != null)
-            movement.enabled = false;
-
-        // destrói após animação de morte
-        Destroy(gameObject, 1.5f);
+        if (ai != null)
+            ai.Die();
     }
 }

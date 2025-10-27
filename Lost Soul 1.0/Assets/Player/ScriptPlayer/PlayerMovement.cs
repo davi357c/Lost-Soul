@@ -17,6 +17,22 @@ public class PlayerMovement : MonoBehaviour
     public float checkRadius = 0.2f;
     public LayerMask whatIsGround;
 
+    [Header("Wall Jump")]
+    public Transform wallCheck;
+    public float wallCheckDistance = 0.4f;
+    public LayerMask whatIsWall;
+    public float wallSlideSpeed = 1.5f;
+    public float wallJumpForce = 14f;
+    public Vector2 wallJumpDirection = new Vector2(1f, 1.2f);
+    public float wallJumpTime = 0.2f;
+    public float wallStickTime = 1f; // tempo grudado na parede antes de escorregar
+
+    private bool isTouchingWall;
+    private bool isWallSliding;
+    private bool isWallJumping;
+    private float wallJumpTimer;
+    private float wallStickTimer;
+
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
@@ -33,8 +49,8 @@ public class PlayerMovement : MonoBehaviour
     public float edgePadding = 0.3f;
 
     [Header("Ataque")]
-    public float attackRange = 1f;          // horizontal
-    public float downAttackRange = 0.5f;    // vertical
+    public float attackRange = 1f;
+    public float downAttackRange = 0.5f;
     public LayerMask enemyLayer;
     public int attackDamage = 1;
     public float knockbackForce = 5f;
@@ -62,11 +78,15 @@ public class PlayerMovement : MonoBehaviour
         if (!isDashing)
         {
             moveInput = Input.GetAxisRaw("Horizontal");
-            rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+
+            // Permite movimento normal se não estiver wall jumping
+            if (!isWallJumping)
+                rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 
             if (moveInput > 0 && !isFacingRight) Flip();
             else if (moveInput < 0 && isFacingRight) Flip();
 
+            // Pulo normal
             if (Input.GetButtonDown("Jump") && isGrounded)
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
 
@@ -91,11 +111,15 @@ public class PlayerMovement : MonoBehaviour
             {
                 StartCoroutine(DashRoutine());
             }
+
+            // Wall Slide e Wall Jump ajustado
+            WallSlideAndJump();
         }
 
         animator.SetFloat("Speed", Mathf.Abs(moveInput));
         animator.SetBool("isGrounded", isGrounded);
         animator.SetBool("lookDown", isLookingDown);
+        animator.SetBool("isWallSliding", isWallSliding);
     }
 
     void FixedUpdate()
@@ -104,6 +128,58 @@ public class PlayerMovement : MonoBehaviour
 
         if (isGrounded)
             lastSafePosition = transform.position;
+    }
+
+    // ===== WALL SLIDE + JUMP =====
+    void WallSlideAndJump()
+    {
+        isTouchingWall = Physics2D.Raycast(transform.position, isFacingRight ? Vector2.right : Vector2.left, wallCheckDistance, whatIsWall);
+
+        if (isTouchingWall && !isGrounded && rb.linearVelocity.y <= 0)
+        {
+            // Gruda na parede por um tempo
+            if (wallStickTimer < wallStickTime)
+            {
+                rb.linearVelocity = new Vector2(0, 0);
+                wallStickTimer += Time.deltaTime;
+            }
+            else
+            {
+                // Começa a escorregar
+                rb.linearVelocity = new Vector2(0, Mathf.Max(rb.linearVelocity.y, -wallSlideSpeed));
+            }
+
+            // Se apertar espaço, executa o wall jump
+            if (Input.GetButtonDown("Jump"))
+            {
+                float xDir = isFacingRight ? -1 : 1;
+                rb.linearVelocity = new Vector2(xDir * wallJumpDirection.x * wallJumpForce,
+                                                wallJumpDirection.y * wallJumpForce);
+
+                // vira o personagem
+                if (isFacingRight && xDir < 0) Flip();
+                else if (!isFacingRight && xDir > 0) Flip();
+
+                isWallJumping = true;
+                wallJumpTimer = wallJumpTime;
+                wallStickTimer = 0f;
+            }
+
+            isWallSliding = true;
+        }
+        else
+        {
+            isWallSliding = false;
+            wallStickTimer = 0f;
+        }
+
+        // controla o tempo do wall jump
+        if (isWallJumping)
+        {
+            wallJumpTimer -= Time.deltaTime;
+            if (wallJumpTimer <= 0)
+                isWallJumping = false;
+        }
     }
 
     void Flip()
@@ -121,7 +197,6 @@ public class PlayerMovement : MonoBehaviour
         float dashSpeed = dashDistance / dashDuration;
         float elapsed = 0f;
 
-        // Desliga colisão apenas com a layer dashThroughWalls
         int playerLayer = gameObject.layer;
         Physics2D.IgnoreLayerCollision(playerLayer, LayerMaskToLayer(dashThroughWalls), true);
 
@@ -133,20 +208,12 @@ public class PlayerMovement : MonoBehaviour
         }
 
         rb.linearVelocity = Vector2.zero;
-
-        // Restaura colisão
         Physics2D.IgnoreLayerCollision(playerLayer, LayerMaskToLayer(dashThroughWalls), false);
-
         isDashing = false;
     }
 
-    public bool IsDashing()
-    {
-        return isDashing;
-    }
+    public bool IsDashing() => isDashing;
 
-
-    // Converte LayerMask em Layer (suporta apenas 1 layer ativa no mask)
     private int LayerMaskToLayer(LayerMask mask)
     {
         int layer = 0;
@@ -159,16 +226,13 @@ public class PlayerMovement : MonoBehaviour
         return layer;
     }
 
-
     IEnumerator AttackRoutine()
     {
         isAttacking = true;
         animator.SetTrigger("Attack");
         yield return new WaitForSeconds(0.3f);
-
         Vector2 attackPos = transform.position + (isFacingRight ? Vector3.right : Vector3.left) * attackRange;
         DamageEnemies(attackPos);
-
         isAttacking = false;
     }
 
@@ -177,15 +241,10 @@ public class PlayerMovement : MonoBehaviour
         isAttacking = true;
         animator.SetTrigger("DownAttack");
         yield return new WaitForSeconds(0.3f);
-
         Vector2 attackPos = transform.position + Vector3.down * downAttackRange;
         bool hitEnemy = DamageEnemies(attackPos);
-
         if (hitEnemy)
-        {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * 0.7f);
-        }
-
         isAttacking = false;
     }
 
@@ -194,10 +253,8 @@ public class PlayerMovement : MonoBehaviour
         isAttacking = true;
         animator.SetTrigger("UpAttack");
         yield return new WaitForSeconds(0.3f);
-
         Vector2 attackPos = transform.position + Vector3.up * downAttackRange;
         DamageEnemies(attackPos);
-
         isAttacking = false;
     }
 
@@ -221,7 +278,6 @@ public class PlayerMovement : MonoBehaviour
     void HandleLookDown()
     {
         bool canLookDown = isGrounded && moveInput == 0 && !isAttacking && Mathf.Abs(rb.linearVelocity.y) < 0.01f;
-
         if (Input.GetKey(KeyCode.S) && canLookDown)
         {
             holdTimeS += Time.deltaTime;
@@ -229,7 +285,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 isLookingDown = true;
                 animator.SetBool("lookDown", true);
-
                 CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
                 if (cam != null) cam.LookDown(true);
             }
@@ -241,7 +296,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 isLookingDown = false;
                 animator.SetBool("lookDown", false);
-
                 CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
                 if (cam != null) cam.LookDown(false);
             }
@@ -257,10 +311,8 @@ public class PlayerMovement : MonoBehaviour
     {
         enabled = false;
         yield return new WaitForSeconds(delay);
-
         Vector2 spawnPos = lastSafePosition;
         spawnPos.y += 0.5f;
-
         RaycastHit2D hit = Physics2D.Raycast(spawnPos, Vector2.down, 5f, whatIsGround);
         if (hit.collider != null)
         {
@@ -268,14 +320,29 @@ public class PlayerMovement : MonoBehaviour
             float rightEdge = hit.collider.bounds.max.x - edgePadding;
             spawnPos.x = Mathf.Clamp(lastSafePosition.x, leftEdge, rightEdge);
         }
-
         transform.position = spawnPos;
         rb.linearVelocity = Vector2.zero;
         enabled = true;
     }
 
-    void Awake()
+    void Awake() => DontDestroyOnLoad(gameObject);
+
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
     {
-        DontDestroyOnLoad(gameObject);
+        // chão
+        if (groundCheck != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
+        }
+
+        // parede
+        Gizmos.color = Color.cyan;
+        Vector3 origin = transform.position;
+        Vector3 dir = (isFacingRight ? Vector2.right : Vector2.left) * wallCheckDistance;
+        Gizmos.DrawLine(origin, origin + dir);
+        Gizmos.DrawWireSphere(origin + dir, 0.05f);
     }
+#endif
 }
