@@ -295724,7 +295724,7 @@ GameObject:
   - component: {fileID: 352672017}
   - component: {fileID: 352672018}
   - component: {fileID: 352672019}
-  m_Layer: 0
+  m_Layer: 27
   m_Name: Lights_2 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -304464,7 +304464,7 @@ GameObject:
   - component: {fileID: 1097742241}
   - component: {fileID: 1097742242}
   - component: {fileID: 1097742243}
-  m_Layer: 0
+  m_Layer: 27
   m_Name: Lights_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -304983,7 +304983,7 @@ GameObject:
   - component: {fileID: 1264596244}
   - component: {fileID: 1264596245}
   - component: {fileID: 1264596246}
-  m_Layer: 0
+  m_Layer: 27
   m_Name: Lights_2 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305629,7 +305629,7 @@ GameObject:
   - component: {fileID: 1449155573}
   - component: {fileID: 1449155574}
   - component: {fileID: 1449155575}
-  m_Layer: 0
+  m_Layer: 27
   m_Name: Lights_2 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -318134,7 +318134,7 @@ GameObject:
   - component: {fileID: 1700330751}
   - component: {fileID: 1700330752}
   - component: {fileID: 1700330753}
-  m_Layer: 0
+  m_Layer: 27
   m_Name: Lights_2 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

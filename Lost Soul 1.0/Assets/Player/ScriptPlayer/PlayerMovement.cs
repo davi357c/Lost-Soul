@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
@@ -27,11 +28,21 @@ public class PlayerMovement : MonoBehaviour
     public float wallJumpTime = 0.2f;
     public float wallStickTime = 1f; // tempo grudado na parede antes de escorregar
 
+    // ==== FIX: variáveis auxiliares para wall logic ====
+    [Tooltip("Tempo após o wall jump em que o player NÃO regruda na parede (anti-‘regrab’).")]
+    public float wallNoAttachTime = 0.15f;
+
+    [Tooltip("Multiplicador de gravidade durante o slide para suavizar a descida.")]
+    public float wallSlideGravityScale = 0.4f;
+
     private bool isTouchingWall;
     private bool isWallSliding;
     private bool isWallJumping;
     private float wallJumpTimer;
     private float wallStickTimer;
+    private float noAttachTimer;                // evita “regrudar” logo após o pulo
+    private int lastWallSide = 0;               // -1 = parede à esquerda, +1 = direita, 0 = nenhuma
+    private float defaultGravityScale = 1f;     // gravidade original do Rigidbody2D
 
     private Rigidbody2D rb;
     private Animator animator;
@@ -69,7 +80,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (groundCheck == null)
             Debug.LogError("GroundCheck não atribuído!");
+        if (wallCheck == null)
+            Debug.LogError("WallCheck não atribuído!");
 
+        defaultGravityScale = rb.gravityScale;
         lastSafePosition = transform.position;
     }
 
@@ -79,21 +93,18 @@ public class PlayerMovement : MonoBehaviour
         {
             moveInput = Input.GetAxisRaw("Horizontal");
 
-            // Permite movimento normal se não estiver wall jumping
             if (!isWallJumping)
                 rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 
             if (moveInput > 0 && !isFacingRight) Flip();
             else if (moveInput < 0 && isFacingRight) Flip();
 
-            // Pulo normal
             if (Input.GetButtonDown("Jump") && isGrounded)
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
 
             if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0)
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
 
-            // Ataque
             if (Input.GetMouseButtonDown(0) && !isAttacking)
             {
                 if (Input.GetKey(KeyCode.S) && !isGrounded)
@@ -106,14 +117,12 @@ public class PlayerMovement : MonoBehaviour
 
             HandleLookDown();
 
-            // Dash
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 StartCoroutine(DashRoutine());
             }
 
-            // Wall Slide e Wall Jump ajustado
-            WallSlideAndJump();
+            WallSlideAndJump(); // >>> toda a lógica de parede está aqui
         }
 
         animator.SetFloat("Speed", Mathf.Abs(moveInput));
@@ -127,57 +136,117 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
 
         if (isGrounded)
+        {
             lastSafePosition = transform.position;
+            isWallJumping = false;     // aterrissou -> encerra estado de wall jump
+            noAttachTimer = 0f;        // pode voltar a grudar quando pular de novo
+        }
     }
 
-    // ===== WALL SLIDE + JUMP =====
+    // ===== WALL SLIDE + JUMP (corrigido) =====
     void WallSlideAndJump()
     {
-        isTouchingWall = Physics2D.Raycast(transform.position, isFacingRight ? Vector2.right : Vector2.left, wallCheckDistance, whatIsWall);
+        // Direção para checar parede baseada no facing
+        int faceDir = isFacingRight ? 1 : -1;
+        Vector2 checkDir = new Vector2(faceDir, 0f);
 
-        if (isTouchingWall && !isGrounded && rb.linearVelocity.y <= 0)
+        // ==== FIX: usar wallCheck como origem da checagem ====
+        Vector2 origin = wallCheck != null ? (Vector2)wallCheck.position : (Vector2)transform.position;
+
+        // Se ainda estou no timer de "não regrudar", ignore contato com a MESMA parede do salto
+        bool ignoreAttach = noAttachTimer > 0f;
+
+        // Raycast para detectar parede
+        RaycastHit2D wallHit = Physics2D.Raycast(origin, checkDir, wallCheckDistance, whatIsWall);
+        isTouchingWall = wallHit.collider != null;
+
+        // Descobrir o lado da parede detectada
+        int currentWallSide = 0;
+        if (isTouchingWall)
+            currentWallSide = faceDir; // parede está no lado para o qual estou virado
+
+        // Timer de não regrudar diminui ao longo do tempo
+        if (noAttachTimer > 0f)
+            noAttachTimer -= Time.deltaTime;
+
+        // Condição para entrar em wall slide: tocando parede, no ar e caindo (ou parado verticalmente)
+        bool canWallSlide = isTouchingWall && !isGrounded && rb.linearVelocity.y <= 0.05f;
+
+        // Se devo ignorar regrudar (acabou de dar wall jump) e é a mesma parede, NÃO desliza
+        if (ignoreAttach && currentWallSide != 0 && currentWallSide == lastWallSide)
         {
-            // Gruda na parede por um tempo
+            canWallSlide = false;
+        }
+
+        if (canWallSlide)
+        {
+            // Entrou em wall slide
+            isWallSliding = true;
+
+            // FIX: controlar gravidade e velocidade de descida de forma estável
+            rb.gravityScale = defaultGravityScale * wallSlideGravityScale;
+            if (rb.linearVelocity.y < -wallSlideSpeed)
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, -wallSlideSpeed);
+
+            // "Grudar" por um tempo antes de começar a escorregar
             if (wallStickTimer < wallStickTime)
             {
-                rb.linearVelocity = new Vector2(0, 0);
+                // zera velocidade para dar sensação de 'grudar'
+                rb.linearVelocity = new Vector2(0f, Mathf.Max(rb.linearVelocity.y, -0.01f));
                 wallStickTimer += Time.deltaTime;
             }
-            else
-            {
-                // Começa a escorregar
-                rb.linearVelocity = new Vector2(0, Mathf.Max(rb.linearVelocity.y, -wallSlideSpeed));
-            }
 
-            // Se apertar espaço, executa o wall jump
+            // Pulo na parede (afastando do lado dela)
             if (Input.GetButtonDown("Jump"))
             {
-                float xDir = isFacingRight ? -1 : 1;
-                rb.linearVelocity = new Vector2(xDir * wallJumpDirection.x * wallJumpForce,
-                                                wallJumpDirection.y * wallJumpForce);
+                // Direção de salto: sempre para longe da parede.
+                // Se a parede está à direita (+1), salto para esquerda (-1), e vice-versa.
+                int away = currentWallSide == 1 ? -1 : 1;
 
-                // vira o personagem
-                if (isFacingRight && xDir < 0) Flip();
-                else if (!isFacingRight && xDir > 0) Flip();
+                Vector2 jumpDir = new Vector2(away * Mathf.Abs(wallJumpDirection.x), Mathf.Abs(wallJumpDirection.y));
+                jumpDir = jumpDir.normalized;
 
+                rb.gravityScale = defaultGravityScale; // restaura gravidade para o salto
+                rb.linearVelocity = Vector2.zero;      // zera antes de aplicar o impulso
+                rb.linearVelocity = jumpDir * wallJumpForce;
+
+                // Garante a orientação do personagem para o lado do salto
+                if (away > 0 && !isFacingRight) Flip();
+                else if (away < 0 && isFacingRight) Flip();
+
+                // Marca estados/temporizadores
                 isWallJumping = true;
                 wallJumpTimer = wallJumpTime;
+                noAttachTimer = wallNoAttachTime; // importante!
+                lastWallSide = currentWallSide;   // lembra de qual lado saltou
+
+                // Sai do slide imediatamente
+                isWallSliding = false;
                 wallStickTimer = 0f;
             }
-
-            isWallSliding = true;
         }
         else
         {
+            // Não está em wall slide
+            if (isWallSliding)
+            {
+                // Ao sair do slide, restaura gravidade
+                rb.gravityScale = defaultGravityScale;
+            }
+
             isWallSliding = false;
             wallStickTimer = 0f;
+
+            // Se não está em slide e não está no pulo de parede, mantém gravidade normal
+            if (!isWallJumping)
+                rb.gravityScale = defaultGravityScale;
         }
 
-        // controla o tempo do wall jump
+        // Timer do estado "wall jump" (impede movimento horizontal sobrescrever imediatamente)
         if (isWallJumping)
         {
             wallJumpTimer -= Time.deltaTime;
-            if (wallJumpTimer <= 0)
+            if (wallJumpTimer <= 0f)
                 isWallJumping = false;
         }
     }
@@ -200,6 +269,10 @@ public class PlayerMovement : MonoBehaviour
         int playerLayer = gameObject.layer;
         Physics2D.IgnoreLayerCollision(playerLayer, LayerMaskToLayer(dashThroughWalls), true);
 
+        // Durante o dash, gravidade 0 para não cair
+        float prevGrav = rb.gravityScale;
+        rb.gravityScale = 0f;
+
         while (elapsed < dashDuration)
         {
             rb.linearVelocity = dashDir * dashSpeed;
@@ -208,6 +281,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         rb.linearVelocity = Vector2.zero;
+        rb.gravityScale = prevGrav;
+
         Physics2D.IgnoreLayerCollision(playerLayer, LayerMaskToLayer(dashThroughWalls), false);
         isDashing = false;
     }
@@ -325,24 +400,52 @@ public class PlayerMovement : MonoBehaviour
         enabled = true;
     }
 
-    void Awake() => DontDestroyOnLoad(gameObject);
+    // ================================
+    // ZERAR VELOCIDADE AO TROCAR DE CENA
+    // ================================
+    void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (rb != null)
+            rb.linearVelocity = Vector2.zero;
+
+        // Reinicia estados de parede ao carregar nova cena
+        isWallSliding = false;
+        isWallJumping = false;
+        wallStickTimer = 0f;
+        noAttachTimer = 0f;
+        lastWallSide = 0;
+        rb.gravityScale = defaultGravityScale;
+    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
-        // chão
         if (groundCheck != null)
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
         }
 
-        // parede
-        Gizmos.color = Color.cyan;
-        Vector3 origin = transform.position;
-        Vector3 dir = (isFacingRight ? Vector2.right : Vector2.left) * wallCheckDistance;
-        Gizmos.DrawLine(origin, origin + dir);
-        Gizmos.DrawWireSphere(origin + dir, 0.05f);
+        // Gizmos de parede
+        if (wallCheck != null)
+        {
+            Gizmos.color = Color.cyan;
+            Vector3 origin = wallCheck.position;
+            Vector3 dir = (isFacingRight ? Vector2.right : Vector2.left) * wallCheckDistance;
+            Gizmos.DrawLine(origin, origin + dir);
+            Gizmos.DrawWireSphere(origin + dir, 0.05f);
+        }
     }
 #endif
 }

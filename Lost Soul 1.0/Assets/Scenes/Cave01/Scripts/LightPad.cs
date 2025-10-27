@@ -48,7 +48,7 @@ public class LightPad : MonoBehaviour
         StartCoroutine(FlashSprite(spriteRed, time));
     }
 
-    /// <summary>Usado para EXIBIR a sequência (sempre em vermelho).</summary>
+    /// Exibição da sequência (sempre em vermelho).
     public void ShowRed(float time)
     {
         StopAllCoroutines();
@@ -65,6 +65,13 @@ public class LightPad : MonoBehaviour
     }
 
     void OnMouseDown()
+    {
+        if (_interactable && _manager != null)
+            _manager.OnPadClicked(this);
+    }
+
+    /// Chamado pelo Player quando ele "bate" no pad
+    public void OnHitByPlayer()
     {
         if (_interactable && _manager != null)
             _manager.OnPadClicked(this);
