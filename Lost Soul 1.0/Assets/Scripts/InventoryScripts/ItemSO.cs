@@ -13,24 +13,39 @@ public class ItemSO : ScriptableObject
 
     public bool UseItem()
     {
-        if (statToChange == StatToChange.health)
-        {
-            PlayerHealth playerHealth = GameObject.Find("Player").GetComponent<PlayerHealth>();
+        // tenta o singleton primeiro (se você aplicou a mudança acima)
+        PlayerHealth playerHealth = PlayerHealth.Instance;
 
-            // Corrigido: agora usa as variáveis corretas
-            if (playerHealth.currentLives == playerHealth.maxLives)
-            {
-                return false; // já está com vida cheia
-            }
-            else
-            {
-                playerHealth.ChangeHealth(amountToChangeStat);
-                return true; // item foi usado
-            }
+        // se não houver singleton (ou não foi aplicado), tenta achar na cena
+        if (playerHealth == null)
+        {
+            playerHealth = GameObject.FindObjectOfType<PlayerHealth>();
         }
 
+        if (playerHealth == null)
+        {
+            Debug.LogWarning($"[ItemSO] Não encontrou PlayerHealth ao usar {itemName}.");
+            return false;
+        }
+
+        Debug.Log($"[ItemSO] Tentando usar {itemName} em Player (vidas antes = {playerHealth.currentLives}).");
+
+        if (statToChange == StatToChange.health)
+        {
+            if (playerHealth.currentLives >= playerHealth.maxLives)
+            {
+                Debug.Log($"[ItemSO] Jogador já com vida cheia ({playerHealth.currentLives}/{playerHealth.maxLives}).");
+                return false; // não usar se vida cheia
+            }
+            playerHealth.ChangeHealth(amountToChangeStat);
+            Debug.Log($"[ItemSO] Item usado. Vidas agora = {playerHealth.currentLives}.");
+            return true;
+        }
+
+        // outros tipos de stat aqui...
         return false;
     }
+
 
     public enum StatToChange
     {

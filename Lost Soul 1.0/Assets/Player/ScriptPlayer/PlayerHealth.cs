@@ -11,8 +11,9 @@ public class PlayerHealth : MonoBehaviour
     [Header("UI de Corações")]
     public Animator[] hearts;
 
-    [Header("Opcional: Prefab do HeartsContainer (UI)")]
-    public GameObject heartsPrefab; // arrasta aqui o prefab com o Canvas + ObjectAleatorio
+    [Header("Opcional: Prefab do Hearts (UI)")]
+    [Tooltip("Se deixado vazio, PlayerHealth tentará encontrar os animators na cena. Se preenchido, será instanciado apenas quando necessário.")]
+    public GameObject heartsPrefab;
 
     [Header("Configurações de Dano")]
     public float invulnerableTime = 1f;
@@ -25,11 +26,13 @@ public class PlayerHealth : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerMovement movement;
 
+    // Singleton público para acesso seguro
     private static PlayerHealth instance;
+    public static PlayerHealth Instance => instance;
 
     void Awake()
     {
-        // Singleton robusto (só 1 PlayerHealth existe)
+        // singleton robusto
         if (instance != null && instance != this)
         {
             Debug.Log("[PlayerHealth] Outro PlayerHealth encontrado - destruindo este.");
@@ -44,7 +47,6 @@ public class PlayerHealth : MonoBehaviour
 
     void Start()
     {
-        // Só define a vida se ainda não foi inicializada
         if (currentLives <= 0)
             currentLives = maxLives;
 
@@ -52,42 +54,156 @@ public class PlayerHealth : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         movement = GetComponent<PlayerMovement>();
 
+        // tenta localizar os animators de coração de forma tolerante
+        StartCoroutine(LocateHeartsAndUpdate());
         Debug.Log($"[PlayerHealth] Start - currentLives={currentLives}, heartsArrayLength={hearts?.Length ?? 0}");
-        UpdateHeartsUI();
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log("[PlayerHealth] Cena carregada: " + scene.name);
+        // ao carregar cena, tenta localizar/atualizar (coroutine cuida da ordem de inicialização)
+        StartCoroutine(LocateHeartsAndUpdate());
+    }
 
-        // Tenta encontrar o container da cena atual (ajustado para "ObjectAleatorio")
-        GameObject container = GameObject.Find("ObjectAleatorio");
-        if (container != null)
+    // Coroutine que tenta localizar os animators de hearts de várias maneiras (e atualiza a UI quando encontrado)
+    private IEnumerator LocateHeartsAndUpdate()
+    {
+        // se já tem referência válida, só atualiza
+        if (hearts != null && hearts.Length > 0)
         {
-            hearts = container.GetComponentsInChildren<Animator>();
-            Debug.Log("[PlayerHealth] ObjectAleatorio encontrado. Hearts count = " + hearts.Length);
             UpdateHeartsUI();
-            return;
+            yield break;
         }
 
-        Debug.LogWarning("[PlayerHealth] ObjectAleatorio não encontrado na cena.");
+        float timeout = 1.0f; // tempo máximo para tentar encontrar (em segundos)
+        float timer = 0f;
 
-        // Se não encontrar e tiver prefab, instancia (apenas uma vez)
-        if (heartsPrefab != null && GameObject.Find(heartsPrefab.name) == null)
+        // 1) tentativa rápida por GameObject nomeado "ObjectAleatorio" (você já usou esse)
+        GameObject obj = GameObject.Find("ObjectAleatorio");
+        if (obj != null)
         {
-            GameObject heartsObj = Instantiate(heartsPrefab);
-            heartsObj.name = heartsPrefab.name;
-            DontDestroyOnLoad(heartsObj);
+            hearts = obj.GetComponentsInChildren<Animator>(true);
+            Debug.Log($"[PlayerHealth] Encontrou ObjectAleatorio. Hearts count = {hearts.Length}");
+            UpdateHeartsUI();
+            yield break;
+        }
 
-            Transform containerTransform = heartsObj.transform.Find("ObjectAleatorio");
-            if (containerTransform != null)
-                hearts = containerTransform.GetComponentsInChildren<Animator>();
+        // 2) tenta procurar nos root GameObjects da cena um conjunto de animators que cai bem (prefere igual a maxLives)
+        while ((hearts == null || hearts.Length == 0) && timer < timeout)
+        {
+            Animator[] best = null;
+            int bestCount = 0;
+
+            var currentScene = SceneManager.GetActiveScene();
+            var roots = currentScene.GetRootGameObjects();
+
+            foreach (var root in roots)
+            {
+                var anims = root.GetComponentsInChildren<Animator>(true);
+                if (anims == null || anims.Length == 0) continue;
+
+                // preferir conjunto com contagem igual a maxLives
+                if (anims.Length == maxLives)
+                {
+                    best = anims;
+                    bestCount = anims.Length;
+                    break;
+                }
+
+                if (anims.Length > bestCount)
+                {
+                    best = anims;
+                    bestCount = anims.Length;
+                }
+            }
+
+            if (best != null && best.Length > 0)
+            {
+                hearts = best;
+                Debug.Log($"[PlayerHealth] Hearts encontrados em root object. Hearts count = {hearts.Length}");
+                UpdateHeartsUI();
+                yield break;
+            }
+
+            // 3) tenta encontrar por nome igual ao prefab (se prefab foi informado e já existe na cena)
+            if (heartsPrefab != null)
+            {
+                GameObject existing = GameObject.Find(heartsPrefab.name);
+                if (existing != null)
+                {
+                    hearts = existing.GetComponentsInChildren<Animator>(true);
+                    Debug.Log($"[PlayerHealth] Encontrou objeto com nome do prefab ({heartsPrefab.name}). Hearts count = {hearts.Length}");
+                    UpdateHeartsUI();
+                    yield break;
+                }
+            }
+
+            // espera um frame e tenta novamente (ajuda com ordem de Start/Awake)
+            yield return null;
+            timer += Time.deltaTime;
+        }
+
+        // 4) se ainda não achou e tiver prefab, instancia (apenas se não houver outro com mesmo nome)
+        if ((hearts == null || hearts.Length == 0) && heartsPrefab != null)
+        {
+            if (GameObject.Find(heartsPrefab.name) == null)
+            {
+                GameObject heartsObj = Instantiate(heartsPrefab);
+                heartsObj.name = heartsPrefab.name;
+                DontDestroyOnLoad(heartsObj);
+
+                hearts = heartsObj.GetComponentsInChildren<Animator>(true);
+                Debug.Log($"[PlayerHealth] Hearts prefab instanciado. Hearts count = {hearts.Length}");
+                UpdateHeartsUI();
+                yield break;
+            }
             else
-                hearts = heartsObj.GetComponentsInChildren<Animator>();
-
-            Debug.Log("[PlayerHealth] Hearts prefab instanciado via código. Hearts count = " + hearts.Length);
-            UpdateHeartsUI();
+            {
+                GameObject existing = GameObject.Find(heartsPrefab.name);
+                if (existing != null)
+                {
+                    hearts = existing.GetComponentsInChildren<Animator>(true);
+                    Debug.Log($"[PlayerHealth] Hearts encontrado por nome (existing). Hearts count = {hearts.Length}");
+                    UpdateHeartsUI();
+                    yield break;
+                }
+            }
         }
+
+        // 5) fallback: tentar qualquer Animator na cena (se nada melhor foi encontrado)
+        if (hearts == null || hearts.Length == 0)
+        {
+            var all = FindObjectsOfType<Animator>(true);
+            if (all != null && all.Length > 0)
+            {
+                // agrupa por parent root e escolhe o maior conjunto como heurística
+                Animator[] best = null;
+                int bestCount = 0;
+                foreach (var a in all)
+                {
+                    var parentRoot = a.transform.root;
+                    var anims = parentRoot.GetComponentsInChildren<Animator>(true);
+                    if (anims.Length > bestCount)
+                    {
+                        best = anims;
+                        bestCount = anims.Length;
+                    }
+                }
+
+                if (best != null && best.Length > 0)
+                {
+                    hearts = best;
+                    Debug.Log($"[PlayerHealth] Fallback: conjunto de animators escolhido. Hearts count = {hearts.Length}");
+                    UpdateHeartsUI();
+                    yield break;
+                }
+            }
+        }
+
+        // se chegou aqui, não encontrou nada — UpdateHeartsUI fará warning caso chamado em outro momento
+        Debug.LogWarning("[PlayerHealth] Não conseguiu localizar hearts automaticamente. Configure hearts manualmente no Inspector ou forneça heartsPrefab.");
+        yield break;
     }
 
     public void TakeDamage(Vector2 hitDirection)
@@ -123,10 +239,12 @@ public class PlayerHealth : MonoBehaviour
             return;
         }
 
+        // ativa/desativa corações conforme currentLives
         for (int i = 0; i < hearts.Length; i++)
         {
             bool isAlive = i < currentLives;
-            hearts[i].gameObject.SetActive(isAlive);
+            if (hearts[i] != null && hearts[i].gameObject != null)
+                hearts[i].gameObject.SetActive(isAlive);
         }
     }
 
@@ -168,23 +286,16 @@ public class PlayerHealth : MonoBehaviour
 
     public void ChangeHealth(int amount)
     {
-        // Garante que o player não está morto
         if (isDead) return;
 
-        // Altera a vida (positiva = cura, negativa = dano)
         currentLives += amount;
-
-        // Limita a vida entre 0 e o máximo
         currentLives = Mathf.Clamp(currentLives, 0, maxLives);
 
-        // Atualiza o UI
         UpdateHeartsUI();
 
-        // Se a vida chegou a 0, morre
         if (currentLives <= 0)
         {
             Die();
         }
     }
-
 }

@@ -12055,10 +12055,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 808285879}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad8fa7c0db47ae84fba95725755b2413, type: 3}
+  m_Script: {fileID: 11500000, guid: b09325b690183134cb10b24214f87d1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectIndex: 0
 --- !u!1 &827273995
 GameObject:
   m_ObjectHideFlags: 0
@@ -51466,6 +51465,7 @@ GameObject:
   - component: {fileID: 1615619782}
   - component: {fileID: 1615619781}
   - component: {fileID: 1615619780}
+  - component: {fileID: 1615619783}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -51534,6 +51534,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1615619783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1615619779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5b5f2eb34c6932469b1ded519a1e803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &1633698610 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 6092913802259104640, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
@@ -52914,8 +52926,8 @@ MonoBehaviour:
   interactDistance: 2
   interactKey: 101
   coinPrefab: {fileID: 793008723303224103, guid: 56cf37f58f07b6f46befbf888b2862cd, type: 3}
-  coinsToSpawn: 100
-  spawnRadius: 25
+  coinsToSpawn: 20
+  spawnRadius: 3
   forceX: {x: -2, y: 2}
   forceY: {x: 4, y: 7}
 --- !u!95 &1870251121

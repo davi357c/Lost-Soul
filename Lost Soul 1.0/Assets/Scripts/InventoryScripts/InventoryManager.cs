@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices.WindowsRuntime;
+﻿using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
@@ -52,7 +52,7 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < itemSlot.Length; i++)
         {
-            if(itemSlot[i].isFull == false && itemSlot[i].name == name || itemSlot[i].quantity ==0)
+            if(itemSlot[i].isFull == false && itemSlot[i].itemName == itemName || itemSlot[i].quantity ==0)
             {
                 int leftOverItems = itemSlot[i].AddItem(itemName, quantity, itemSprite, itemDescription);
                 if(leftOverItems > 0)
