@@ -165,4 +165,26 @@ public class PlayerHealth : MonoBehaviour
         if (instance == this) instance = null;
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
+
+    public void ChangeHealth(int amount)
+    {
+        // Garante que o player não está morto
+        if (isDead) return;
+
+        // Altera a vida (positiva = cura, negativa = dano)
+        currentLives += amount;
+
+        // Limita a vida entre 0 e o máximo
+        currentLives = Mathf.Clamp(currentLives, 0, maxLives);
+
+        // Atualiza o UI
+        UpdateHeartsUI();
+
+        // Se a vida chegou a 0, morre
+        if (currentLives <= 0)
+        {
+            Die();
+        }
+    }
+
 }
