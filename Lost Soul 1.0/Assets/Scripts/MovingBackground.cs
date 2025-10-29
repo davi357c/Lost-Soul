@@ -6,7 +6,7 @@ public class ParallaxSimple : MonoBehaviour
     [System.Serializable]
     public struct Layer
     {
-        public Transform t;             // arraste Background1..4 aqui
+        public Transform t;             // arraste Background1..4 aqui.
         [Range(0f, 1f)] public float factorX; // 0 = acompanha a câmera (perto) | 1 = quase parado (longe)
         [Range(0f, 1f)] public float factorY; // normalmente 1 em 2D sidescroller
         [HideInInspector] public Vector3 startPos;
