@@ -369,15 +369,43 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   wallCheck: {fileID: 482717491584887158}
-  wallCheckDistance: 0.4
+  wallCheckDistance: 0.5
   whatIsWall:
     serializedVersion: 2
-    m_Bits: 0
-  wallSlideSpeed: 1.5
+    m_Bits: 1024
+  wallSlideMaxDownSpeed: 8
   wallJumpForce: 14
   wallJumpDirection: {x: 1, y: 1.2}
   wallJumpTime: 0.2
   wallStickTime: 1
+  wallSlideMinGravityScale: 0.25
+  wallSlideMaxGravityScale: 1
+  wallSlideAccelDuration: 1
+  wallSlideAccelCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  wallNoAttachTime: 0.15
   respawnOffset: {x: -1, y: 0.5}
   edgePadding: 0.3
   attackRange: 1
@@ -573,7 +601,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.01164341, y: -0.018224161}
+  m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.1569945, y: 0.2835517}
   m_Direction: 0
 --- !u!1001 &1659939016987817355

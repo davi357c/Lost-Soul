@@ -254,13 +254,45 @@ public class PlayerHealth : MonoBehaviour
         isDead = true;
 
         if (animator != null) animator.SetTrigger("Die");
-        if (movement != null) movement.enabled = false;
+
+        StartCoroutine(RespawnAfterDeath());
+    }
+
+
+    private IEnumerator RespawnAfterDeath()
+    {
+        yield return new WaitForSeconds(1.5f); // tempo da animação de morte
+
+        // Lê checkpoint salvo
+        float x = PlayerPrefs.GetFloat("LastCheckpointX", transform.position.x);
+        float y = PlayerPrefs.GetFloat("LastCheckpointY", transform.position.y);
+
+        transform.position = new Vector2(x, y);
+
         if (rb != null)
         {
+            rb.simulated = true;
             rb.linearVelocity = Vector2.zero;
-            rb.simulated = false;
         }
+
+        if (movement != null)
+            movement.enabled = true;
+
+        currentLives = maxLives;
+        UpdateHeartsUI();
+        isDead = false;
+
+        // 🔹 Aqui o reset da animação:
+        if (animator != null)
+        {
+            animator.ResetTrigger("Die");   // evita ficar preso no estado de morte
+            animator.Play("playerIdle");           // força o retorno pra animação Idle
+        }
+
+        Debug.Log($"[PlayerHealth] Player respawnado no checkpoint salvo ({x}, {y})");
     }
+
+
 
     IEnumerator InvulnerabilityRoutine()
     {

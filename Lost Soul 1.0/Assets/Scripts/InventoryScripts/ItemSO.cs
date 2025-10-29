@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using static ItemSO;
 
 [CreateAssetMenu]
@@ -13,10 +13,10 @@ public class ItemSO : ScriptableObject
 
     public bool UseItem()
     {
-        // tenta o singleton primeiro (se voc� aplicou a mudan�a acima)
+        // tenta o singleton primeiro (se você aplicou a mudança acima)
         PlayerHealth playerHealth = PlayerHealth.Instance;
 
-        // se n�o houver singleton (ou n�o foi aplicado), tenta achar na cena
+        // se não houver singleton (ou não foi aplicado), tenta achar na cena
         if (playerHealth == null)
         {
             playerHealth = GameObject.FindObjectOfType<PlayerHealth>();
@@ -24,9 +24,31 @@ public class ItemSO : ScriptableObject
 
         if (playerHealth == null)
         {
-            Debug.LogWarning($"[ItemSO] N�o encontrou PlayerHealth ao usar {itemName}.");
+            Debug.LogWarning($"[ItemSO] Não encontrou PlayerHealth ao usar {itemName}.");
             return false;
         }
+
+        if (attributesToChange == AttributesToChange.agility)
+        {
+            PlayerMovement playerMovement = GameObject.FindObjectOfType<PlayerMovement>();
+            if (playerMovement != null)
+            {
+                float multiplier = 1f + (amountToChangeAtribbute / 100f); // Ex: 50 → +50%
+                float duration = 15f; // você pode deixar fixo ou criar outro campo no ScriptableObject
+
+                playerMovement.ApplyAgilityBoost(multiplier, duration);
+                Debug.Log($"[ItemSO] Poção de Agilidade usada: +{amountToChangeAtribbute}% velocidade por {duration}s.");
+
+                Debug.Log($"[ItemSO] Poção de Agilidade usada: +50% velocidade por 15s.");
+                return true;
+            }
+            else
+            {
+                Debug.LogWarning("[ItemSO] PlayerMovement não encontrado para aplicar agilidade.");
+                return false;
+            }
+        }
+
 
         Debug.Log($"[ItemSO] Tentando usar {itemName} em Player (vidas antes = {playerHealth.currentLives}).");
 
@@ -34,8 +56,8 @@ public class ItemSO : ScriptableObject
         {
             if (playerHealth.currentLives >= playerHealth.maxLives)
             {
-                Debug.Log($"[ItemSO] Jogador j� com vida cheia ({playerHealth.currentLives}/{playerHealth.maxLives}).");
-                return false; // n�o usar se vida cheia
+                Debug.Log($"[ItemSO] Jogador já com vida cheia ({playerHealth.currentLives}/{playerHealth.maxLives}).");
+                return false; // não usar se vida cheia
             }
             playerHealth.ChangeHealth(amountToChangeStat);
             Debug.Log($"[ItemSO] Item usado. Vidas agora = {playerHealth.currentLives}.");

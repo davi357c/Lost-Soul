@@ -23,6 +23,13 @@ public class PlayerMovement : MonoBehaviour
     public float wallCheckDistance = 0.4f;
     public LayerMask whatIsWall;
 
+    [Header("Agilidade (buff temporário)")]
+    public bool isAgilityBoosted = false;
+    public float agilityMultiplier = 1.5f; // Multiplicador de velocidade (ex: 1.5 = 50% mais rápido)
+    public float agilityDuration = 15f;    // Duração do efeito em segundos
+    private Coroutine agilityCoroutine;
+
+
     [Tooltip("Velocidade vertical máxima (módulo) permitida durante o slide. (Opcional, 0 = sem limite)")]
     public float wallSlideMaxDownSpeed = 8f;
 
@@ -103,8 +110,21 @@ public class PlayerMovement : MonoBehaviour
         if (wallCheck == null) Debug.LogError("WallCheck não atribuído!");
 
         defaultGravityScale = rb.gravityScale;
-        lastSafePosition = transform.position;
+
+        // --- NOVO: carregar checkpoint salvo ---
+        if (PlayerPrefs.HasKey("LastCheckpointX") && PlayerPrefs.HasKey("LastCheckpointY"))
+        {
+            float x = PlayerPrefs.GetFloat("LastCheckpointX");
+            float y = PlayerPrefs.GetFloat("LastCheckpointY");
+            transform.position = new Vector2(x, y);
+            Debug.Log($"[PlayerMovement] Player carregado no último checkpoint: ({x}, {y})");
+        }
+        else
+        {
+            lastSafePosition = transform.position;
+        }
     }
+
 
     void Update()
     {
@@ -451,5 +471,31 @@ public class PlayerMovement : MonoBehaviour
             Gizmos.DrawWireSphere(origin + dir, 0.05f);
         }
     }
+
+    public void ApplyAgilityBoost(float multiplier, float duration)
+    {
+        if (agilityCoroutine != null)
+            StopCoroutine(agilityCoroutine);
+
+        agilityCoroutine = StartCoroutine(AgilityBoostRoutine(multiplier, duration));
+    }
+
+    private IEnumerator AgilityBoostRoutine(float multiplier, float duration)
+    {
+        isAgilityBoosted = true;
+        float originalSpeed = moveSpeed;
+        moveSpeed *= multiplier;
+
+        Debug.Log($"[PlayerMovement] Agilidade aumentada para {moveSpeed} por {duration}s!");
+
+        yield return new WaitForSeconds(duration);
+
+        moveSpeed = originalSpeed;
+        isAgilityBoosted = false;
+
+        Debug.Log("[PlayerMovement] Agilidade voltou ao normal.");
+    }
+
+
 #endif
 }
