@@ -1066,7 +1066,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 8
-      m_TileSpriteIndex: 7
+      m_TileSpriteIndex: 12
       m_TileMatrixIndex: 2
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1076,7 +1076,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 7
-      m_TileSpriteIndex: 6
+      m_TileSpriteIndex: 7
       m_TileMatrixIndex: 2
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3573,10 +3573,10 @@ Tilemap:
     m_Data: {fileID: 8586281397320397129, guid: 31853555d4c37274fb6f649222c01c2a, type: 3}
   - m_RefCount: 100
     m_Data: {fileID: 2594133912986005199, guid: 70791342d24cbc14f898330d7a92fcbf, type: 3}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 1
     m_Data: {fileID: -6235631481291177234, guid: 387d4d36425fc6745a60f036eb194488, type: 3}
-  - m_RefCount: 1
-    m_Data: {fileID: 1019416715291139316, guid: a08211c4fa65e5540860fa2d24ca74e8, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 771654456457894775, guid: ab07bccfb12cbef48b4d34fd4b6ce2a5, type: 3}
   - m_RefCount: 1
@@ -3585,8 +3585,8 @@ Tilemap:
     m_Data: {fileID: -4584014384345606717, guid: b989607ef14b71f4fa0e9af2893a1b76, type: 3}
   - m_RefCount: 21
     m_Data: {fileID: -6570007476586875250, guid: f18fe8f80d533944da563b33e0786243, type: 3}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 1019416715291139316, guid: a08211c4fa65e5540860fa2d24ca74e8, type: 3}
   m_TileMatrixArray:
   - m_RefCount: 0
     m_Data:
@@ -4144,10 +4144,14 @@ MonoBehaviour:
   contentParent: {fileID: 1188649077}
   shopItemPrefab: {fileID: 3474713477550278181, guid: 136f83ab5ddf4a045b0def5a97a18b77, type: 3}
   items:
-  - name: Espada
-    description: 
-    price: 100
+  - name: Tridente
+    description: Espada para matar inimigos e cortar causa 10 de dano
+    price: 10
     icon: {fileID: 1818535864590207836, guid: 06bb10ec819b8fe4b88757da30202e4b, type: 3}
+  - name: Mapa
+    description: Esse item serve para visualizar o mapa todo
+    price: 10
+    icon: {fileID: -5164599079202685034, guid: f765ecc051a62fc41bb57f1eba4c8245, type: 3}
 --- !u!1 &1346351788
 GameObject:
   m_ObjectHideFlags: 0

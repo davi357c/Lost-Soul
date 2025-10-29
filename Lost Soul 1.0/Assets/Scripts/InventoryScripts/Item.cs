@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class Item : MonoBehaviour
 {
     [SerializeField]
     private string itemName;
@@ -11,19 +11,26 @@ public class NewMonoBehaviourScript : MonoBehaviour
     [SerializeField]
     private Sprite sprite;
 
+    [TextArea]
+    [SerializeField]
+    private string itemDescription;
+
     private InventoryManager inventoryManager;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         inventoryManager = GameObject.Find("InventoryCanvas").GetComponent<InventoryManager>();
     }
 
-    // Update is called once per frame
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Player")
         {
-            inventoryManager.AddItem(itemName, quantity, sprite);
-            Destroy(gameObject);
+            int leftOverItems = inventoryManager.AddItem(itemName, quantity, sprite, itemDescription);
+            if (leftOverItems <= 0)
+                Destroy(gameObject);
+            else
+                quantity = leftOverItems;
         }
     }
 }
