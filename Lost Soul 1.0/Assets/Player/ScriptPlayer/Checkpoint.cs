@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement; // ADICIONADO
 
 public class Checkpoint : MonoBehaviour
 {
@@ -87,14 +88,18 @@ public class Checkpoint : MonoBehaviour
         isActive = true;
         UpdateVisual(true);
 
-        // Salva posição e ID
+        // Salva posição, ID e nome da cena (garante que o nome da cena seja salvo)
+        string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
         PlayerPrefs.SetFloat("LastCheckpointX", transform.position.x);
         PlayerPrefs.SetFloat("LastCheckpointY", transform.position.y);
         PlayerPrefs.SetString("LastCheckpointID", checkpointID);
+        PlayerPrefs.SetString("LastCheckpointScene", sceneName);
         PlayerPrefs.Save();
 
-        Debug.Log($"[Checkpoint] Checkpoint salvo: {checkpointID} ({transform.position})");
+        Debug.Log($"[Checkpoint] Checkpoint salvo: ID='{checkpointID}', Pos={transform.position}, Scene='{sceneName}'");
     }
+
+
 
     private void UpdateVisual(bool active)
     {

@@ -4,26 +4,30 @@ using UnityEngine.SceneManagement;
 public class DoorInteraction2D : MonoBehaviour
 {
     [Header("Configurações da Porta")]
-    [Tooltip("Canvas (World Space) com o 'E' - arraste aqui")]
     public GameObject interactionUI;
-
-    [Tooltip("Nome da cena para onde o player será levado")]
     public string sceneToLoad;
-
-    [Tooltip("Nome do ponto de spawn na próxima cena")]
     public string spawnPointName;
 
     private bool playerInRange = false;
+    private bool canInteract = false;
 
     void Start()
     {
         if (interactionUI != null)
             interactionUI.SetActive(false);
+
+        // Previne interação imediata (delay de 0.5s)
+        Invoke(nameof(EnableInteraction), 0.5f);
+    }
+
+    void EnableInteraction()
+    {
+        canInteract = true;
     }
 
     void Update()
     {
-        if (playerInRange && Input.GetKeyDown(KeyCode.E))
+        if (canInteract && playerInRange && Input.GetKeyDown(KeyCode.E))
         {
             EnterDoor();
         }
@@ -37,17 +41,15 @@ public class DoorInteraction2D : MonoBehaviour
             return;
         }
 
-        // Salva o nome do ponto onde o player deve nascer na próxima cena
         PlayerPrefs.SetString("LastSpawnPoint", spawnPointName);
         PlayerPrefs.Save();
 
-        // Carrega a próxima cena
         SceneManager.LoadScene(sceneToLoad);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (canInteract && other.CompareTag("Player"))
         {
             playerInRange = true;
             if (interactionUI != null)

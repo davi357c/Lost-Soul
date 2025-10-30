@@ -655,8 +655,6 @@ MonoBehaviour:
     m_Bits: 0
   attackDamage: 1
   knockbackForce: 5
-  ballKnockbackForce: 100
-  setFullKnockback: 0
   dashDistance: 3
   dashDuration: 0.1
   dashThroughWalls:
@@ -809,6 +807,9 @@ MonoBehaviour:
   heartsPrefab: {fileID: 1877018499976964415, guid: 2ec57d5e320ae51499a0569ac6d8a052, type: 3}
   invulnerableTime: 1
   knockbackForce: 5
+  fadeImage: {fileID: 0}
+  fadeDuration: 3
+  fadeInAfterRespawn: 2
 --- !u!70 &5663195781222956821
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
