@@ -208,7 +208,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -274,10 +274,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_0
       rect:
         serializedVersion: 2
-        x: 10
-        y: 6
-        width: 43
-        height: 55
+        x: 0
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -296,10 +296,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_1
       rect:
         serializedVersion: 2
-        x: 75
-        y: 7
-        width: 41
-        height: 54
+        x: 64
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -318,10 +318,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_2
       rect:
         serializedVersion: 2
-        x: 139
-        y: 7
-        width: 41
-        height: 54
+        x: 128
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -340,10 +340,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_3
       rect:
         serializedVersion: 2
-        x: 201
-        y: 3
-        width: 45
-        height: 59
+        x: 192
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -362,10 +362,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_4
       rect:
         serializedVersion: 2
-        x: 265
-        y: 3
-        width: 45
-        height: 60
+        x: 256
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -384,10 +384,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_5
       rect:
         serializedVersion: 2
-        x: 329
-        y: 3
-        width: 45
-        height: 60
+        x: 320
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -406,10 +406,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_6
       rect:
         serializedVersion: 2
-        x: 393
-        y: 3
-        width: 45
-        height: 59
+        x: 384
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -428,10 +428,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_7
       rect:
         serializedVersion: 2
-        x: 456
-        y: 50
-        width: 11
-        height: 10
+        x: 448
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -450,10 +450,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_8
       rect:
         serializedVersion: 2
-        x: 472
-        y: 47
-        width: 8
-        height: 10
+        x: 512
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -472,10 +472,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_9
       rect:
         serializedVersion: 2
-        x: 490
-        y: 49
-        width: 11
-        height: 10
+        x: 576
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -494,10 +494,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_10
       rect:
         serializedVersion: 2
-        x: 516
-        y: 52
-        width: 10
-        height: 11
+        x: 640
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -516,10 +516,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_11
       rect:
         serializedVersion: 2
-        x: 558
-        y: 53
-        width: 8
-        height: 9
+        x: 704
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -538,10 +538,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_12
       rect:
         serializedVersion: 2
-        x: 579
-        y: 55
-        width: 7
-        height: 8
+        x: 768
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -560,10 +560,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_13
       rect:
         serializedVersion: 2
-        x: 627
-        y: 56
-        width: 7
-        height: 8
+        x: 832
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -582,10 +582,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_14
       rect:
         serializedVersion: 2
-        x: 639
-        y: 39
-        width: 15
-        height: 25
+        x: 896
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -604,10 +604,10 @@ TextureImporter:
       name: Enemy3No-Move-Die_15
       rect:
         serializedVersion: 2
-        x: 684
-        y: 47
-        width: 23
-        height: 17
+        x: 960
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -622,935 +622,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_16
-      rect:
-        serializedVersion: 2
-        x: 710
-        y: 29
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2d9d853ad5ab917c0800000000000000
-      internalID: -4100041074408891950
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_17
-      rect:
-        serializedVersion: 2
-        x: 752
-        y: 43
-        width: 16
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f1c73a667fc6d4f10800000000000000
-      internalID: 2255578798217198623
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_18
-      rect:
-        serializedVersion: 2
-        x: 789
-        y: 25
-        width: 36
-        height: 35
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 134006060e8a42940800000000000000
-      internalID: 5270523145573368881
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_19
-      rect:
-        serializedVersion: 2
-        x: 860
-        y: 54
-        width: 6
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1e7470e0d6bf6da80800000000000000
-      internalID: -8442284005654050847
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_20
-      rect:
-        serializedVersion: 2
-        x: 924
-        y: 57
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 822c39ffe08d0be30800000000000000
-      internalID: 4517347985181622824
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_21
-      rect:
-        serializedVersion: 2
-        x: 924
-        y: 47
-        width: 6
-        height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f16c77bde2a8bb950800000000000000
-      internalID: 6465913623875667487
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_22
-      rect:
-        serializedVersion: 2
-        x: 988
-        y: 44
-        width: 6
-        height: 20
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3d3e8d39acce46760800000000000000
-      internalID: 7450340038385656787
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_23
-      rect:
-        serializedVersion: 2
-        x: 454
-        y: 11
-        width: 51
-        height: 43
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 64b5ca027bb622ba0800000000000000
-      internalID: -6115206909744358586
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_24
-      rect:
-        serializedVersion: 2
-        x: 522
-        y: 43
-        width: 15
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: bdb70687001dbc070800000000000000
-      internalID: 8127819752469986267
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_25
-      rect:
-        serializedVersion: 2
-        x: 522
-        y: 6
-        width: 44
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a788d7da214a5eba0800000000000000
-      internalID: -6060257323430082438
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_26
-      rect:
-        serializedVersion: 2
-        x: 581
-        y: 45
-        width: 16
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d742dc07678c20870800000000000000
-      internalID: 8647694645528962173
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_27
-      rect:
-        serializedVersion: 2
-        x: 583
-        y: 14
-        width: 45
-        height: 34
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: cf33f21060abb7480800000000000000
-      internalID: -8900315703615212548
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_28
-      rect:
-        serializedVersion: 2
-        x: 627
-        y: 48
-        width: 6
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 55757963a36a517f0800000000000000
-      internalID: -642424602876225707
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_29
-      rect:
-        serializedVersion: 2
-        x: 655
-        y: 28
-        width: 24
-        height: 25
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6f46c6a0ee12d6310800000000000000
-      internalID: 1399812365442901238
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_30
-      rect:
-        serializedVersion: 2
-        x: 741
-        y: 41
-        width: 6
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8a1946996019b7510800000000000000
-      internalID: 1547990354461233576
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_31
-      rect:
-        serializedVersion: 2
-        x: 853
-        y: 38
-        width: 21
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4f0e64de3e3485370800000000000000
-      internalID: 8311467758529732852
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_32
-      rect:
-        serializedVersion: 2
-        x: 917
-        y: 42
-        width: 21
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d783c8fd8a31450d0800000000000000
-      internalID: -3435098999750903683
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_33
-      rect:
-        serializedVersion: 2
-        x: 514
-        y: 30
-        width: 15
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b5ad0a7e27a9f5e40800000000000000
-      internalID: 5647402276048919131
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_34
-      rect:
-        serializedVersion: 2
-        x: 564
-        y: 37
-        width: 6
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e97b7c7c16261ad80800000000000000
-      internalID: -8241197671008192610
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_35
-      rect:
-        serializedVersion: 2
-        x: 575
-        y: 30
-        width: 10
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6aef526cf06826880800000000000000
-      internalID: -8619179334526697818
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_36
-      rect:
-        serializedVersion: 2
-        x: 624
-        y: 33
-        width: 10
-        height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 95e4eed142bee4c70800000000000000
-      internalID: 8957355249240002137
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_37
-      rect:
-        serializedVersion: 2
-        x: 629
-        y: 41
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ca95ffd4fcbc46b10800000000000000
-      internalID: 1973926627922368940
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_38
-      rect:
-        serializedVersion: 2
-        x: 676
-        y: 38
-        width: 7
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 80c4e8588c5af6700800000000000000
-      internalID: 535829161333115912
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_39
-      rect:
-        serializedVersion: 2
-        x: 696
-        y: 40
-        width: 6
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 84b82ead0d75d7a80800000000000000
-      internalID: -8467515169849570488
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_40
-      rect:
-        serializedVersion: 2
-        x: 806
-        y: 31
-        width: 7
-        height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 71a87e02d3f065610800000000000000
-      internalID: 1609490672050997783
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_41
-      rect:
-        serializedVersion: 2
-        x: 457
-        y: 10
-        width: 12
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: be7a37480bbd12240800000000000000
-      internalID: 4765331431917594603
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_42
-      rect:
-        serializedVersion: 2
-        x: 494
-        y: 17
-        width: 12
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 947fa5845f4d0bb50800000000000000
-      internalID: 6607014803298514761
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_43
-      rect:
-        serializedVersion: 2
-        x: 516
-        y: 14
-        width: 9
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 918c0fd8d6664ece0800000000000000
-      internalID: -1376862965349693415
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_44
-      rect:
-        serializedVersion: 2
-        x: 563
-        y: 16
-        width: 10
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 245559ab8924980a0800000000000000
-      internalID: -6878893732098910910
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_45
-      rect:
-        serializedVersion: 2
-        x: 632
-        y: 13
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f34cfdefbbf337730800000000000000
-      internalID: 3995607371075273791
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_46
-      rect:
-        serializedVersion: 2
-        x: 660
-        y: 18
-        width: 10
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7250768e23b6e5bd0800000000000000
-      internalID: -2639554465200929497
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_47
-      rect:
-        serializedVersion: 2
-        x: 672
-        y: 14
-        width: 19
-        height: 20
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ae84224fb45bf67f0800000000000000
-      internalID: -617075286103406358
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_48
-      rect:
-        serializedVersion: 2
-        x: 725
-        y: 19
-        width: 8
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: cea9ab69aa4a903b0800000000000000
-      internalID: -5545720413549847828
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_49
-      rect:
-        serializedVersion: 2
-        x: 739
-        y: 18
-        width: 9
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c8d9f80e6b43480b0800000000000000
-      internalID: -5727394866052227700
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_50
-      rect:
-        serializedVersion: 2
-        x: 493
-        y: 10
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2d87fda9ece72b5f0800000000000000
-      internalID: -742391562736011054
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_51
-      rect:
-        serializedVersion: 2
-        x: 564
-        y: 4
-        width: 9
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e7904dc3bc557d760800000000000000
-      internalID: 7482543637286619518
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_52
-      rect:
-        serializedVersion: 2
-        x: 577
-        y: 11
-        width: 7
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: db0069a1352cbb250800000000000000
-      internalID: 5961572193939095741
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_53
-      rect:
-        serializedVersion: 2
-        x: 585
-        y: 3
-        width: 11
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f5af1959edb0a0470800000000000000
-      internalID: 8361508708786764383
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_54
-      rect:
-        serializedVersion: 2
-        x: 598
-        y: 8
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b771ec71e853c6da0800000000000000
-      internalID: -5950322123262257285
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_55
-      rect:
-        serializedVersion: 2
-        x: 623
-        y: 2
-        width: 14
-        height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: dccf7adb44395d050800000000000000
-      internalID: 5824723616522566861
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_56
-      rect:
-        serializedVersion: 2
-        x: 644
-        y: 1
-        width: 13
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8619d5f4d47d33360800000000000000
-      internalID: 7148293760611094888
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enemy3No-Move-Die_57
-      rect:
-        serializedVersion: 2
-        x: 700
-        y: 0
-        width: 16
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 970209ff363e338a0800000000000000
-      internalID: -6326463032896511879
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: cd832d2e3e9033e4e94e0de18d3a1abf
     internalID: 0
     vertices: []
     indices: 
@@ -1568,52 +644,10 @@ TextureImporter:
       Enemy3No-Move-Die_13: -8299366110103949877
       Enemy3No-Move-Die_14: 8359853157389100708
       Enemy3No-Move-Die_15: 8995883947976774346
-      Enemy3No-Move-Die_16: -4100041074408891950
-      Enemy3No-Move-Die_17: 2255578798217198623
-      Enemy3No-Move-Die_18: 5270523145573368881
-      Enemy3No-Move-Die_19: -8442284005654050847
       Enemy3No-Move-Die_2: 3970742491399994253
-      Enemy3No-Move-Die_20: 4517347985181622824
-      Enemy3No-Move-Die_21: 6465913623875667487
-      Enemy3No-Move-Die_22: 7450340038385656787
-      Enemy3No-Move-Die_23: -6115206909744358586
-      Enemy3No-Move-Die_24: 8127819752469986267
-      Enemy3No-Move-Die_25: -6060257323430082438
-      Enemy3No-Move-Die_26: 8647694645528962173
-      Enemy3No-Move-Die_27: -8900315703615212548
-      Enemy3No-Move-Die_28: -642424602876225707
-      Enemy3No-Move-Die_29: 1399812365442901238
       Enemy3No-Move-Die_3: 40318674132392772
-      Enemy3No-Move-Die_30: 1547990354461233576
-      Enemy3No-Move-Die_31: 8311467758529732852
-      Enemy3No-Move-Die_32: -3435098999750903683
-      Enemy3No-Move-Die_33: 5647402276048919131
-      Enemy3No-Move-Die_34: -8241197671008192610
-      Enemy3No-Move-Die_35: -8619179334526697818
-      Enemy3No-Move-Die_36: 8957355249240002137
-      Enemy3No-Move-Die_37: 1973926627922368940
-      Enemy3No-Move-Die_38: 535829161333115912
-      Enemy3No-Move-Die_39: -8467515169849570488
       Enemy3No-Move-Die_4: -1148490225835560066
-      Enemy3No-Move-Die_40: 1609490672050997783
-      Enemy3No-Move-Die_41: 4765331431917594603
-      Enemy3No-Move-Die_42: 6607014803298514761
-      Enemy3No-Move-Die_43: -1376862965349693415
-      Enemy3No-Move-Die_44: -6878893732098910910
-      Enemy3No-Move-Die_45: 3995607371075273791
-      Enemy3No-Move-Die_46: -2639554465200929497
-      Enemy3No-Move-Die_47: -617075286103406358
-      Enemy3No-Move-Die_48: -5545720413549847828
-      Enemy3No-Move-Die_49: -5727394866052227700
       Enemy3No-Move-Die_5: -3717539210225769382
-      Enemy3No-Move-Die_50: -742391562736011054
-      Enemy3No-Move-Die_51: 7482543637286619518
-      Enemy3No-Move-Die_52: 5961572193939095741
-      Enemy3No-Move-Die_53: 8361508708786764383
-      Enemy3No-Move-Die_54: -5950322123262257285
-      Enemy3No-Move-Die_55: 5824723616522566861
-      Enemy3No-Move-Die_56: 7148293760611094888
-      Enemy3No-Move-Die_57: -6326463032896511879
       Enemy3No-Move-Die_6: -8393906162659759198
       Enemy3No-Move-Die_7: 5182350629243581601
       Enemy3No-Move-Die_8: 7475153845727643141

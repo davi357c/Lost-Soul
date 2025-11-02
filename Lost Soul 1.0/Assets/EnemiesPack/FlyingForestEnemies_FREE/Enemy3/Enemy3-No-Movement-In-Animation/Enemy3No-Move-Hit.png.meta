@@ -46,7 +46,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -112,10 +112,10 @@ TextureImporter:
       name: Enemy3No-Move-Hit_0
       rect:
         serializedVersion: 2
-        x: 10
-        y: 6
-        width: 43
-        height: 55
+        x: 0
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,10 +134,10 @@ TextureImporter:
       name: Enemy3No-Move-Hit_1
       rect:
         serializedVersion: 2
-        x: 75
-        y: 8
-        width: 45
-        height: 50
+        x: 64
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -156,10 +156,10 @@ TextureImporter:
       name: Enemy3No-Move-Hit_2
       rect:
         serializedVersion: 2
-        x: 140
-        y: 8
-        width: 45
-        height: 51
+        x: 128
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,10 +178,10 @@ TextureImporter:
       name: Enemy3No-Move-Hit_3
       rect:
         serializedVersion: 2
-        x: 203
-        y: 6
-        width: 43
-        height: 55
+        x: 192
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -200,7 +200,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: def7f9118ba5df949befeb7b62452a27
     internalID: 0
     vertices: []
     indices: 

@@ -25,6 +25,7 @@ public class PlayerHealth : MonoBehaviour
 
     private bool isInvulnerable = false;
     private bool isDead = false;
+    public bool IsDead => isDead;
 
     private Animator animator;
     private Rigidbody2D rb;
@@ -374,9 +375,6 @@ public class PlayerHealth : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
             rb.AddForce(new Vector2(hitDirection.x * knockbackForce, knockbackForce), ForceMode2D.Impulse);
         }
-
-        if (movement != null)
-            movement.Respawn(0.3f);
     }
 
 

@@ -11,8 +11,15 @@ public class AttackHitbox : MonoBehaviour
         EnemyHealth enemy = collision.GetComponent<EnemyHealth>();
         if (enemy != null)
         {
-            // Aplica dano e knockback
             enemy.TakeDamage(knockbackDirection.normalized, damage);
+            return;
+        }
+
+        FlyEnemyHealth flyEnemy = collision.GetComponent<FlyEnemyHealth>();
+        if (flyEnemy != null)
+        {
+            flyEnemy.TakeDamage(knockbackDirection.normalized, damage);
         }
     }
+
 }

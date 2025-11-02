@@ -529,7 +529,7 @@ GameObject:
   - component: {fileID: 8407295381999299900}
   - component: {fileID: 1557547359232427441}
   - component: {fileID: 5663195781222956821}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -696,13 +696,14 @@ MonoBehaviour:
   wallNoAttachTime: 0.15
   respawnOffset: {x: -1, y: 0.5}
   edgePadding: 0.3
-  attackRange: 4
-  downAttackRange: 4
+  attackRange: 6
+  downAttackRange: 6
   enemyLayer:
     serializedVersion: 2
     m_Bits: 4096
   attackDamage: 1
   knockbackForce: 5
+  pogoForce: 8
   AttackHitboxFront: {fileID: 764359509325550946}
   AttackHitboxUp: {fileID: 4041642564960749828}
   AttackHitboxDown: {fileID: 839482563078281228}

@@ -58,7 +58,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -124,10 +124,10 @@ TextureImporter:
       name: Enemy3No-Move-SmashEnd_0
       rect:
         serializedVersion: 2
-        x: 10
-        y: 10
-        width: 43
-        height: 50
+        x: 0
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -146,10 +146,10 @@ TextureImporter:
       name: Enemy3No-Move-SmashEnd_1
       rect:
         serializedVersion: 2
-        x: 71
-        y: 10
-        width: 49
-        height: 37
+        x: 64
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -168,10 +168,10 @@ TextureImporter:
       name: Enemy3No-Move-SmashEnd_2
       rect:
         serializedVersion: 2
-        x: 137
-        y: 10
-        width: 45
-        height: 36
+        x: 128
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -190,10 +190,10 @@ TextureImporter:
       name: Enemy3No-Move-SmashEnd_3
       rect:
         serializedVersion: 2
-        x: 201
-        y: 10
-        width: 45
-        height: 41
+        x: 192
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -212,10 +212,10 @@ TextureImporter:
       name: Enemy3No-Move-SmashEnd_4
       rect:
         serializedVersion: 2
-        x: 265
-        y: 10
-        width: 45
-        height: 43
+        x: 256
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -234,10 +234,10 @@ TextureImporter:
       name: Enemy3No-Move-SmashEnd_5
       rect:
         serializedVersion: 2
-        x: 330
-        y: 10
-        width: 43
-        height: 47
+        x: 320
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -256,10 +256,10 @@ TextureImporter:
       name: Enemy3No-Move-SmashEnd_6
       rect:
         serializedVersion: 2
-        x: 394
-        y: 7
-        width: 43
-        height: 54
+        x: 384
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -278,10 +278,10 @@ TextureImporter:
       name: Enemy3No-Move-SmashEnd_7
       rect:
         serializedVersion: 2
-        x: 458
-        y: 6
-        width: 43
-        height: 55
+        x: 448
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -300,7 +300,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 719af4b0a1d1d8e45990fa4b55344033
     internalID: 0
     vertices: []
     indices: 

@@ -9,24 +9,32 @@ public class EnemyHealth : MonoBehaviour
 
     [Header("Knockback")]
     public float knockbackForce = 5f;
+    public float knockbackDuration = 0.25f; // quanto tempo o inimigo fica "em knockback"
+    [HideInInspector]
+    public bool isKnockedBack = false; // flag pública para outros scripts verificarem
 
     [Header("Morte")]
-    public float deathDelay = 1.0f; // tempo para animação de morte
+    public float deathDelay = 2.3f; // duração da animação de morte
     private bool isDead = false;
+    public bool IsDead => isDead; 
 
-    Rigidbody2D rb;
-    Animator animator;
+
+    private Rigidbody2D rb;
+    private Animator animator;
+    private Coroutine knockbackCoroutine;
 
     void Start()
     {
         currentHealth = maxHealth;
+
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+        // procura o Animator no próprio objeto ou em um filho (sprite)
+        animator = GetComponentInChildren<Animator>();
 
         if (rb == null)
             Debug.LogWarning($"[EnemyHealth] Rigidbody2D não encontrado em '{name}'. Knockback não funcionará.");
         if (animator == null)
-            Debug.LogWarning($"[EnemyHealth] Animator não encontrado em '{name}'. Animação de morte não funcionará.");
+            Debug.LogWarning($"[EnemyHealth] Animator não encontrado em '{name}' ou em seus filhos.");
     }
 
     public void TakeDamage(int amount)
@@ -36,15 +44,20 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(Vector2 hitDirection, int amount)
     {
-        if (isDead) return; // evita chamar TakeDamage depois da morte
+        if (isDead) return;
 
         currentHealth -= amount;
 
-        // Aplica knockback se houver Rigidbody2D e houver direção válida
+        // aplica knockback se houver direção válida e Rigidbody disponível
         if (rb != null && hitDirection != Vector2.zero)
         {
+            // zera a velocidade antes para aplicar um impulso consistente
             rb.linearVelocity = Vector2.zero;
             rb.AddForce(hitDirection.normalized * knockbackForce, ForceMode2D.Impulse);
+
+            // marca knockback e inicia coroutine para liberar depois
+            if (knockbackCoroutine != null) StopCoroutine(knockbackCoroutine);
+            knockbackCoroutine = StartCoroutine(KnockbackRoutine(knockbackDuration));
         }
 
         if (currentHealth <= 0)
@@ -53,15 +66,29 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
+    private IEnumerator KnockbackRoutine(float duration)
+    {
+        isKnockedBack = true;
+        yield return new WaitForSeconds(duration);
+        isKnockedBack = false;
+        knockbackCoroutine = null;
+    }
+
     private IEnumerator Die()
     {
+        if (isDead) yield break;
         isDead = true;
 
-        // Toca animação de morte
+        // aciona animação de morte, se houver
         if (animator != null)
             animator.SetTrigger("Death");
 
-        // Espera a animação terminar (ou tempo definido)
+        // desativa o collider pra não colidir mais
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+            col.enabled = false;
+
+        // espera o tempo da animação
         yield return new WaitForSeconds(deathDelay);
 
         Destroy(gameObject);

@@ -131,12 +131,22 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetMouseButtonDown(0) && !isAttacking)
             {
                 if (Input.GetKey(KeyCode.S) && !isGrounded)
+                {
+                    animator.SetTrigger("DownAttack"); // dispara animação imediatamente
                     StartCoroutine(DownAttackRoutine());
+                }
                 else if (Input.GetKey(KeyCode.W))
+                {
+                    animator.SetTrigger("UpAttack");
                     StartCoroutine(UpAttackRoutine());
+                }
                 else
+                {
+                    animator.SetTrigger("Attack");
                     StartCoroutine(AttackRoutine());
+                }
             }
+
 
             HandleLookDown();
 
@@ -290,31 +300,25 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator AttackRoutine()
     {
         isAttacking = true;
-        animator.SetTrigger("Attack");
-
         if (AttackHitboxFront != null) AttackHitboxFront.SetActive(true);
         yield return new WaitForSeconds(0.3f);
         if (AttackHitboxFront != null) AttackHitboxFront.SetActive(false);
-
         isAttacking = false;
     }
+
 
     IEnumerator UpAttackRoutine()
     {
         isAttacking = true;
-        animator.SetTrigger("UpAttack");
-
         if (AttackHitboxUp != null) AttackHitboxUp.SetActive(true);
         yield return new WaitForSeconds(0.3f);
         if (AttackHitboxUp != null) AttackHitboxUp.SetActive(false);
-
         isAttacking = false;
     }
 
     IEnumerator DownAttackRoutine()
     {
         isAttacking = true;
-        animator.SetTrigger("DownAttack");
 
         if (AttackHitboxDown != null) AttackHitboxDown.SetActive(true);
 
