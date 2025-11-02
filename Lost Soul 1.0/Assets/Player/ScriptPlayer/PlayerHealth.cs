@@ -350,6 +350,36 @@ public class PlayerHealth : MonoBehaviour
         if (movement != null) movement.Respawn(0.3f);
     }
 
+    public void TakeDamage(int damage, Vector2 hitDirection)
+    {
+        if (isInvulnerable || isDead) return;
+
+        // subtrai o dano recebido em vez de apenas 1 vida
+        currentLives -= damage;
+        UpdateHeartsUI();
+
+        if (currentLives <= 0)
+        {
+            Die();
+            return;
+        }
+
+        if (animator != null)
+            animator.SetTrigger("Hit");
+
+        StartCoroutine(InvulnerabilityRoutine());
+
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.AddForce(new Vector2(hitDirection.x * knockbackForce, knockbackForce), ForceMode2D.Impulse);
+        }
+
+        if (movement != null)
+            movement.Respawn(0.3f);
+    }
+
+
     void UpdateHeartsUI()
     {
         if (hearts == null || hearts.Length == 0)

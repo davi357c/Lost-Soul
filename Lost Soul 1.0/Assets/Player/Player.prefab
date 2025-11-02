@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6061020301719548097}
   - component: {fileID: 6505064059643731683}
+  - component: {fileID: 2621838760257268191}
   m_Layer: 26
   m_Name: AttackHitboxFront
   m_TagString: Untagged
@@ -78,6 +79,21 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.1326354, y: 0.3108611}
   m_EdgeRadius: 0
+--- !u!114 &2621838760257268191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764359509325550946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cb2c17052c0c2345aa74c0ae2520c4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  knockbackForce: 5
+  knockbackDirection: {x: 3, y: 0}
 --- !u!1 &839482563078281228
 GameObject:
   m_ObjectHideFlags: 0
@@ -88,6 +104,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6914660204267830000}
   - component: {fileID: 4174876179636401870}
+  - component: {fileID: 7122374233348325109}
   m_Layer: 26
   m_Name: AttackHitboxDown
   m_TagString: Untagged
@@ -156,6 +173,21 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.25822303, y: 0.11374128}
   m_EdgeRadius: 0
+--- !u!114 &7122374233348325109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839482563078281228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cb2c17052c0c2345aa74c0ae2520c4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  knockbackForce: 5
+  knockbackDirection: {x: 1, y: 0}
 --- !u!1 &1186355928279310315
 GameObject:
   m_ObjectHideFlags: 0
@@ -197,6 +229,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4482804271731986712}
   - component: {fileID: 8668037943164364081}
+  - component: {fileID: 8592578293950549687}
   m_Layer: 26
   m_Name: AttackHitboxUp
   m_TagString: Untagged
@@ -265,6 +298,21 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.28115672, y: 0.09996086}
   m_EdgeRadius: 0
+--- !u!114 &8592578293950549687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4041642564960749828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cb2c17052c0c2345aa74c0ae2520c4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  knockbackForce: 5
+  knockbackDirection: {x: 1, y: 0}
 --- !u!1 &4210760208956389422
 GameObject:
   m_ObjectHideFlags: 0
@@ -648,13 +696,16 @@ MonoBehaviour:
   wallNoAttachTime: 0.15
   respawnOffset: {x: -1, y: 0.5}
   edgePadding: 0.3
-  attackRange: 1
-  downAttackRange: 0.5
+  attackRange: 4
+  downAttackRange: 4
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   attackDamage: 1
   knockbackForce: 5
+  AttackHitboxFront: {fileID: 764359509325550946}
+  AttackHitboxUp: {fileID: 4041642564960749828}
+  AttackHitboxDown: {fileID: 839482563078281228}
   dashDistance: 3
   dashDuration: 0.1
   dashThroughWalls:

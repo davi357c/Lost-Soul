@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     private float moveInput;
     private bool isFacingRight = true;
 
-    [Header("Pulo")]
+[Header("Pulo")]
     public float jumpForce = 14f;
     private bool isGrounded;
 
@@ -25,53 +25,34 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Agilidade (buff temporário)")]
     public bool isAgilityBoosted = false;
-    public float agilityMultiplier = 1.5f; // Multiplicador de velocidade (ex: 1.5 = 50% mais rápido)
-    public float agilityDuration = 15f;    // Duração do efeito em segundos
+    public float agilityMultiplier = 1.5f;
+    public float agilityDuration = 15f;
     private Coroutine agilityCoroutine;
-
 
     [Tooltip("Velocidade vertical máxima (módulo) permitida durante o slide. (Opcional, 0 = sem limite)")]
     public float wallSlideMaxDownSpeed = 8f;
-
     public float wallJumpForce = 14f;
     public Vector2 wallJumpDirection = new Vector2(1f, 1.2f);
     public float wallJumpTime = 0.2f;
-
-    [Tooltip("IGNORADO agora (mantido só p/ compatibilidade). O slide usa aceleração progressiva).")]
     public float wallStickTime = 1f;
 
-    // ==== Nova lógica: aceleração progressiva no slide ====
     [Header("Wall Slide (Aceleração Progressiva)")]
-    [Tooltip("Gravidade mínima (multiplicador) no início do slide.")]
     public float wallSlideMinGravityScale = 0.25f;
-
-    [Tooltip("Gravidade máxima (multiplicador) atingida ao fim da curva.")]
     public float wallSlideMaxGravityScale = 1.0f;
-
-    [Tooltip("Tempo para ir de min -> max na curva.")]
     public float wallSlideAccelDuration = 1.0f;
-
-    [Tooltip("Curva de progressão da gravidade (0→1 no eixo X, min→max no eixo Y).")]
     public AnimationCurve wallSlideAccelCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
-
-    [Tooltip("Tempo após o wall jump em que o player não regruda na MESMA parede.")]
     public float wallNoAttachTime = 0.15f;
 
     private bool isTouchingWall;
     private bool isWallSliding;
     private bool isWallJumping;
     private float wallJumpTimer;
-
-    private float noAttachTimer;        // anti-regrab
-    private int lastWallSide = 0;       // -1 = parede à esq, +1 = dir, 0 = nenhuma
+    private float noAttachTimer;
+    private int lastWallSide = 0;
     private float defaultGravityScale = 1f;
-
-    // Cronômetro do slide para aumentar a gravidade de forma progressiva
     private float wallSlideElapsed = 0f;
 
-    // (Legado, não usado mais para travar/soltar)
     private float wallStickTimer;
-
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
@@ -80,7 +61,6 @@ public class PlayerMovement : MonoBehaviour
     private bool isLookingDown = false;
     private float holdTimeS = 0f;
     private float requiredHoldTime = 3f;
-
     private Vector2 lastSafePosition;
 
     [Header("Respawn")]
@@ -93,6 +73,12 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask enemyLayer;
     public int attackDamage = 1;
     public float knockbackForce = 5f;
+    public int pogoForce = 8;
+
+    [Tooltip("Referências para os Hitboxes de ataque")]
+    public GameObject AttackHitboxFront;
+    public GameObject AttackHitboxUp;
+    public GameObject AttackHitboxDown;
 
     [Header("Dash")]
     public float dashDistance = 5f;
@@ -111,7 +97,6 @@ public class PlayerMovement : MonoBehaviour
 
         defaultGravityScale = rb.gravityScale;
 
-        // --- NOVO: carregar checkpoint salvo ---
         if (PlayerPrefs.HasKey("LastCheckpointX") && PlayerPrefs.HasKey("LastCheckpointY"))
         {
             float x = PlayerPrefs.GetFloat("LastCheckpointX");
@@ -125,13 +110,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
     void Update()
     {
         if (!isDashing)
         {
             moveInput = Input.GetAxisRaw("Horizontal");
-
             if (!isWallJumping)
                 rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 
@@ -144,6 +127,7 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0)
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
 
+            // SISTEMA DE ATAQUE COM HITBOXES
             if (Input.GetMouseButtonDown(0) && !isAttacking)
             {
                 if (Input.GetKey(KeyCode.S) && !isGrounded)
@@ -171,7 +155,6 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
-
         if (isGrounded)
         {
             lastSafePosition = transform.position;
@@ -180,52 +163,39 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // ===== WALL SLIDE + JUMP com aceleração progressiva =====
     void WallSlideAndJump()
     {
         int faceDir = isFacingRight ? 1 : -1;
         Vector2 checkDir = new Vector2(faceDir, 0f);
         Vector2 origin = wallCheck != null ? (Vector2)wallCheck.position : (Vector2)transform.position;
-
         bool ignoreAttach = noAttachTimer > 0f;
-
         RaycastHit2D wallHit = Physics2D.Raycast(origin, checkDir, wallCheckDistance, whatIsWall);
         isTouchingWall = wallHit.collider != null;
-
         int currentWallSide = 0;
         if (isTouchingWall) currentWallSide = faceDir;
 
         if (noAttachTimer > 0f) noAttachTimer -= Time.deltaTime;
 
         bool canWallSlide = isTouchingWall && !isGrounded && rb.linearVelocity.y <= 0.05f;
-
         if (ignoreAttach && currentWallSide != 0 && currentWallSide == lastWallSide)
             canWallSlide = false;
 
         if (canWallSlide)
         {
-            // Entrou/permanece em slide
             if (!isWallSliding)
             {
                 isWallSliding = true;
                 wallSlideElapsed = 0f;
                 lastWallSide = currentWallSide;
             }
-            else
-            {
-                wallSlideElapsed += Time.deltaTime;
-            }
+            else wallSlideElapsed += Time.deltaTime;
 
-            // Zera movimentação horizontal enquanto desliza (opcional; melhora controle)
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
-
-            // Aceleração progressiva: calcula fator 0→1 via curva/duração
             float t = wallSlideAccelDuration > 0f ? Mathf.Clamp01(wallSlideElapsed / wallSlideAccelDuration) : 1f;
             float curveEval = Mathf.Clamp01(wallSlideAccelCurve.Evaluate(t));
             float gravMul = Mathf.Lerp(wallSlideMinGravityScale, wallSlideMaxGravityScale, curveEval);
             rb.gravityScale = defaultGravityScale * gravMul;
 
-            // (Opcional) Limite de queda escalonado: aumenta o teto de velocidade com o mesmo fator
             if (wallSlideMaxDownSpeed > 0f)
             {
                 float maxDownNow = Mathf.Lerp(0.5f, wallSlideMaxDownSpeed, curveEval);
@@ -233,16 +203,12 @@ public class PlayerMovement : MonoBehaviour
                     rb.linearVelocity = new Vector2(rb.linearVelocity.x, -maxDownNow);
             }
 
-            // Pulo de parede (sempre para longe da parede)
             if (Input.GetButtonDown("Jump"))
             {
                 int away = currentWallSide == 1 ? -1 : 1;
                 Vector2 jumpDir = new Vector2(away * Mathf.Abs(wallJumpDirection.x), Mathf.Abs(wallJumpDirection.y)).normalized;
-
                 rb.gravityScale = defaultGravityScale;
-                rb.linearVelocity = Vector2.zero;
                 rb.linearVelocity = jumpDir * wallJumpForce;
-
                 if (away > 0 && !isFacingRight) Flip();
                 else if (away < 0 && isFacingRight) Flip();
 
@@ -255,19 +221,15 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            // Saiu do slide
             if (isWallSliding)
-            {
                 rb.gravityScale = defaultGravityScale;
-            }
+
             isWallSliding = false;
             wallSlideElapsed = 0f;
-
             if (!isWallJumping)
                 rb.gravityScale = defaultGravityScale;
         }
 
-        // Janela de wall jump
         if (isWallJumping)
         {
             wallJumpTimer -= Time.deltaTime;
@@ -279,21 +241,21 @@ public class PlayerMovement : MonoBehaviour
     void Flip()
     {
         isFacingRight = !isFacingRight;
-        spriteRenderer.flipX = !spriteRenderer.flipX;
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
     }
+
 
     private IEnumerator DashRoutine()
     {
         isDashing = true;
         animator.SetTrigger("Dash");
-
         Vector2 dashDir = isFacingRight ? Vector2.right : Vector2.left;
         float dashSpeed = dashDistance / dashDuration;
         float elapsed = 0f;
-
         int playerLayer = gameObject.layer;
         Physics2D.IgnoreLayerCollision(playerLayer, LayerMaskToLayer(dashThroughWalls), true);
-
         float prevGrav = rb.gravityScale;
         rb.gravityScale = 0f;
 
@@ -306,7 +268,6 @@ public class PlayerMovement : MonoBehaviour
 
         rb.linearVelocity = Vector2.zero;
         rb.gravityScale = prevGrav;
-
         Physics2D.IgnoreLayerCollision(playerLayer, LayerMaskToLayer(dashThroughWalls), false);
         isDashing = false;
     }
@@ -325,25 +286,16 @@ public class PlayerMovement : MonoBehaviour
         return layer;
     }
 
+    // ==== COROUTINES DE ATAQUE ====
     IEnumerator AttackRoutine()
     {
         isAttacking = true;
         animator.SetTrigger("Attack");
-        yield return new WaitForSeconds(0.3f);
-        Vector2 attackPos = transform.position + (isFacingRight ? Vector3.right : Vector3.left) * attackRange;
-        DamageEnemies(attackPos);
-        isAttacking = false;
-    }
 
-    IEnumerator DownAttackRoutine()
-    {
-        isAttacking = true;
-        animator.SetTrigger("DownAttack");
+        if (AttackHitboxFront != null) AttackHitboxFront.SetActive(true);
         yield return new WaitForSeconds(0.3f);
-        Vector2 attackPos = transform.position + Vector3.down * downAttackRange;
-        bool hitEnemy = DamageEnemies(attackPos);
-        if (hitEnemy)
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * 0.7f);
+        if (AttackHitboxFront != null) AttackHitboxFront.SetActive(false);
+
         isAttacking = false;
     }
 
@@ -351,28 +303,41 @@ public class PlayerMovement : MonoBehaviour
     {
         isAttacking = true;
         animator.SetTrigger("UpAttack");
+
+        if (AttackHitboxUp != null) AttackHitboxUp.SetActive(true);
         yield return new WaitForSeconds(0.3f);
-        Vector2 attackPos = transform.position + Vector3.up * downAttackRange;
-        DamageEnemies(attackPos);
+        if (AttackHitboxUp != null) AttackHitboxUp.SetActive(false);
+
         isAttacking = false;
     }
 
-    private bool DamageEnemies(Vector2 attackPosition)
+    IEnumerator DownAttackRoutine()
     {
-        bool hitEnemy = false;
-        Collider2D[] hits = Physics2D.OverlapCircleAll(attackPosition, attackRange, enemyLayer);
-        foreach (Collider2D hit in hits)
+        isAttacking = true;
+        animator.SetTrigger("DownAttack");
+
+        if (AttackHitboxDown != null) AttackHitboxDown.SetActive(true);
+
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackHitboxDown.transform.position, downAttackRange, enemyLayer);
+        if (hitEnemies.Length > 0)
         {
-            EnemyHealth enemy = hit.GetComponent<EnemyHealth>();
-            if (enemy != null)
-            {
-                Vector2 dir = (hit.transform.position - transform.position).normalized;
-                enemy.TakeDamage(dir, attackDamage);
-                hitEnemy = true;
-            }
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, pogoForce); // ou crie uma variável pogoForce separada
         }
-        return hitEnemy;
+
+        yield return new WaitForSeconds(0.3f);
+
+        if (AttackHitboxDown != null) AttackHitboxDown.SetActive(false);
+
+        isAttacking = false;
     }
+
+
+
+
+    // ANIMATION EVENTS (mantidos por compatibilidade)
+    public void OnAttackHit() { }
+    public void OnDownAttackHit() { }
+    public void OnUpAttackHit() { }
 
     void HandleLookDown()
     {
@@ -424,9 +389,6 @@ public class PlayerMovement : MonoBehaviour
         enabled = true;
     }
 
-    // ================================
-    // ZERAR VELOCIDADE AO TROCAR DE CENA
-    // ================================
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -440,10 +402,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (rb != null)
-            rb.linearVelocity = Vector2.zero;
-
-        // Reinicia estados de parede ao carregar nova cena
+        if (rb != null) rb.linearVelocity = Vector2.zero;
         isWallSliding = false;
         isWallJumping = false;
         wallStickTimer = 0f;
@@ -454,17 +413,16 @@ public class PlayerMovement : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
+private void OnDrawGizmosSelected()
     {
         if (groundCheck != null)
         {
-            Gizmos.color = Color.yellow;
+            Gizmos.color = UnityEngine.Color.yellow;
             Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
         }
-
         if (wallCheck != null)
         {
-            Gizmos.color = Color.cyan;
+            Gizmos.color = UnityEngine.Color.cyan;
             Vector3 origin = wallCheck.position;
             Vector3 dir = (isFacingRight ? Vector2.right : Vector2.left) * wallCheckDistance;
             Gizmos.DrawLine(origin, origin + dir);
@@ -472,11 +430,9 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void ApplyAgilityBoost(float multiplier, float duration)
+public void ApplyAgilityBoost(float multiplier, float duration)
     {
-        if (agilityCoroutine != null)
-            StopCoroutine(agilityCoroutine);
-
+        if (agilityCoroutine != null) StopCoroutine(agilityCoroutine);
         agilityCoroutine = StartCoroutine(AgilityBoostRoutine(multiplier, duration));
     }
 
@@ -485,17 +441,12 @@ public class PlayerMovement : MonoBehaviour
         isAgilityBoosted = true;
         float originalSpeed = moveSpeed;
         moveSpeed *= multiplier;
-
         Debug.Log($"[PlayerMovement] Agilidade aumentada para {moveSpeed} por {duration}s!");
-
         yield return new WaitForSeconds(duration);
-
         moveSpeed = originalSpeed;
         isAgilityBoosted = false;
-
         Debug.Log("[PlayerMovement] Agilidade voltou ao normal.");
     }
-
 
 #endif
 }
