@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     private float moveInput;
     private bool isFacingRight = true;
 
-[Header("Pulo")]
+    [Header("Pulo")]
     public float jumpForce = 14f;
     private bool isGrounded;
 
@@ -146,7 +146,6 @@ public class PlayerMovement : MonoBehaviour
                     StartCoroutine(AttackRoutine());
                 }
             }
-
 
             HandleLookDown();
 
@@ -322,10 +321,31 @@ public class PlayerMovement : MonoBehaviour
 
         if (AttackHitboxDown != null) AttackHitboxDown.SetActive(true);
 
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackHitboxDown.transform.position, downAttackRange, enemyLayer);
-        if (hitEnemies.Length > 0)
+        // Espera um passo de física para garantir que o collider do hitbox já está ativo
+        yield return new WaitForFixedUpdate();
+
+        Vector2 center = AttackHitboxDown != null ? (Vector2)AttackHitboxDown.transform.position : rb.position;
+
+        // Só considera colisores na Layer Enemy dentro do raio definido
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(center, downAttackRange, enemyLayer);
+
+        bool hitValidEnemy = false;
+        for (int i = 0; i < hitEnemies.Length; i++)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, pogoForce); // ou crie uma variável pogoForce separada
+            if (hitEnemies[i] == null) continue;
+
+            // Garante que o inimigo está abaixo do player (ataque realmente "pra baixo")
+            if (hitEnemies[i].transform.position.y < transform.position.y)
+            {
+                hitValidEnemy = true;
+                break;
+            }
+        }
+
+        // Só dá o "pogo" se realmente acertou um inimigo válido
+        if (hitValidEnemy)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, pogoForce);
         }
 
         yield return new WaitForSeconds(0.3f);
@@ -334,9 +354,6 @@ public class PlayerMovement : MonoBehaviour
 
         isAttacking = false;
     }
-
-
-
 
     // ANIMATION EVENTS (mantidos por compatibilidade)
     public void OnAttackHit() { }
@@ -417,7 +434,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-private void OnDrawGizmosSelected()
+    private void OnDrawGizmosSelected()
     {
         if (groundCheck != null)
         {
@@ -432,9 +449,16 @@ private void OnDrawGizmosSelected()
             Gizmos.DrawLine(origin, origin + dir);
             Gizmos.DrawWireSphere(origin + dir, 0.05f);
         }
+
+        // Visualização da área de ataque para baixo (apenas no editor)
+        if (AttackHitboxDown != null)
+        {
+            Gizmos.color = UnityEngine.Color.magenta;
+            Gizmos.DrawWireSphere(AttackHitboxDown.transform.position, downAttackRange);
+        }
     }
 
-public void ApplyAgilityBoost(float multiplier, float duration)
+    public void ApplyAgilityBoost(float multiplier, float duration)
     {
         if (agilityCoroutine != null) StopCoroutine(agilityCoroutine);
         agilityCoroutine = StartCoroutine(AgilityBoostRoutine(multiplier, duration));

@@ -64648,6 +64648,18 @@ PrefabInstance:
       propertyPath: fadeImage
       value: 
       objectReference: {fileID: 1570609244}
+    - target: {fileID: 2153905889577079749, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
+      propertyPath: jumpForce
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 2153905889577079749, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
+      propertyPath: pogoForce
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2153905889577079749, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
+      propertyPath: wallJumpDirection.y
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2369397405886767564, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -64751,6 +64763,22 @@ PrefabInstance:
     - target: {fileID: 6287257045387228969, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6505064059643731683, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
+      propertyPath: m_Size.x
+      value: 0.32109955
+      objectReference: {fileID: 0}
+    - target: {fileID: 6505064059643731683, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
+      propertyPath: m_Size.y
+      value: 0.11230063
+      objectReference: {fileID: 0}
+    - target: {fileID: 6505064059643731683, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.2071084
+      objectReference: {fileID: 0}
+    - target: {fileID: 6505064059643731683, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.040780175
       objectReference: {fileID: 0}
     - target: {fileID: 8808844472112912136, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
       propertyPath: m_AnchorMax.y
