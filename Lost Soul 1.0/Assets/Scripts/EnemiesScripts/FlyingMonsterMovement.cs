@@ -33,17 +33,17 @@ public class FlyingMonsterMovement : MonoBehaviour
 
     void Update()
     {
-        // Se o inimigo morreu e o movimento ainda n„o foi desativado, faz isso uma vez
+        // Se o inimigo morreu e o movimento ainda n√£o foi desativado, faz isso uma vez
         if (enemyHealth != null && enemyHealth.IsDead && !isMovementDisabled)
         {
             DisableMovement();
             return;
         }
 
-        // Se o movimento j· foi desativado, sai
+        // Se o movimento j√° foi desativado, sai
         if (isMovementDisabled) return;
 
-        // Atualiza referÍncia do player caso tenha sido perdida
+        // Atualiza refer√™ncia do player caso tenha sido perdida
         if (playerTransform == null)
         {
             GameObject p = GameObject.FindWithTag("Player");
@@ -110,13 +110,13 @@ public class FlyingMonsterMovement : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
-            rb.isKinematic = true; // desliga a fÌsica
+            rb.isKinematic = true; // desliga a f√≠sica
         }
 
         if (col != null)
-            col.enabled = false; // desativa colisıes
+            col.enabled = false; // desativa colis√µes
 
-        // opcional: tambÈm pode desabilitar este script
+        // opcional: tamb√©m pode desabilitar este script
         // enabled = false;
     }
 }

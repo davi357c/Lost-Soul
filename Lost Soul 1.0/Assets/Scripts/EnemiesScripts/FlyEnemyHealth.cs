@@ -11,13 +11,12 @@ public class FlyEnemyHealth : MonoBehaviour
     public float knockbackForce = 5f;
     public float knockbackDuration = 0.25f; // quanto tempo o inimigo fica "em knockback"
     [HideInInspector]
-    public bool isKnockedBack = false; // flag p�blica para outros scripts verificarem
+    public bool isKnockedBack = false; // flag pública para outros scripts verificarem
 
     [Header("Morte")]
-    public float deathDelay = 1.03f; // dura��o da anima��o de morte
+    public float deathDelay = 1.03f; // duração da animação de morte
     private bool isDead = false;
     public bool IsDead => isDead;
-
 
     private Rigidbody2D rb;
     private Animator animator;
@@ -31,13 +30,12 @@ public class FlyEnemyHealth : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
 
         if (rb == null)
-            Debug.LogWarning("Rigidbody2D n�o encontrado!");
+            Debug.LogWarning("Rigidbody2D não encontrado!");
         if (animator == null)
-            Debug.LogWarning("Animator n�o encontrado!");
+            Debug.LogWarning("Animator não encontrado!");
         else
             Debug.Log("Animator encontrado: " + animator.name);
     }
-
 
     public void TakeDamage(int amount)
     {
@@ -52,13 +50,13 @@ public class FlyEnemyHealth : MonoBehaviour
 
         currentHealth -= amount;
 
-        // aciona anima��o de hit
+        // aciona animação de hit
         if (animator != null && !isDead)
         {
             animator.SetTrigger("Hit");
         }
 
-        // aplica knockback se houver dire��o v�lida e Rigidbody dispon�vel
+        // aplica knockback se houver direção válida e Rigidbody disponível
         if (rb != null && hitDirection != Vector2.zero)
         {
             rb.linearVelocity = Vector2.zero;
@@ -74,7 +72,6 @@ public class FlyEnemyHealth : MonoBehaviour
         }
     }
 
-
     private IEnumerator KnockbackRoutine(float duration)
     {
         isKnockedBack = true;
@@ -88,15 +85,15 @@ public class FlyEnemyHealth : MonoBehaviour
         if (isDead) yield break;
         isDead = true;
 
-        // Se existir FlyMonsterDamage, delega a sequ�ncia de morte para ele (explode + anima��o + destroy)
+        // Se existir FlyMonsterDamage, delega a sequência de morte para ele (explode + animação + destroy)
         FlyMonsterDamage damageComp = GetComponent<FlyMonsterDamage>();
         if (damageComp != null)
         {
             damageComp.HandleDeathFromHealth(deathDelay);
-            yield break; // o FlyMonsterDamage ir� destruir o GameObject ap�s o delay
+            yield break; // o FlyMonsterDamage irá destruir o GameObject após o delay
         }
 
-        // fallback � comporta-se como antes se n�o houver FlyMonsterDamage
+        // fallback – comporta-se como antes se não houver FlyMonsterDamage
         if (animator != null)
             animator.SetTrigger("Death");
 
