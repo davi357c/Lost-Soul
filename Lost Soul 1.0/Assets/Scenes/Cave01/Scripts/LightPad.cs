@@ -85,12 +85,6 @@ public class LightPad : MonoBehaviour
         sr.sprite = spriteOff ? spriteOff : prev;
     }
 
-    void OnMouseDown()
-    {
-        if (_interactable && _manager != null)
-            _manager.OnPadClicked(this);
-    }
-
     /// Chamado explicitamente (se preferir acionar por script externo)
     public void OnHitByPlayer()
     {
