@@ -26,6 +26,10 @@ public class PuzzleManager : MonoBehaviour
     public UnityEvent onPuzzleSuccess;
     public UnityEvent onPuzzleFail; // dispara em ERRO (antes de resetar)
 
+    [Header("Recompensas")]
+    [Tooltip("Player que terá a escalada em parede liberada após o sucesso.")]
+    public PlayerMovement playerMovement;
+
     List<int> sequence = new List<int>();
     int currentRoundLength = 1;
     int inputIndex = 0;
@@ -42,6 +46,10 @@ public class PuzzleManager : MonoBehaviour
             p.Bind(this);
             p.SetOff();
         }
+
+        // Se não for atribuído via Inspector, tenta achar um PlayerMovement na cena
+        if (playerMovement == null)
+            playerMovement = FindObjectOfType<PlayerMovement>();
     }
 
     // Chamado pela alavanca
@@ -122,7 +130,7 @@ public class PuzzleManager : MonoBehaviour
             // Completou a rodada atual?
             if (inputIndex >= currentRoundLength)
             {
-                // Acabou o puzzle (5ª rodada)?
+                // Acabou o puzzle (última rodada)?
                 if (currentRoundLength >= totalRounds)
                 {
                     StartCoroutine(WinSequence());
@@ -153,6 +161,12 @@ public class PuzzleManager : MonoBehaviour
         yield return StartCoroutine(BlinkAll(sprite: "green", times: 3, interval: blinkInterval));
 
         onPuzzleSuccess?.Invoke();
+
+        // Libera a escalada em parede no player
+        if (playerMovement != null)
+        {
+            playerMovement.EnableWallClimb();
+        }
 
         // Depois do sucesso, garante tudo apagado
         foreach (var p in pads) p.SetOff();

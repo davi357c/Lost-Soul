@@ -43,6 +43,10 @@ public class PlayerMovement : MonoBehaviour
     public AnimationCurve wallSlideAccelCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
     public float wallNoAttachTime = 0.15f;
 
+    [Header("Desbloqueios")]
+    [Tooltip("Se falso, o player NÃO consegue escalar/pular na parede. É liberado pelo puzzle.")]
+    public bool canWallClimb = false;
+
     private bool isTouchingWall;
     private bool isWallSliding;
     private bool isWallJumping;
@@ -152,7 +156,18 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Q))
                 StartCoroutine(DashRoutine());
 
-            WallSlideAndJump();
+            // SÓ PERMITE SLIDE / JUMP EM PAREDE SE O PUZZLE JÁ TIVER SIDO CONCLUÍDO
+            if (canWallClimb)
+            {
+                WallSlideAndJump();
+            }
+            else
+            {
+                // Garante que não fique "grudado" na parede nem com gravidade alterada
+                isWallSliding = false;
+                if (!isWallJumping)
+                    rb.gravityScale = defaultGravityScale;
+            }
         }
 
         animator.SetFloat("Speed", Mathf.Abs(moveInput));
@@ -185,11 +200,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (noAttachTimer > 0f) noAttachTimer -= Time.deltaTime;
 
-        bool canWallSlide = isTouchingWall && !isGrounded && rb.linearVelocity.y <= 0.05f;
+        bool canWallSlideInternal = isTouchingWall && !isGrounded && rb.linearVelocity.y <= 0.05f;
         if (ignoreAttach && currentWallSide != 0 && currentWallSide == lastWallSide)
-            canWallSlide = false;
+            canWallSlideInternal = false;
 
-        if (canWallSlide)
+        if (canWallSlideInternal)
         {
             if (!isWallSliding)
             {
@@ -408,6 +423,12 @@ public class PlayerMovement : MonoBehaviour
         transform.position = spawnPos;
         rb.linearVelocity = Vector2.zero;
         enabled = true;
+    }
+
+    public void EnableWallClimb()
+    {
+        canWallClimb = true;
+        Debug.Log("[PlayerMovement] Escalada em parede liberada pelo puzzle!");
     }
 
     void Awake()
