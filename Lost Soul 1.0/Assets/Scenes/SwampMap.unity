@@ -63343,6 +63343,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   attackCooldown: 1
+  enableTouchDamage: 1
+  touchDamageRange: 0.4
+  touchDamageCooldown: 0.8
+  touchKnockbackForce: 8
 --- !u!1 &1144984444
 GameObject:
   m_ObjectHideFlags: 0
@@ -66891,6 +66895,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   proximityDistance: 4
+  preExplosionBlinkTime: 3
+  blinkInterval: 0.15
+  contactDamage: 1
   deathDelayFallback: 1
 --- !u!1 &1443302250
 GameObject:
@@ -67445,6 +67452,7 @@ MonoBehaviour:
   playerTransform: {fileID: 0}
   isChasing: 0
   chaseDistance: 8
+  stopDistanceFromPlayer: 0.7
 --- !u!114 &1483996054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72592,7 +72600,7 @@ GameObject:
   - component: {fileID: 1569370217}
   - component: {fileID: 1569370216}
   - component: {fileID: 1569370220}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: FlyEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}

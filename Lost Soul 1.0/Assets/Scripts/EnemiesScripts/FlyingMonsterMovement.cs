@@ -2,13 +2,16 @@ using UnityEngine;
 
 public class FlyingMonsterMovement : MonoBehaviour
 {
+    [Header("Patrulha")]
     public Transform[] patrolPoints;
-    public float moveSpeed;
-    public float chaseDistance;
+    public float moveSpeed = 2f;
 
-    private int currentPatrolIndex = 0;
+    [Header("Perseguição")]
+    public float chaseDistance = 5f;
     public Transform playerTransform;
     public bool isChasing;
+
+    private int currentPatrolIndex = 0;
 
     private Animator animator;
     private FlyEnemyHealth enemyHealth;
@@ -56,6 +59,7 @@ public class FlyingMonsterMovement : MonoBehaviour
         {
             if (playerTransform == null) return;
 
+            // Se o player morreu, para de perseguir
             if (PlayerHealth.Instance != null && PlayerHealth.Instance.IsDead)
             {
                 isChasing = false;
@@ -71,17 +75,20 @@ public class FlyingMonsterMovement : MonoBehaviour
             else if (moveDir.x < -0.01f)
                 transform.localScale = new Vector3(1, 1, 1);
 
+            // Se afastar muito além da distância de perseguição, volta pra patrulha
             if (Vector2.Distance(transform.position, playerTransform.position) > chaseDistance + 2f)
                 isChasing = false;
         }
         else
         {
+            // Se o player estiver perto o suficiente, começa a perseguir
             if (playerTransform != null && Vector2.Distance(transform.position, playerTransform.position) < chaseDistance)
             {
                 isChasing = true;
             }
 
-            if (patrolPoints.Length == 0) return;
+            // Patrulha simples entre pontos
+            if (patrolPoints == null || patrolPoints.Length == 0) return;
 
             Transform targetPoint = patrolPoints[currentPatrolIndex];
             transform.position = Vector3.MoveTowards(transform.position, targetPoint.position, moveSpeed * Time.deltaTime);
@@ -100,8 +107,14 @@ public class FlyingMonsterMovement : MonoBehaviour
             animator.SetFloat("Speed", moveDir.magnitude);
     }
 
-    private void DisableMovement()
+    /// <summary>
+    /// Desativa completamente o movimento e as colisões do inimigo.
+    /// Pode ser chamado de outros scripts (ex.: FlyMonsterDamage).
+    /// </summary>
+    public void DisableMovement()
     {
+        if (isMovementDisabled) return;
+
         isMovementDisabled = true;
 
         if (animator != null)
@@ -116,7 +129,7 @@ public class FlyingMonsterMovement : MonoBehaviour
         if (col != null)
             col.enabled = false; // desativa colisões
 
-        // opcional: também pode desabilitar este script
-        // enabled = false;
+        // Desabilita este script para garantir que não mova mais o inimigo
+        enabled = false;
     }
 }

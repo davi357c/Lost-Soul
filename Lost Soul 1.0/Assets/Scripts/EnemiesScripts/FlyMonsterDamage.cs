@@ -10,92 +10,127 @@ public class FlyMonsterDamage : MonoBehaviour
     public LayerMask playerLayer;
 
     [Header("Proximidade")]
-    public float proximityDistance = 2f; // se o player chegar tão perto, começa a preparar a explosão
+    [Tooltip("Distância em que o inimigo começa a preparar a explosão ao chegar perto do player.")]
+    public float proximityDistance = 2f;
 
     [Header("Piscando antes de explodir")]
     [Tooltip("Tempo que o inimigo fica piscando antes de explodir.")]
     public float preExplosionBlinkTime = 3f;
-    [Tooltip("Intervalo entre cada piscar.")]
+    [Tooltip("Intervalo entre cada piscada.")]
     public float blinkInterval = 0.15f;
 
+    [Header("Dano por contato (encostar no inimigo)")]
+    [Tooltip("Dano que o player leva apenas por encostar no inimigo.")]
+    public int contactDamage = 1;
+
     [Header("Configurações de morte")]
-    public float deathDelayFallback = 1.0f; // usado caso não ache FlyEnemyHealth
+    [Tooltip("Usado caso não encontre FlyEnemyHealth.")]
+    public float deathDelayFallback = 1.0f;
 
     private bool hasExploded = false;
     private bool isPreparingToExplode = false;
 
     private Animator animator;
     private FlyEnemyHealth enemyHealth;
+    private Transform playerTransform;
     private Collider2D mainCollider;
     private Rigidbody2D rb;
-    private Transform playerTransform;
+    private FlyingMonsterMovement flyingMovement;
+
     private SpriteRenderer[] spriteRenderers;
+    private Color[] originalColors;
+
+    private Rigidbody2D[] allRigidbodies;
+    private Collider2D[] allColliders;
 
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
         enemyHealth = GetComponent<FlyEnemyHealth>();
-        mainCollider = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
+        mainCollider = GetComponent<Collider2D>();
+        flyingMovement = GetComponent<FlyingMonsterMovement>();
 
         GameObject p = GameObject.FindWithTag("Player");
         if (p != null) playerTransform = p.transform;
 
+        // pega todos os sprites para piscar em vermelho
         spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+        if (spriteRenderers != null && spriteRenderers.Length > 0)
+        {
+            originalColors = new Color[spriteRenderers.Length];
+            for (int i = 0; i < spriteRenderers.Length; i++)
+            {
+                if (spriteRenderers[i] != null)
+                    originalColors[i] = spriteRenderers[i].color;
+            }
+        }
 
-        // se o collider for trigger para detectar "encostar", ok; se for físico, OnCollision também pode explodir
+        // pega TODOS rigidbodies e colliders do inimigo (raiz + filhos)
+        allRigidbodies = GetComponentsInChildren<Rigidbody2D>();
+        allColliders = GetComponentsInChildren<Collider2D>();
+
         if (mainCollider == null)
-            Debug.LogWarning($"[{name}] Collider2D não encontrado no inimigo voador.");
+        {
+            Debug.LogWarning($"[{name}] Collider2D principal não encontrado no inimigo voador.");
+        }
     }
 
     void Update()
     {
         if (hasExploded) return;
 
-        // Atualiza referência do player se perder
+        // garante referência do player
         if (playerTransform == null)
         {
             GameObject p = GameObject.FindWithTag("Player");
             if (p != null) playerTransform = p.transform;
         }
 
-        // Explosão por proximidade só se ainda não estiver preparando nem tiver explodido
-        if (!isPreparingToExplode && playerTransform != null)
+        if (playerTransform == null || isPreparingToExplode) return;
+
+        // explosão por proximidade
+        float dist = Vector2.Distance(transform.position, playerTransform.position);
+        if (dist <= proximityDistance)
         {
-            float dist = Vector2.Distance(transform.position, playerTransform.position);
-            if (dist <= proximityDistance)
-            {
-                float delay = enemyHealth != null ? enemyHealth.deathDelay : deathDelayFallback;
-                StartExplosionSequence(delay);
-            }
+            float delay = enemyHealth != null ? enemyHealth.deathDelay : deathDelayFallback;
+            StartExplosionSequence(delay);
         }
     }
 
-    // Quando o player encostar (trigger)
+    // dano e explosão quando QUALQUER collider com PlayerHealth encosta (trigger)
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (hasExploded || isPreparingToExplode) return;
 
-        if (other.CompareTag("Player"))
+        PlayerHealth ph = other.GetComponent<PlayerHealth>() ??
+                          other.GetComponentInParent<PlayerHealth>();
+        if (ph != null)
         {
+            DamagePlayerOnContact(ph, other.transform);
+
             float delay = enemyHealth != null ? enemyHealth.deathDelay : deathDelayFallback;
             StartExplosionSequence(delay);
         }
     }
 
-    // Caso esteja usando colisão física (não trigger)
+    // dano e explosão quando encosta com colisão normal (sem trigger)
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (hasExploded || isPreparingToExplode) return;
 
-        if (collision.collider.CompareTag("Player"))
+        PlayerHealth ph = collision.collider.GetComponent<PlayerHealth>() ??
+                          collision.collider.GetComponentInParent<PlayerHealth > ();
+        if (ph != null)
         {
+            DamagePlayerOnContact(ph, collision.collider.transform);
+
             float delay = enemyHealth != null ? enemyHealth.deathDelay : deathDelayFallback;
             StartExplosionSequence(delay);
         }
     }
 
-    // Chamado pelo FlyEnemyHealth quando é morto (para que a morte por dano também cause a explosão)
+    // chamado pelo FlyEnemyHealth quando ele morre por dano normal
     public void HandleDeathFromHealth(float deathDelay)
     {
         if (hasExploded || isPreparingToExplode) return;
@@ -103,44 +138,19 @@ public class FlyMonsterDamage : MonoBehaviour
     }
 
     /// <summary>
-    /// Inicia a rotina de piscar por alguns segundos e depois explodir.
+    /// Começa o preparo da explosão: marca como morto, desliga movimento/física/colisores
+    /// e inicia o piscar vermelho.
     /// </summary>
     private void StartExplosionSequence(float deathDelay)
     {
         if (hasExploded || isPreparingToExplode) return;
-        StartCoroutine(BlinkThenExplode(deathDelay));
-    }
-
-    private IEnumerator BlinkThenExplode(float deathDelay)
-    {
         isPreparingToExplode = true;
 
-        // Para o movimento (se tiver Rigidbody2D)
-        if (rb != null)
-            rb.linearVelocity = Vector2.zero;
-
-        float elapsed = 0f;
-        bool visible = true;
-
-        // Loop de piscar
-        while (elapsed < preExplosionBlinkTime)
-        {
-            SetSpritesVisible(visible);
-            visible = !visible;
-
-            yield return new WaitForSeconds(blinkInterval);
-            elapsed += blinkInterval;
-        }
-
-        // Garante que fique visível no momento da explosão
-        SetSpritesVisible(true);
-
-        // Se tiver sistema de vida, força a vida para 0 na hora da explosão
+        // Marca o inimigo como morto no sistema de vida (para o FlyingMonsterMovement parar)
         if (enemyHealth != null)
         {
             enemyHealth.currentHealth = 0;
 
-            // Marca o inimigo como morto para outros scripts (ex.: movimento) usando reflection no campo privado isDead
             var field = typeof(FlyEnemyHealth).GetField(
                 "isDead",
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance
@@ -149,23 +159,70 @@ public class FlyMonsterDamage : MonoBehaviour
                 field.SetValue(enemyHealth, true);
         }
 
-        // Agora executa a explosão de fato (dano em área + animação + destruir)
+        // Desliga o script de movimento para ele NÃO seguir/empurrar mais
+        if (flyingMovement != null)
+            flyingMovement.enabled = false;
+
+        // Desliga TODA física e colisores (raiz + filhos) para não empurrar mais nada
+        if (allRigidbodies != null)
+        {
+            foreach (var body in allRigidbodies)
+            {
+                if (body == null) continue;
+                body.linearVelocity = Vector2.zero;
+                body.isKinematic = true;
+            }
+        }
+
+        if (allColliders != null)
+        {
+            foreach (var c in allColliders)
+            {
+                if (c == null) continue;
+                c.enabled = false;
+            }
+        }
+
+        StartCoroutine(BlinkThenExplode(deathDelay));
+    }
+
+    private IEnumerator BlinkThenExplode(float deathDelay)
+    {
+        float elapsed = 0f;
+        bool useRed = true;
+
+        // PISCAR VERMELHO (sem sumir/voltar)
+        while (elapsed < preExplosionBlinkTime)
+        {
+            SetSpritesBlinkColor(useRed);
+            useRed = !useRed;
+
+            yield return new WaitForSeconds(blinkInterval);
+            elapsed += blinkInterval;
+        }
+
+        // volta pra cor original antes da explosão
+        SetSpritesBlinkColor(false);
+
+        // agora faz a explosão de fato
         yield return StartCoroutine(ExplodeAndDieInternal(deathDelay));
     }
 
-    private void SetSpritesVisible(bool visible)
+    private void SetSpritesBlinkColor(bool red)
     {
-        if (spriteRenderers == null) return;
+        if (spriteRenderers == null || originalColors == null) return;
 
         for (int i = 0; i < spriteRenderers.Length; i++)
         {
-            if (spriteRenderers[i] != null)
-                spriteRenderers[i].enabled = visible;
+            if (spriteRenderers[i] == null) continue;
+
+            spriteRenderers[i].enabled = true; // nunca some
+            spriteRenderers[i].color = red ? Color.red : originalColors[i];
         }
     }
 
     /// <summary>
-    /// Função interna que realmente aplica dano, toca animação e destrói o inimigo.
+    /// Explode, aplica dano em área e destrói o inimigo.
     /// </summary>
     private IEnumerator ExplodeAndDieInternal(float deathDelay)
     {
@@ -173,22 +230,17 @@ public class FlyMonsterDamage : MonoBehaviour
         hasExploded = true;
         isPreparingToExplode = false;
 
-        // dispara animação de morte/explosão
         if (animator != null)
             animator.SetTrigger("Death");
 
-        // desativa colisores
-        if (mainCollider != null)
-            mainCollider.enabled = false;
-
-        // para o rigidbody
+        // física já desligada antes, só garante zero
         if (rb != null)
             rb.linearVelocity = Vector2.zero;
 
-        // aplica o dano em área imediatamente
+        // dano em área
         ApplyAreaDamage();
 
-        // espera o tempo da animação antes de destruir
+        // espera a animação
         yield return new WaitForSeconds(deathDelay);
 
         Destroy(gameObject);
@@ -201,13 +253,23 @@ public class FlyMonsterDamage : MonoBehaviour
         {
             if (col == null) continue;
 
-            PlayerHealth ph = col.GetComponent<PlayerHealth>();
+            PlayerHealth ph = col.GetComponent<PlayerHealth>() ??
+                              col.GetComponentInParent<PlayerHealth>();
             if (ph != null)
             {
                 Vector2 dir = (col.transform.position - transform.position).normalized;
                 ph.TakeDamage(explosionDamage, dir);
             }
         }
+    }
+
+    private void DamagePlayerOnContact(PlayerHealth ph, Transform playerTransform)
+    {
+        if (ph == null || playerTransform == null) return;
+
+        Vector2 dir = (playerTransform.position - transform.position).normalized;
+        int dmg = contactDamage > 0 ? contactDamage : explosionDamage;
+        ph.TakeDamage(dmg, dir);
     }
 
     private void OnDrawGizmosSelected()

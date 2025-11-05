@@ -14,7 +14,7 @@ public class FlyEnemyHealth : MonoBehaviour
     public bool isKnockedBack = false; // flag pública para outros scripts verificarem
 
     [Header("Morte")]
-    public float deathDelay = 1.03f; // duração da animação de morte
+    public float deathDelay = 1.03f; // duração da animação de morte/explosão
     private bool isDead = false;
     public bool IsDead => isDead;
 
@@ -30,11 +30,9 @@ public class FlyEnemyHealth : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
 
         if (rb == null)
-            Debug.LogWarning("Rigidbody2D não encontrado!");
+            Debug.LogWarning("Rigidbody2D não encontrado em " + name);
         if (animator == null)
-            Debug.LogWarning("Animator não encontrado!");
-        else
-            Debug.Log("Animator encontrado: " + animator.name);
+            Debug.LogWarning("Animator não encontrado em " + name);
     }
 
     public void TakeDamage(int amount)
@@ -44,13 +42,12 @@ public class FlyEnemyHealth : MonoBehaviour
 
     public void TakeDamage(Vector2 hitDirection, int amount)
     {
-        Debug.Log($"{name} recebeu {amount} de dano! Vida atual: {currentHealth}");
-
         if (isDead) return;
 
+        Debug.Log($"{name} recebeu {amount} de dano! Vida atual: {currentHealth}");
         currentHealth -= amount;
 
-        // aciona animação de hit
+        // animação de hit
         if (animator != null && !isDead)
         {
             animator.SetTrigger("Hit");
@@ -62,7 +59,9 @@ public class FlyEnemyHealth : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
             rb.AddForce(hitDirection.normalized * knockbackForce, ForceMode2D.Impulse);
 
-            if (knockbackCoroutine != null) StopCoroutine(knockbackCoroutine);
+            if (knockbackCoroutine != null)
+                StopCoroutine(knockbackCoroutine);
+
             knockbackCoroutine = StartCoroutine(KnockbackRoutine(knockbackDuration));
         }
 
@@ -80,20 +79,30 @@ public class FlyEnemyHealth : MonoBehaviour
         knockbackCoroutine = null;
     }
 
+    /// <summary>
+    /// Usado por outros scripts (ex.: FlyMonsterDamage) quando a morte
+    /// não vem diretamente de TakeDamage (explosão por proximidade/contato).
+    /// </summary>
+    public void ForceDeadState()
+    {
+        if (isDead) return;
+        isDead = true;
+    }
+
     private IEnumerator Die()
     {
         if (isDead) yield break;
         isDead = true;
 
-        // Se existir FlyMonsterDamage, delega a sequência de morte para ele (explode + animação + destroy)
+        // Se existir FlyMonsterDamage, delega a sequência de morte para ele (explosão + animação + destroy)
         FlyMonsterDamage damageComp = GetComponent<FlyMonsterDamage>();
         if (damageComp != null)
         {
             damageComp.HandleDeathFromHealth(deathDelay);
-            yield break; // o FlyMonsterDamage irá destruir o GameObject após o delay
+            yield break; // FlyMonsterDamage vai destruir o GameObject
         }
 
-        // fallback – comporta-se como antes se não houver FlyMonsterDamage
+        // fallback – morte simples se não houver FlyMonsterDamage
         if (animator != null)
             animator.SetTrigger("Death");
 
