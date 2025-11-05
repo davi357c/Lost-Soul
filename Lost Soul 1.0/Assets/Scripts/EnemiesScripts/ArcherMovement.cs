@@ -1,16 +1,16 @@
 using UnityEngine;
-using System.Collections;
 
 public class ArcherMovement : MonoBehaviour
 {
     public Transform[] patrolPoints;
-    public float moveSpeed;
+    public float moveSpeed = 2f;
     public int patrolDestination;
 
-[Header("Player / Perseguição")]
+    [Header("Player / Perseguição")]
     public Transform playerTransform;
+    public string playerTag = "Player";
     public bool isChasing;
-    public float chaseDistance;
+    public float chaseDistance = 5f;
 
     [Header("Tiro")]
     public GameObject arrowPrefab;
@@ -23,28 +23,41 @@ public class ArcherMovement : MonoBehaviour
 
     private Animator animator;
     private EnemyHealth enemyHealth;
-
     private float fireCooldown = 0f;
     private bool isAttacking = false;
-
-    // guarda a escala original
     private Vector3 originalScale;
 
-    void Start()
+    // para reduzir spam de log
+    private float nextSearchLogTime = 0f;
+
+    void Awake()
     {
         animator = GetComponentInChildren<Animator>();
         enemyHealth = GetComponent<EnemyHealth>();
-        originalScale = transform.localScale; // guarda a escala original
+        originalScale = transform.localScale;
+    }
 
+    void Start()
+    {
+        TryFindPlayer();
         if (playerTransform == null)
-        {
-            GameObject p = GameObject.FindWithTag("Player");
-            if (p != null) playerTransform = p.transform;
-        }
+            Debug.LogWarning($"[{name}] playerTransform null no Start(). Verifique tag '{playerTag}' e se o Player está ativo na cena.");
     }
 
     void Update()
     {
+        // tenta encontrar player novamente caso esteja null (útil se player for instanciado depois)
+        if (playerTransform == null)
+        {
+            // escreve no log no máximo a cada 2 segundos pra não spammar
+            if (Time.time >= nextSearchLogTime)
+            {
+                Debug.Log($"[{name}] playerTransform ainda null. Tentando FindWithTag('{playerTag}')...");
+                nextSearchLogTime = Time.time + 2f;
+            }
+            TryFindPlayer();
+        }
+
         if (enemyHealth != null && enemyHealth.IsDead)
         {
             if (animator != null)
@@ -52,104 +65,86 @@ public class ArcherMovement : MonoBehaviour
             return;
         }
 
-        if (playerTransform == null)
-        {
-            GameObject p = GameObject.FindWithTag("Player");
-            if (p != null) playerTransform = p.transform;
-        }
+        if (playerTransform == null) return; // sem player, nada a fazer
 
-        Vector2 moveDir = Vector2.zero;
+        float dist = Vector2.Distance(transform.position, playerTransform.position);
 
-        if (playerTransform != null && Vector2.Distance(transform.position, playerTransform.position) < chaseDistance)
+        // lógica simples: se estiver dentro de chaseDistance, ataca; se estiver um pouco mais longe, persegue
+        if (dist <= chaseDistance)
         {
             isChasing = false;
             isAttacking = true;
         }
+        else if (dist <= chaseDistance + 6f) // margem arbitrária para perseguição
+        {
+            isChasing = true;
+            isAttacking = false;
+        }
         else
         {
+            isChasing = false;
             isAttacking = false;
         }
 
         if (isAttacking)
         {
-            if (playerTransform == null) return;
-
-            // FLIP CORRIGIDO
-            if (playerTransform.position.x < transform.position.x)
-                transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z); // esquerda
-            else
-                transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);  // direita
-
+            FaceTarget();
             if (animator != null)
                 animator.SetFloat("Speed", 0f);
-
             HandleShooting();
         }
         else if (isChasing)
         {
-            if (playerTransform == null) return;
-
             if (PlayerHealth.Instance != null && PlayerHealth.Instance.IsDead)
             {
                 isChasing = false;
                 return;
             }
 
-            if (Vector2.Distance(transform.position, playerTransform.position) > chaseDistance + 2f)
-            {
-                isChasing = false;
-                return;
-            }
-
-            if (transform.position.x > playerTransform.position.x)
-            {
-                transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z); // esquerda
-                transform.position += Vector3.left * moveSpeed * Time.deltaTime;
-                moveDir = Vector2.left;
-            }
-            else if (transform.position.x < playerTransform.position.x)
-            {
-                transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z); // direita
-                transform.position += Vector3.right * moveSpeed * Time.deltaTime;
-                moveDir = Vector2.right;
-            }
+            Vector3 dir = (playerTransform.position - transform.position).normalized;
+            transform.position += Vector3.right * Mathf.Sign(dir.x) * moveSpeed * Time.deltaTime;
+            transform.localScale = new Vector3(Mathf.Sign(dir.x) * Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
 
             if (animator != null)
-                animator.SetFloat("Speed", Mathf.Abs(moveDir.x));
+                animator.SetFloat("Speed", Mathf.Abs(dir.x));
         }
-        else
+        else // patrulha
         {
-            if (playerTransform != null && Vector2.Distance(transform.position, playerTransform.position) < chaseDistance)
-            {
-                isChasing = true;
-            }
-
-            if (patrolDestination == 0)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, patrolPoints[0].position, moveSpeed * Time.deltaTime);
-                moveDir = (patrolPoints[0].position - transform.position).normalized;
-
-                if (Vector2.Distance(transform.position, patrolPoints[0].position) < .2f)
-                {
-                    transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z); // esquerda
-                    patrolDestination = 1;
-                }
-            }
-            else if (patrolDestination == 1)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, patrolPoints[1].position, moveSpeed * Time.deltaTime);
-                moveDir = (patrolPoints[1].position - transform.position).normalized;
-
-                if (Vector2.Distance(transform.position, patrolPoints[1].position) < .2f)
-                {
-                    transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z); // direita
-                    patrolDestination = 0;
-                }
-            }
-
-            if (animator != null)
-                animator.SetFloat("Speed", Mathf.Abs(moveDir.x));
+            Patrol();
         }
+    }
+
+    void TryFindPlayer()
+    {
+        if (playerTransform != null) return;
+        GameObject p = GameObject.FindWithTag(playerTag);
+        if (p != null)
+        {
+            playerTransform = p.transform;
+            Debug.Log($"[{name}] Player encontrado automaticamente: {p.name}");
+        }
+    }
+
+    void FaceTarget()
+    {
+        if (playerTransform.position.x < transform.position.x)
+            transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+        else
+            transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+    }
+
+    void Patrol()
+    {
+        if (patrolPoints == null || patrolPoints.Length < 2) return;
+        Transform target = patrolPoints[patrolDestination];
+        Vector2 moveDir = (target.position - transform.position).normalized;
+        transform.position = Vector2.MoveTowards(transform.position, target.position, moveSpeed * Time.deltaTime);
+
+        if (Vector2.Distance(transform.position, target.position) < 0.2f)
+            patrolDestination = 1 - patrolDestination;
+
+        if (animator != null)
+            animator.SetFloat("Speed", Mathf.Abs(moveDir.x));
     }
 
     void HandleShooting()
@@ -177,7 +172,6 @@ public class ArcherMovement : MonoBehaviour
 
         Vector2 dir = (playerTransform.position - firePoint.position).normalized;
         GameObject arrow = Instantiate(arrowPrefab, firePoint.position, Quaternion.identity);
-
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         arrow.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
@@ -200,4 +194,10 @@ public class ArcherMovement : MonoBehaviour
         Destroy(arrow, arrowLifeTime + 0.5f);
     }
 
+    // visualizar chaseDistance no editor
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, chaseDistance);
+    }
 }
