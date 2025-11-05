@@ -21,7 +21,7 @@ public class MonsterDamage : MonoBehaviour
     [Tooltip("Tempo mínimo entre um dano de contato e outro.")]
     public float touchDamageCooldown = 0.8f;
     [Tooltip("Força do knockback quando o player encosta no inimigo.")]
-    public float touchKnockbackForce = 8f; // (opcional, se quiser usar também aqui)
+    public float touchKnockbackForce = 8f;
 
     private Animator animator;
     private bool canAttack = true;
@@ -33,12 +33,12 @@ public class MonsterDamage : MonoBehaviour
     {
         if (animator == null)
             animator = GetComponent<Animator>();
-
         enemyHealth = GetComponentInParent<EnemyHealth>();
 
         if (attackPoint == null)
             attackPoint = transform;
     }
+
 
     void Update()
     {
@@ -47,12 +47,7 @@ public class MonsterDamage : MonoBehaviour
         // --- ATAQUE NORMAL (animação + event) ---
         if (canAttack && !isAttacking)
         {
-            Collider2D playerCollider = Physics2D.OverlapCircle(
-                attackPoint.position,
-                attackRange,
-                playerLayer
-            );
-
+            Collider2D playerCollider = Physics2D.OverlapCircle(attackPoint.position, attackRange, playerLayer);
             if (playerCollider != null)
             {
                 StartCoroutine(AttackRoutine());
@@ -62,27 +57,27 @@ public class MonsterDamage : MonoBehaviour
         // --- DANO POR CONTATO DE CORPO ---
         if (enableTouchDamage && Time.time >= nextTouchDamageTime)
         {
-            Collider2D playerColliderTouch = Physics2D.OverlapCircle(
-                transform.position,
-                touchDamageRange,
-                playerLayer
-            );
-
+            Collider2D playerColliderTouch = Physics2D.OverlapCircle(transform.position, touchDamageRange, playerLayer);
             if (playerColliderTouch != null)
             {
                 PlayerHealth playerHealth = playerColliderTouch.GetComponent<PlayerHealth>();
                 if (playerHealth != null)
                 {
-                    // Direção do knockback: do inimigo para o player (empurra para longe)
-                    Vector2 dir = (playerColliderTouch.transform.position - transform.position);
+                    // Direção do knockback = do inimigo -> player
+                    // (sempre pro lado oposto do inimigo)
+                    Vector2 hitDirection = (playerColliderTouch.transform.position - transform.position).normalized;
 
-                    // Só horizontal, pra não ficar estranho se o inimigo estiver acima/abaixo
-                    dir.y = 0f;
-                    dir = dir.normalized;
+                    // Knockback direto no Rigidbody2D do player
+                    Rigidbody2D playerRb = playerColliderTouch.GetComponent<Rigidbody2D>();
+                    if (playerRb != null)
+                    {
+                        // opcional: zera velocidade X pra deixar o knockback mais consistente
+                        playerRb.linearVelocity = new Vector2(0f, playerRb.linearVelocity.y);
+                        playerRb.AddForce(hitDirection * touchKnockbackForce, ForceMode2D.Impulse);
+                    }
 
-                    // Aplica o dano + knockback usando o próprio sistema do PlayerHealth
-                    // (PlayerHealth já zera a velocidade e dá o impulso pro lado contrário)
-                    playerHealth.TakeDamage(damage, dir);
+                    // Aplica dano usando o sistema de vida do player
+                    playerHealth.TakeDamage(damage, hitDirection);
                 }
 
                 // cooldown entre danos de contato
@@ -116,22 +111,14 @@ public class MonsterDamage : MonoBehaviour
     {
         if (enemyHealth != null && enemyHealth.IsDead) return;
 
-        Collider2D playerCollider = Physics2D.OverlapCircle(
-            attackPoint.position,
-            attackRange,
-            playerLayer
-        );
-
+        Collider2D playerCollider = Physics2D.OverlapCircle(attackPoint.position, attackRange, playerLayer);
         if (playerCollider != null)
         {
             PlayerHealth playerHealth = playerCollider.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                Vector2 dir = (playerCollider.transform.position - transform.position);
-                dir.y = 0f;
-                dir = dir.normalized;
-
-                playerHealth.TakeDamage(damage, dir);
+                Vector2 hitDirection = (playerCollider.transform.position - transform.position).normalized;
+                playerHealth.TakeDamage(damage, hitDirection);
             }
         }
     }
