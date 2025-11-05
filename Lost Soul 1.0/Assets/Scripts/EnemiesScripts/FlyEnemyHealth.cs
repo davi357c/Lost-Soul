@@ -94,7 +94,10 @@ public class FlyEnemyHealth : MonoBehaviour
     private IEnumerator Die()
     {
         if (isDead) yield break;
+
+        // Marca como morto logo no início (garante integração com o spawner)
         isDead = true;
+        currentHealth = 0;
 
         // Se existir FlyMonsterDamage, delega a sequência de morte/explosão pra ele
         FlyMonsterDamage damageComp = GetComponent<FlyMonsterDamage>();
