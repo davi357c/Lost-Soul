@@ -67452,7 +67452,7 @@ MonoBehaviour:
   playerTransform: {fileID: 0}
   isChasing: 0
   chaseDistance: 8
-  stopDistanceFromPlayer: 0.7
+  stopDistanceFromPlayer: 1.5
 --- !u!114 &1483996054
 MonoBehaviour:
   m_ObjectHideFlags: 0

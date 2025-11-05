@@ -14,18 +14,18 @@ public class FlyingMonsterMovement : MonoBehaviour
     private int currentPatrolIndex = 0;
 
     private Animator animator;
-    private FlyEnemyHealth enemyHealth;
     private Rigidbody2D rb;
     private Collider2D col;
+    private FlyEnemyHealth enemyHealth;
 
     private bool isMovementDisabled = false; // evita que tente "reviver" o movimento
 
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
-        enemyHealth = GetComponent<FlyEnemyHealth>();
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
+        enemyHealth = GetComponent<FlyEnemyHealth>();
 
         if (playerTransform == null)
         {
@@ -36,15 +36,14 @@ public class FlyingMonsterMovement : MonoBehaviour
 
     void Update()
     {
-        // Se o inimigo morreu e o movimento ainda não foi desativado, faz isso uma vez
-        if (enemyHealth != null && enemyHealth.IsDead && !isMovementDisabled)
+        if (isMovementDisabled) return;
+
+        // Se o inimigo morreu, desativa movimento e colisões
+        if (enemyHealth != null && enemyHealth.IsDead)
         {
             DisableMovement();
             return;
         }
-
-        // Se o movimento já foi desativado, sai
-        if (isMovementDisabled) return;
 
         // Atualiza referência do player caso tenha sido perdida
         if (playerTransform == null)
@@ -58,13 +57,6 @@ public class FlyingMonsterMovement : MonoBehaviour
         if (isChasing)
         {
             if (playerTransform == null) return;
-
-            // Se o player morreu, para de perseguir
-            if (PlayerHealth.Instance != null && PlayerHealth.Instance.IsDead)
-            {
-                isChasing = false;
-                return;
-            }
 
             Vector3 targetPos = playerTransform.position;
             transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
@@ -109,27 +101,47 @@ public class FlyingMonsterMovement : MonoBehaviour
 
     /// <summary>
     /// Desativa completamente o movimento e as colisões do inimigo.
-    /// Pode ser chamado de outros scripts (ex.: FlyMonsterDamage).
+    /// Pode ser chamado de outros scripts (ex.: FlyMonsterDamage ou FlyEnemyHealth).
     /// </summary>
     public void DisableMovement()
     {
         if (isMovementDisabled) return;
-
         isMovementDisabled = true;
 
+        // para animação de movimento
         if (animator != null)
             animator.SetFloat("Speed", 0f);
 
+        // trava física COMPLETAMENTE
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
-            rb.isKinematic = true; // desliga a física
+            rb.isKinematic = true;
+            rb.simulated = false; // não participa mais de nenhuma simulação 2D
         }
 
-        if (col != null)
-            col.enabled = false; // desativa colisões
+        // desativa TODOS colliders do inimigo (objeto + filhos)
+        Collider2D[] allCols = GetComponentsInChildren<Collider2D>();
+        foreach (var c in allCols)
+        {
+            if (c != null) c.enabled = false;
+        }
 
-        // Desabilita este script para garantir que não mova mais o inimigo
+        // 🔴 IMPORTANTE: desativa também os colliders do OBJETO PAI
+        if (transform.parent != null)
+        {
+            Collider2D[] parentCols = transform.parent.GetComponents<Collider2D>();
+            foreach (var c in parentCols)
+            {
+                if (c != null) c.enabled = false;
+            }
+        }
+
+        // por garantia, também desativa o collider principal, se havia referência
+        if (col != null)
+            col.enabled = false;
+
+        // desabilita este script para garantir que não mova mais o inimigo
         enabled = false;
     }
 }
