@@ -23,6 +23,7 @@ public class FlyEnemyHealth : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     private Coroutine knockbackCoroutine;
+    //private FlyMonsterDamage flyMonsterDamage;
 
     void Start()
     {
@@ -36,6 +37,15 @@ public class FlyEnemyHealth : MonoBehaviour
         if (animator == null)
             Debug.LogWarning("Animator não encontrado em " + name);
     }
+
+    //private void Update()
+    //{
+    //Debug.LogWarning(currentHealth);
+    //    if (flyMonsterDamage.hasExploded == true) 
+    //    {
+    //        currentHealth = 0;
+    //   }
+    //}
 
     public void TakeDamage(int amount)
     {
