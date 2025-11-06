@@ -17,6 +17,8 @@ public class Checkpoint : MonoBehaviour
     [Header("Light")]
     public Light2D checkpointLight; // se estiver usando Light 2D
 
+    [Header("UI de Interação")]
+    public GameObject interactionUI; // Canvas com a letra "E"
 
     private void Start()
     {
@@ -30,6 +32,10 @@ public class Checkpoint : MonoBehaviour
         if (activeParticles != null)
             activeParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
 
+        // Esconde o UI de interação
+        if (interactionUI != null)
+            interactionUI.SetActive(false);
+
         // Checa se este é o checkpoint salvo
         string savedID = PlayerPrefs.GetString("LastCheckpointID", "");
         if (!string.IsNullOrEmpty(savedID) && savedID == checkpointID)
@@ -39,13 +45,20 @@ public class Checkpoint : MonoBehaviour
         }
     }
 
-
     private void Update()
     {
         // Se o jogador estiver perto e apertar E
         if (playerNearby && Input.GetKeyDown(KeyCode.E))
         {
-            ActivateCheckpoint(playerTransform);
+            // Só ativa se ainda não estiver ativo
+            if (!isActive)
+            {
+                ActivateCheckpoint(playerTransform);
+
+                // Esconde o E após ativar
+                if (interactionUI != null)
+                    interactionUI.SetActive(false);
+            }
         }
     }
 
@@ -55,7 +68,10 @@ public class Checkpoint : MonoBehaviour
         {
             playerNearby = true;
             playerTransform = other.transform;
-            // opcional: mostrar dica "Pressione E"
+
+            // Mostra o UI de interação apenas se não estiver ativo
+            if (!isActive && interactionUI != null)
+                interactionUI.SetActive(true);
         }
     }
 
@@ -65,7 +81,10 @@ public class Checkpoint : MonoBehaviour
         {
             playerNearby = false;
             playerTransform = null;
-            // opcional: esconder dica
+
+            // Esconde o UI de interação
+            if (interactionUI != null)
+                interactionUI.SetActive(false);
         }
     }
 
@@ -81,6 +100,10 @@ public class Checkpoint : MonoBehaviour
             {
                 cp.isActive = false;
                 cp.UpdateVisual(false);
+
+                // Garante que o "E" dos outros desapareça
+                if (cp.interactionUI != null)
+                    cp.interactionUI.SetActive(false);
             }
         }
 
@@ -88,7 +111,7 @@ public class Checkpoint : MonoBehaviour
         isActive = true;
         UpdateVisual(true);
 
-        // Salva posição, ID e nome da cena (garante que o nome da cena seja salvo)
+        // Salva posição, ID e nome da cena
         string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
         PlayerPrefs.SetFloat("LastCheckpointX", transform.position.x);
         PlayerPrefs.SetFloat("LastCheckpointY", transform.position.y);
@@ -98,8 +121,6 @@ public class Checkpoint : MonoBehaviour
 
         Debug.Log($"[Checkpoint] Checkpoint salvo: ID='{checkpointID}', Pos={transform.position}, Scene='{sceneName}'");
     }
-
-
 
     private void UpdateVisual(bool active)
     {
@@ -119,5 +140,4 @@ public class Checkpoint : MonoBehaviour
         if (checkpointLight != null)
             checkpointLight.enabled = active;
     }
-
 }

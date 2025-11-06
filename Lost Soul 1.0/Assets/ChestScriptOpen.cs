@@ -16,20 +16,39 @@ public class ChestScriptOpen : MonoBehaviour
     public Vector2 forceX = new Vector2(-2f, 2f);
     public Vector2 forceY = new Vector2(4f, 7f);
 
+    [Header("UI de Interação")]
+    public GameObject interactionUI; // Canvas com a letra "E"
+
     void Start()
     {
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        // Garante que o UI comece desativado
+        if (interactionUI != null)
+            interactionUI.SetActive(false);
     }
 
     void Update()
     {
         float distance = Vector3.Distance(player.position, transform.position);
 
+        // Mostra/esconde o UI de interação
+        if (!isOpen && interactionUI != null)
+        {
+            if (distance <= interactDistance)
+                interactionUI.SetActive(true);
+            else
+                interactionUI.SetActive(false);
+        }
+
+        // Interação com o baú
         if (distance <= interactDistance && Input.GetKeyDown(interactKey) && !isOpen)
         {
             animator.SetTrigger("Open");
             isOpen = true;
+            if (interactionUI != null)
+                interactionUI.SetActive(false); // Esconde o "E" depois de abrir
             SpawnCoins();
         }
     }

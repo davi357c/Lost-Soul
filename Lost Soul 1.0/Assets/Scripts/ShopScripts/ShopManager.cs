@@ -10,6 +10,15 @@ public class ShopManager : MonoBehaviour
     public Transform contentParent;
     public GameObject shopItemPrefab;
 
+    [Header("Interação")]
+    public float interactionRange = 3f;          // Distância para interagir com a loja
+    public GameObject interactionUI;             // Canvas com a letra "E"
+    public KeyCode interactKey = KeyCode.E;      // Tecla usada para abrir/fechar a loja
+
+    private Transform player;
+    private bool playerInRange = false;
+    private bool isShopOpen = false;
+
     [System.Serializable]
     public class ShopItem
     {
@@ -29,8 +38,45 @@ public class ShopManager : MonoBehaviour
         UpdateCoinsUI();
         PopulateShop();
         shopPanel.SetActive(false);
+
+        // Garante que o UI do "E" comece desativado
+        if (interactionUI != null)
+            interactionUI.SetActive(false);
+
+        // Encontra o jogador
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
     }
 
+    private void Update()
+    {
+        if (player == null) return;
+
+        float distance = Vector3.Distance(player.position, transform.position);
+        bool isNear = distance <= interactionRange;
+
+        // Mostra/esconde o "E"
+        if (isNear && !playerInRange)
+        {
+            playerInRange = true;
+            if (interactionUI != null)
+                interactionUI.SetActive(true);
+        }
+        else if (!isNear && playerInRange)
+        {
+            playerInRange = false;
+            if (interactionUI != null)
+                interactionUI.SetActive(false);
+        }
+
+        // Interação com a loja
+        if (playerInRange && Input.GetKeyDown(interactKey))
+        {
+            if (!isShopOpen)
+                OpenShop();
+            else
+                CloseShop();
+        }
+    }
 
     private void UpdateCoinsUI()
     {
@@ -49,20 +95,25 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    // Dentro do ShopManager
     public void OpenShop()
     {
         shopPanel.SetActive(true);
         shopPanel.transform.SetAsLastSibling();
         UpdateCoinsUI();
-        // Time.timeScale = 0f; // teste: desativa isso
+        isShopOpen = true;
+
+        // Esconde o "E" enquanto a loja está aberta
+        if (interactionUI != null)
+            interactionUI.SetActive(false);
     }
 
     public void CloseShop()
     {
         shopPanel.SetActive(false);
-        // Time.timeScale = 1f; // teste: desativa isso
+        isShopOpen = false;
+
+        // Reaparece o "E" se o jogador ainda estiver por perto
+        if (playerInRange && interactionUI != null)
+            interactionUI.SetActive(true);
     }
-
-
 }
