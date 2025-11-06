@@ -1,11 +1,11 @@
-using UnityEngine;
-using UnityEngine.Rendering.Universal; // Necessário para Light2D
+ï»¿using UnityEngine;
+using UnityEngine.Rendering.Universal; // NecessÃ¡rio para Light2D
 
 public class FloatingItem : MonoBehaviour
 {
-    [Header("Flutuação")]
-    public float floatAmplitude = 0.2f; // altura da flutuação
-    public float floatSpeed = 2f;       // velocidade da flutuação
+    [Header("FlutuaÃ§Ã£o")]
+    public float floatAmplitude = 0.2f; // altura da flutuaÃ§Ã£o
+    public float floatSpeed = 2f;       // velocidade da flutuaÃ§Ã£o
 
     [Header("Coleta")]
     public string playerTag = "Player";
@@ -13,16 +13,20 @@ public class FloatingItem : MonoBehaviour
 
     private Vector3 startPos;
     private bool playerNearby = false;
+    private bool hasBeenCollected = false;
 
-    [Header("Referências (preencha se quiser manualmente)")]
+    [Header("ReferÃªncias (preencha se quiser manualmente)")]
     public ParticleSystem particleSystemChild;
     public Light2D light2DChild;
+
+    [Header("Canvas de HistÃ³ria")]
+    public GameObject storyCanvas; // arraste o canvas que mostra o "papel" aqui
 
     void Start()
     {
         startPos = transform.position;
 
-        // Busca automática se não for atribuída no Inspector
+        // Busca automÃ¡tica se nÃ£o for atribuÃ­da no Inspector
         if (particleSystemChild == null)
             particleSystemChild = GetComponentInChildren<ParticleSystem>();
 
@@ -32,11 +36,11 @@ public class FloatingItem : MonoBehaviour
 
     void Update()
     {
-        // Movimento de flutuação
+        // Movimento de flutuaÃ§Ã£o
         transform.position = startPos + new Vector3(0f, Mathf.Sin(Time.time * floatSpeed) * floatAmplitude, 0f);
 
         // Coleta
-        if (playerNearby && Input.GetKeyDown(collectKey))
+        if (playerNearby && Input.GetKeyDown(collectKey) && !hasBeenCollected)
         {
             Collect();
         }
@@ -44,19 +48,26 @@ public class FloatingItem : MonoBehaviour
 
     void Collect()
     {
-        // Desativa efeitos visuais
+        hasBeenCollected = true;
+
         if (particleSystemChild != null)
             particleSystemChild.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 
         if (light2DChild != null)
             light2DChild.gameObject.SetActive(false);
 
-        // Aqui você pode adicionar efeitos de som, aumentar inventário etc.
-        // Exemplo: InventoryManager.instance.AddItem("Pergaminho");
+        // ðŸ”¥ Desbloquear Fireball
+        PlayerFireball playerFireball = FindObjectOfType<PlayerFireball>();
+        if (playerFireball != null)
+            playerFireball.UnlockFireball();
 
-        // Destruir o item principal (após leve atraso pra não cortar efeitos)
+        // ðŸ§¾ Mostrar Canvas de histÃ³ria
+        if (storyCanvas != null)
+            storyCanvas.SetActive(true);
+
         Destroy(gameObject, 0.1f);
     }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
