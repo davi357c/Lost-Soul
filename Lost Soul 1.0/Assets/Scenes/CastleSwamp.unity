@@ -693,7 +693,7 @@ PrefabInstance:
     - target: {fileID: 9099737740052929500, guid: 217e184d50bb2c742941afea319b5095, type: 3}
       propertyPath: interactionUI
       value: 
-      objectReference: {fileID: 1352737976}
+      objectReference: {fileID: 562732478}
     - target: {fileID: 9099737740052929500, guid: 217e184d50bb2c742941afea319b5095, type: 3}
       propertyPath: spawnPointName
       value: OutsideCastle
@@ -3995,7 +3995,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.000061035156, y: 0}
   m_SizeDelta: {x: 1000, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1188649079
@@ -4222,7 +4222,7 @@ MonoBehaviour:
   contentParent: {fileID: 1188649077}
   shopItemPrefab: {fileID: 3474713477550278181, guid: 136f83ab5ddf4a045b0def5a97a18b77, type: 3}
   interactionRange: 3
-  interactionUI: {fileID: 562732478}
+  interactionUI: {fileID: 0}
   interactKey: 101
   items:
   - name: Mapa
@@ -4427,7 +4427,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2050277556215687226, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4486,11 +4486,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
---- !u!1 &1352737976 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2050277556215687226, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-  m_PrefabInstance: {fileID: 1352737975}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1398238578
 GameObject:
   m_ObjectHideFlags: 0
@@ -4948,7 +4943,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 186183379}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9999951
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -27600,6 +27595,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopManager: {fileID: 1335629292}
+  interactionUI: {fileID: 562732478}
+  interactCooldown: 0.3
 --- !u!61 &1759128051
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -52,4 +52,6 @@ public class AttackHitbox : MonoBehaviour
         // Pede pro player tentar fazer o pogo com base nesse inimigo
         player.OnDownAttackHitEnemy(enemyTransform);
     }
+
+
 }
