@@ -71,6 +71,9 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 respawnOffset = new Vector2(0, 0.5f);
     public float edgePadding = 0.3f;
 
+    [Tooltip("Quanto o player volta pra trás no eixo X em relação ao último ponto seguro, na direção contrária de onde morreu.")]
+    public float respawnBackOffsetX = 1f;
+
     [Header("Ataque")]
     public float attackRange = 1f;
     public float downAttackRange = 0.5f;
@@ -270,7 +273,6 @@ public class PlayerMovement : MonoBehaviour
         transform.localScale = scale;
     }
 
-
     private IEnumerator DashRoutine()
     {
         isDashing = true;
@@ -320,7 +322,6 @@ public class PlayerMovement : MonoBehaviour
         isAttacking = false;
     }
 
-
     IEnumerator UpAttackRoutine()
     {
         isAttacking = true;
@@ -334,40 +335,34 @@ public class PlayerMovement : MonoBehaviour
     {
         isAttacking = true;
 
-        if (AttackHitboxDown != null) AttackHitboxDown.SetActive(true);
+        // Liga a hitbox filha (ela que vai detectar o acerto)
+        if (AttackHitboxDown != null)
+            AttackHitboxDown.SetActive(true);
 
-        // Espera um passo de física para garantir que o collider do hitbox já está ativo
-        yield return new WaitForFixedUpdate();
-
-        Vector2 center = AttackHitboxDown != null ? (Vector2)AttackHitboxDown.transform.position : rb.position;
-
-        // Só considera colisores na Layer Enemy dentro do raio definido
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(center, downAttackRange, enemyLayer);
-
-        bool hitValidEnemy = false;
-        for (int i = 0; i < hitEnemies.Length; i++)
-        {
-            if (hitEnemies[i] == null) continue;
-
-            // Garante que o inimigo está abaixo do player (ataque realmente "pra baixo")
-            if (hitEnemies[i].transform.position.y < transform.position.y)
-            {
-                hitValidEnemy = true;
-                break;
-            }
-        }
-
-        // Só dá o "pogo" se realmente acertou um inimigo válido
-        if (hitValidEnemy)
-        {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, pogoForce);
-        }
-
+        // Janela em que a hitbox fica ativa (ajuste conforme a animação)
         yield return new WaitForSeconds(0.3f);
 
-        if (AttackHitboxDown != null) AttackHitboxDown.SetActive(false);
+        if (AttackHitboxDown != null)
+            AttackHitboxDown.SetActive(false);
 
         isAttacking = false;
+    }
+
+    public void OnDownAttackHitEnemy(Transform enemyTransform)
+    {
+        // Chamado pela hitbox do ataque para baixo quando acerta um inimigo
+        if (!isAttacking) return;
+
+        // Garante que o inimigo está na mesma altura ou abaixo (ataque realmente "pra baixo")
+        if (enemyTransform != null && enemyTransform.position.y > transform.position.y)
+            return;
+
+        // Só dá pogo se o player estiver caindo ou quase parado verticalmente
+        if (rb.linearVelocity.y > 0.1f)
+            return;
+
+        // Aplica o pulo para cima (pogo)
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, pogoForce);
     }
 
     // ANIMATION EVENTS (mantidos por compatibilidade)
@@ -409,17 +404,55 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator RespawnRoutine(float delay)
     {
+        // posição em que o player morreu (antes de qualquer teleporte)
+        Vector2 deathPos = transform.position;
+
         enabled = false;
         yield return new WaitForSeconds(delay);
+
+        // ponto seguro salvo quando o player estava no chão
         Vector2 spawnPos = lastSafePosition;
-        spawnPos.y += 0.5f;
+
+        // aplica offset vertical configurável
+        spawnPos += respawnOffset;
+
+        // Raycast para encontrar a plataforma correta abaixo do ponto seguro
         RaycastHit2D hit = Physics2D.Raycast(spawnPos, Vector2.down, 5f, whatIsGround);
+        float leftEdge = float.NegativeInfinity;
+        float rightEdge = float.PositiveInfinity;
+
         if (hit.collider != null)
         {
-            float leftEdge = hit.collider.bounds.min.x + edgePadding;
-            float rightEdge = hit.collider.bounds.max.x - edgePadding;
+            leftEdge = hit.collider.bounds.min.x + edgePadding;
+            rightEdge = hit.collider.bounds.max.x - edgePadding;
+
+            // primeiro: prende o X dentro da plataforma
             spawnPos.x = Mathf.Clamp(lastSafePosition.x, leftEdge, rightEdge);
         }
+        else
+        {
+            spawnPos.x = lastSafePosition.x;
+        }
+
+        // agora aplica o recuo NA DIREÇÃO CONTRÁRIA de onde morreu
+        if (respawnBackOffsetX != 0f)
+        {
+            // se deathPos.x > lastSafePosition.x, morreu à direita do safe => recua pra esquerda, e vice-versa
+            float deltaX = deathPos.x - lastSafePosition.x;
+
+            if (Mathf.Abs(deltaX) > 0.01f)
+            {
+                float dir = Mathf.Sign(deltaX); // 1 = morreu à direita, -1 = morreu à esquerda
+                float newX = spawnPos.x - dir * respawnBackOffsetX;
+
+                // mantém dentro das bordas da plataforma se tiver hit
+                if (hit.collider != null)
+                    newX = Mathf.Clamp(newX, leftEdge, rightEdge);
+
+                spawnPos.x = newX;
+            }
+        }
+
         transform.position = spawnPos;
         rb.linearVelocity = Vector2.zero;
         enabled = true;
@@ -496,6 +529,5 @@ public class PlayerMovement : MonoBehaviour
         isAgilityBoosted = false;
         Debug.Log("[PlayerMovement] Agilidade voltou ao normal.");
     }
-
 #endif
 }

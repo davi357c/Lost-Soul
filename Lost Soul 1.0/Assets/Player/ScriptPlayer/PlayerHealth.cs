@@ -2,8 +2,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using System.IO;
 
 public class PlayerHealth : MonoBehaviour
@@ -16,7 +14,7 @@ public class PlayerHealth : MonoBehaviour
     public Animator[] hearts;
 
     [Header("Opcional: Prefab do Hearts (UI)")]
-    [Tooltip("Se deixado vazio, PlayerHealth tentará encontrar os animators na cena. Se preenchido, será instanciado apenas quando necessário.")]
+    [Tooltip("Se deixado vazio, PlayerHealth tentará encontrar os animators de coração na cena. Se preenchido, será instanciado apenas quando necessário.")]
     public GameObject heartsPrefab;
 
     [Header("Configurações de Dano")]
@@ -35,12 +33,17 @@ public class PlayerHealth : MonoBehaviour
     private static PlayerHealth instance;
     public static PlayerHealth Instance => instance;
 
-    // --- ALTERAÇÕES PARA FADE (persistente entre cenas) ---
+    // --- FADE / RESPAWN ---
+
     [Header("Fade ao morrer (opcional)")]
-    [Tooltip("Coloque aqui uma Image preta que cubra toda a tela para o efeito de fade. Se vazio, tentaremos achar automaticamente uma Image chamada 'FadeImage' ou a maior Image na cena.")]
+    [Tooltip("Coloque aqui uma Image preta que cubra toda a tela, idealmente uma Image chamada 'FadeImage' ou a maior Image na cena.")]
     public Image fadeImage;               // pode ser atribuído no Inspector (opcional)
     public float fadeDuration = 3f;       // duração do fade para preto antes do respawn
     public float fadeInAfterRespawn = 0.5f; // tempo para desvanecer após respawn
+
+    [Header("Respawn em relação ao checkpoint")]
+    [Tooltip("Quanto o player volta para trás no eixo X ao respawnar no checkpoint, na direção contrária de onde morreu.")]
+    public float respawnBackOffsetX = 1f;
 
     // fade persistente compartilhado entre cenas (evita duplicatas)
     private static Image persistentFadeImage = null;
@@ -110,7 +113,7 @@ public class PlayerHealth : MonoBehaviour
                 Image img = found.GetComponent<Image>();
                 if (img != null && img != persistentFadeImage)
                 {
-                    Debug.Log("[PlayerHealth] Encontrada FadeImage na cena mas já existe uma persistente. Destruindo a nova para evitar duplicata.");
+                    Debug.Log("[PlayerHealth] Encontrada FadeImage extra na cena enquanto já existe uma persistente. Destruindo a nova para evitar duplicata.");
                     Destroy(found);
                 }
             }
@@ -199,7 +202,7 @@ public class PlayerHealth : MonoBehaviour
         float timeout = 1.0f; // tempo máximo para tentar encontrar (em segundos)
         float timer = 0f;
 
-        // 1) tentativa rápida por GameObject nomeado "ObjectAleatorio" (você já usou esse)
+        // 1) tentativa rápida por GameObject nomeado "ObjectAleatorio"
         GameObject obj = GameObject.Find("ObjectAleatorio");
         if (obj != null)
         {
@@ -209,7 +212,7 @@ public class PlayerHealth : MonoBehaviour
             yield break;
         }
 
-        // 2) tenta procurar nos root GameObjects da cena um conjunto de animators que cai bem (prefere igual a maxLives)
+        // 2) tenta procurar nos root GameObjects da cena um conjunto de animators que caia bem (prefere igual a maxLives)
         while ((hearts == null || hearts.Length == 0) && timer < timeout)
         {
             Animator[] best = null;
@@ -270,11 +273,8 @@ public class PlayerHealth : MonoBehaviour
             if (GameObject.Find(heartsPrefab.name) == null)
             {
                 GameObject heartsObj = Instantiate(heartsPrefab);
-                heartsObj.name = heartsPrefab.name;
-                DontDestroyOnLoad(heartsObj);
-
                 hearts = heartsObj.GetComponentsInChildren<Animator>(true);
-                Debug.Log($"[PlayerHealth] Hearts prefab instanciado. Hearts count = {hearts.Length}");
+                Debug.Log($"[PlayerHealth] Hearts instanciados a partir do prefab ({heartsPrefab.name}). Hearts count = {hearts.Length}");
                 UpdateHeartsUI();
                 yield break;
             }
@@ -306,8 +306,8 @@ public class PlayerHealth : MonoBehaviour
                     var anims = parentRoot.GetComponentsInChildren<Animator>(true);
                     if (anims.Length > bestCount)
                     {
-                        best = anims;
                         bestCount = anims.Length;
+                        best = anims;
                     }
                 }
 
@@ -322,8 +322,276 @@ public class PlayerHealth : MonoBehaviour
         }
 
         // se chegou aqui, não encontrou nada — UpdateHeartsUI fará warning caso chamado em outro momento
-        Debug.LogWarning("[PlayerHealth] Não conseguiu localizar hearts automaticamente. Configure hearts manualmente no Inspector ou forneça heartsPrefab.");
-        yield break;
+        Debug.LogWarning("[PlayerHealth] Não conseguiu localizar hearts automaticamente. Configure hearts manualmente no Inspector.");
+    }
+
+    void UpdateHeartsUI()
+    {
+        if (hearts == null || hearts.Length == 0)
+        {
+            Debug.LogWarning("[PlayerHealth] UpdateHeartsUI: hearts array vazio.");
+            return;
+        }
+
+        // ativa/desativa corações conforme currentLives
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            bool isAlive = i < currentLives;
+            if (hearts[i] != null && hearts[i].gameObject != null)
+                hearts[i].gameObject.SetActive(isAlive);
+        }
+    }
+
+    void Die()
+    {
+        if (isDead) return;
+        isDead = true;
+
+        if (animator != null) animator.SetTrigger("Die");
+        StartCoroutine(RespawnAfterDeath());
+    }
+
+    private IEnumerator RespawnAfterDeath()
+    {
+        // posição em que o player morreu (antes de qualquer teleporte)
+        Vector2 deathPosition = transform.position;
+
+        // Debug inicial: mostra o que está salvo
+        Debug.Log(
+            $"[PlayerHealth] Iniciando RespawnAfterDeath(). " +
+            $"Scene='{PlayerPrefs.GetString("LastCheckpointScene", "<vazio>")}', " +
+            $"ID='{PlayerPrefs.GetString("LastCheckpointID", "<vazio>")}', " +
+            $"X={PlayerPrefs.GetFloat("LastCheckpointX", float.NaN)}, " +
+            $"Y={PlayerPrefs.GetFloat("LastCheckpointY", float.NaN)}"
+        );
+
+        // 1) Fade ou espera
+        if (fadeImage == null)
+        {
+            yield return new WaitForSeconds(1.5f);
+        }
+        else
+        {
+            fadeImage.gameObject.SetActive(true);
+            Color c = fadeImage.color;
+            c.a = 0f;
+            fadeImage.color = c;
+
+            float t = 0f;
+            while (t < fadeDuration)
+            {
+                t += Time.deltaTime;
+                c.a = Mathf.Clamp01(t / fadeDuration);
+                fadeImage.color = c;
+                yield return null;
+            }
+            c.a = 1f;
+            fadeImage.color = c;
+        }
+
+        // 2) Pega dados salvos
+        string targetScene = PlayerPrefs.GetString("LastCheckpointScene", SceneManager.GetActiveScene().name);
+        string savedID = PlayerPrefs.GetString("LastCheckpointID", "");
+        float savedX = PlayerPrefs.GetFloat("LastCheckpointX", transform.position.x);
+        float savedY = PlayerPrefs.GetFloat("LastCheckpointY", transform.position.y);
+        Vector2 fallbackPos = new Vector2(savedX, savedY);
+
+        // 3) Carrega cena se existir no Build Settings
+        bool sceneLoaded = false;
+        if (!string.IsNullOrEmpty(targetScene) && SceneManager.GetActiveScene().name != targetScene)
+        {
+            int buildIndex = GetBuildIndexByName(targetScene);
+            if (buildIndex == -1)
+            {
+                Debug.LogWarning($"[PlayerHealth] Cena '{targetScene}' não encontrada no Build Settings. Irei usar a cena atual e coords salvas como fallback {fallbackPos}.");
+            }
+            else
+            {
+                Debug.Log($"[PlayerHealth] Carregando cena '{targetScene}' (buildIndex {buildIndex})...");
+                if (rb != null) rb.simulated = false; // evita fisgações
+
+                var op = SceneManager.LoadSceneAsync(buildIndex);
+                if (op == null)
+                {
+                    Debug.LogWarning("[PlayerHealth] LoadSceneAsync retornou null.");
+                }
+                else
+                {
+                    while (!op.isDone)
+                        yield return null;
+                    // deixa a cena rodar Start/Awake
+                    yield return null;
+                    sceneLoaded = true;
+                    Debug.Log("[PlayerHealth] Cena carregada com sucesso.");
+                }
+            }
+        }
+
+        // 4) Garante que só o Player persistente fique na cena
+        GameObject scenePlayer = null;
+        try
+        {
+            scenePlayer = GameObject.FindWithTag("Player");
+        }
+        catch
+        {
+            scenePlayer = null;
+        }
+
+        if (scenePlayer != null && scenePlayer != this.gameObject)
+        {
+            Debug.Log("[PlayerHealth] Encontrado Player de cena diferente do persistente. Vou destruir o player da cena e usar o persistente.");
+            Destroy(scenePlayer);
+            // aguarda um frame pra garantir destruição
+            yield return null;
+        }
+
+        // 5) Tenta achar o checkpoint por ID
+        Vector2 targetPos = fallbackPos;
+        bool foundByID = false;
+
+        if (!string.IsNullOrEmpty(savedID))
+        {
+            float timeout = 2f;
+            float elapsed = 0f;
+            Checkpoint foundCp = null;
+
+            while (elapsed < timeout && foundCp == null)
+            {
+                Checkpoint[] allCp = null;
+                try
+                {
+                    allCp = FindObjectsOfType<Checkpoint>();
+                }
+                catch
+                {
+                    allCp = FindObjectsOfType<Checkpoint>();
+                }
+
+                if (allCp != null)
+                {
+                    foreach (var cp in allCp)
+                    {
+                        if (cp != null && cp.checkpointID == savedID)
+                        {
+                            foundCp = cp;
+                            break;
+                        }
+                    }
+                }
+
+                if (foundCp != null) break;
+
+                yield return null;
+                elapsed += Time.deltaTime;
+            }
+
+            if (foundCp != null)
+            {
+                targetPos = foundCp.transform.position;
+                foundByID = true;
+                Debug.Log($"[PlayerHealth] Checkpoint encontrado por ID '{savedID}' na cena. Pos={targetPos}");
+            }
+            else
+            {
+                Debug.LogWarning($"[PlayerHealth] Não foi possível achar o checkpoint ID '{savedID}' na cena. Usando fallback {fallbackPos}.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[PlayerHealth] Nenhum ID de checkpoint salvo. Usando fallback.");
+        }
+
+        // 6) Aplica deslocamento no eixo X na direção CONTRÁRIA de onde morreu (se houver diferença)
+        if (respawnBackOffsetX != 0f)
+        {
+            float deltaX = deathPosition.x - targetPos.x;
+            if (Mathf.Abs(deltaX) > 0.01f)
+            {
+                float dirX = Mathf.Sign(deltaX);
+                // se morreu à direita do checkpoint (deltaX > 0) -> empurra respawn pra ESQUERDA
+                // se morreu à esquerda (deltaX < 0) -> empurra respawn pra DIREITA
+                targetPos.x -= dirX * respawnBackOffsetX;
+            }
+        }
+
+        // 7) Reposiciona o player persistente (this.gameObject)
+        transform.position = targetPos;
+        Debug.Log($"[PlayerHealth] Player persistente reposicionado para {targetPos}.");
+
+        // 8) Restaura física e movimento
+        if (rb != null)
+        {
+            rb.simulated = true;
+            rb.linearVelocity = Vector2.zero;
+        }
+        if (movement != null) movement.enabled = true;
+
+        // 9) Restaurar estado de vida e UI
+        currentLives = maxLives;
+        UpdateHeartsUI();
+        isDead = false;
+
+        if (animator != null)
+        {
+            animator.ResetTrigger("Die");
+            animator.Play("playerIdle");
+        }
+
+        Debug.Log($"[PlayerHealth] Respawn concluído na cena {SceneManager.GetActiveScene().name} em {targetPos} (foundByID={foundByID}).");
+
+        // 10) Fade-in
+        if (fadeImage != null)
+        {
+            Color c = fadeImage.color;
+            float t = 0f;
+            float inDuration = Mathf.Max(0.01f, fadeInAfterRespawn);
+            while (t < inDuration)
+            {
+                t += Time.deltaTime;
+                c.a = 1f - Mathf.Clamp01(t / inDuration);
+                fadeImage.color = c;
+                yield return null;
+            }
+            c.a = 0f;
+            fadeImage.color = c;
+            fadeImage.gameObject.SetActive(false);
+        }
+    }
+
+    // Função auxiliar para achar o build index pelo nome da cena (procura no Build Settings)
+    private int GetBuildIndexByName(string sceneName)
+    {
+        int total = SceneManager.sceneCountInBuildSettings;
+        for (int i = 0; i < total; i++)
+        {
+            string path = SceneUtility.GetScenePathByBuildIndex(i);
+            string name = Path.GetFileNameWithoutExtension(path);
+            if (name == sceneName) return i;
+        }
+        return -1;
+    }
+
+    IEnumerator InvulnerabilityRoutine()
+    {
+        isInvulnerable = true;
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        float blinkInterval = 0.1f;
+        float timer = 0f;
+        while (timer < invulnerableTime)
+        {
+            if (sr != null) sr.enabled = !sr.enabled;
+            yield return new WaitForSeconds(blinkInterval);
+            timer += blinkInterval;
+        }
+        if (sr != null) sr.enabled = true;
+        isInvulnerable = false;
+    }
+
+    void OnDestroy()
+    {
+        if (instance == this) instance = null;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     public void TakeDamage(Vector2 hitDirection)
@@ -375,259 +643,6 @@ public class PlayerHealth : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
             rb.AddForce(new Vector2(hitDirection.x * knockbackForce, knockbackForce), ForceMode2D.Impulse);
         }
-    }
-
-
-    void UpdateHeartsUI()
-    {
-        if (hearts == null || hearts.Length == 0)
-        {
-            Debug.LogWarning("[PlayerHealth] UpdateHeartsUI: hearts array vazio.");
-            return;
-        }
-
-        // ativa/desativa corações conforme currentLives
-        for (int i = 0; i < hearts.Length; i++)
-        {
-            bool isAlive = i < currentLives;
-            if (hearts[i] != null && hearts[i].gameObject != null)
-                hearts[i].gameObject.SetActive(isAlive);
-        }
-    }
-
-    void Die()
-    {
-        if (isDead) return;
-        isDead = true;
-
-        if (animator != null) animator.SetTrigger("Die");
-        StartCoroutine(RespawnAfterDeath());
-    }
-
-
-    private IEnumerator RespawnAfterDeath()
-    {
-        // Debug inicial: mostra o que está salvo
-        Debug.Log($"[PlayerHealth] Iniciando RespawnAfterDeath(). PlayerPrefs: Scene='{PlayerPrefs.GetString("LastCheckpointScene", "<vazio>")}', ID='{PlayerPrefs.GetString("LastCheckpointID", "<vazio>")}', X={PlayerPrefs.GetFloat("LastCheckpointX", float.NaN)}, Y={PlayerPrefs.GetFloat("LastCheckpointY", float.NaN)}");
-
-        // 1) Fade ou espera
-        if (fadeImage == null)
-        {
-            yield return new WaitForSeconds(1.5f);
-        }
-        else
-        {
-            fadeImage.gameObject.SetActive(true);
-            Color c = fadeImage.color;
-            c.a = 0f;
-            fadeImage.color = c;
-
-            float t = 0f;
-            while (t < fadeDuration)
-            {
-                t += Time.deltaTime;
-                c.a = Mathf.Clamp01(t / fadeDuration);
-                fadeImage.color = c;
-                yield return null;
-            }
-            c.a = 1f;
-            fadeImage.color = c;
-        }
-
-        // 2) Pega dados salvos
-        string targetScene = PlayerPrefs.GetString("LastCheckpointScene", "");
-        string savedID = PlayerPrefs.GetString("LastCheckpointID", "");
-        float savedX = PlayerPrefs.GetFloat("LastCheckpointX", transform.position.x);
-        float savedY = PlayerPrefs.GetFloat("LastCheckpointY", transform.position.y);
-        Vector2 fallbackPos = new Vector2(savedX, savedY);
-
-        // 3) Carrega cena se existir no Build Settings
-        bool sceneLoaded = false;
-        if (!string.IsNullOrEmpty(targetScene) && SceneManager.GetActiveScene().name != targetScene)
-        {
-            int buildIndex = GetBuildIndexByName(targetScene);
-            if (buildIndex == -1)
-            {
-                Debug.LogWarning($"[PlayerHealth] Cena '{targetScene}' não encontrada no Build Settings (checada pelo nome). Irei usar a cena atual e coords salvas como fallback.");
-            }
-            else
-            {
-                Debug.Log($"[PlayerHealth] Carregando cena '{targetScene}' (buildIndex {buildIndex})...");
-                if (rb != null) rb.simulated = false; // evita fisgações
-                var op = SceneManager.LoadSceneAsync(buildIndex);
-                if (op == null)
-                {
-                    Debug.LogWarning("[PlayerHealth] LoadSceneAsync retornou null.");
-                }
-                else
-                {
-                    while (!op.isDone)
-                        yield return null;
-                    // deixa a cena rodar Start/Awake
-                    yield return null;
-                    sceneLoaded = true;
-                    Debug.Log("[PlayerHealth] Cena carregada com sucesso.");
-                }
-            }
-        }
-        else
-        {
-            Debug.Log("[PlayerHealth] Não é necessário trocar de cena (checkpoint na cena atual ou não definido).");
-        }
-
-        // 4) Tenta encontrar o Checkpoint com o mesmo ID na cena carregada (timeout maior)
-        Vector2 targetPos = fallbackPos;
-        bool foundByID = false;
-        if (!string.IsNullOrEmpty(savedID))
-        {
-            float searchTimeout = 3.0f; // tempo maior para cenas maiores
-            float elapsed = 0f;
-            Checkpoint foundCp = null;
-
-            while (elapsed < searchTimeout)
-            {
-                // tenta incluir inativos (Unity 2020.1+). fallback em catch
-                Checkpoint[] allCp;
-                try
-                {
-                    allCp = FindObjectsOfType<Checkpoint>(true);
-                }
-                catch
-                {
-                    allCp = FindObjectsOfType<Checkpoint>();
-                }
-
-                if (allCp != null)
-                {
-                    foreach (var cp in allCp)
-                    {
-                        if (cp != null && cp.checkpointID == savedID)
-                        {
-                            foundCp = cp;
-                            break;
-                        }
-                    }
-                }
-
-                if (foundCp != null) break;
-
-                yield return null;
-                elapsed += Time.deltaTime;
-            }
-
-            if (foundCp != null)
-            {
-                targetPos = foundCp.transform.position;
-                foundByID = true;
-                Debug.Log($"[PlayerHealth] Checkpoint encontrado por ID '{savedID}' na cena. Pos={targetPos}");
-            }
-            else
-            {
-                Debug.LogWarning($"[PlayerHealth] Não encontrou Checkpoint com ID '{savedID}' na cena carregada dentro do timeout. Usando coords salvas {fallbackPos}.");
-            }
-        }
-        else
-        {
-            Debug.Log("[PlayerHealth] Nenhum LastCheckpointID salvo; usando coords salvas como fallback.");
-        }
-
-        // 5) Se existir um Player da cena (não o persistente), destrua-o para evitar conflito,
-        // e use sempre o player persistente (mais confiável)
-        GameObject scenePlayer = null;
-        try
-        {
-            scenePlayer = GameObject.FindWithTag("Player");
-        }
-        catch { scenePlayer = null; }
-
-        if (scenePlayer != null && scenePlayer != this.gameObject)
-        {
-            Debug.Log($"[PlayerHealth] Encontrado Player de cena '{scenePlayer.name}' que não é o persistente. Vou destruir o player da cena e usar o persistente.");
-            Destroy(scenePlayer);
-            // aguarda um frame pra garantir destruição
-            yield return null;
-        }
-
-        // 6) Reposiciona o player persistente (this.gameObject)
-        transform.position = targetPos;
-        Debug.Log($"[PlayerHealth] Player persistente reposicionado para {targetPos}.");
-
-        // 7) Restaura física e movimento
-        if (rb != null)
-        {
-            rb.simulated = true;
-            rb.linearVelocity = Vector2.zero;
-        }
-        if (movement != null) movement.enabled = true;
-
-        // 8) Restaurar estado de vida e UI
-        currentLives = maxLives;
-        UpdateHeartsUI();
-        isDead = false;
-
-        if (animator != null)
-        {
-            animator.ResetTrigger("Die");
-            animator.Play("playerIdle");
-        }
-
-        Debug.Log($"[PlayerHealth] Respawn concluído na cena {SceneManager.GetActiveScene().name} em {targetPos} (foundByID={foundByID}).");
-
-        // 9) Fade-in
-        if (fadeImage != null)
-        {
-            Color c = fadeImage.color;
-            float t = 0f;
-            float inDuration = Mathf.Max(0.01f, fadeInAfterRespawn);
-            while (t < inDuration)
-            {
-                t += Time.deltaTime;
-                c.a = 1f - Mathf.Clamp01(t / inDuration);
-                fadeImage.color = c;
-                yield return null;
-            }
-            c.a = 0f;
-            fadeImage.color = c;
-            fadeImage.gameObject.SetActive(false);
-        }
-    }
-
-    // Função auxiliar para achar o build index pelo nome da cena (procura no Build Settings)
-    private int GetBuildIndexByName(string sceneName)
-    {
-        int total = SceneManager.sceneCountInBuildSettings;
-        for (int i = 0; i < total; i++)
-        {
-            string path = SceneUtility.GetScenePathByBuildIndex(i);
-            string name = Path.GetFileNameWithoutExtension(path);
-            if (name == sceneName) return i;
-        }
-        return -1;
-    }
-
-
-
-
-    IEnumerator InvulnerabilityRoutine()
-    {
-        isInvulnerable = true;
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        float blinkInterval = 0.1f;
-        float timer = 0f;
-        while (timer < invulnerableTime)
-        {
-            if (sr != null) sr.enabled = !sr.enabled;
-            yield return new WaitForSeconds(blinkInterval);
-            timer += blinkInterval;
-        }
-        if (sr != null) sr.enabled = true;
-        isInvulnerable = false;
-    }
-
-    void OnDestroy()
-    {
-        if (instance == this) instance = null;
-        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     public void ChangeHealth(int amount)
