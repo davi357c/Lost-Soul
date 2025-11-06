@@ -27,7 +27,7 @@ public class FlyMonsterDamage : MonoBehaviour
     [Tooltip("Usado caso não exista FlyEnemyHealth ou o campo deathDelay não esteja configurado.")]
     public float deathDelayFallback = 1.0f;
 
-    private bool hasExploded = false;
+    public bool hasExploded = false;
     private bool isPreparingToExplode = false;
 
     private Animator animator;
