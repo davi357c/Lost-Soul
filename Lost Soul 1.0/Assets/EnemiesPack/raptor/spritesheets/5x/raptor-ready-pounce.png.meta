@@ -159,7 +159,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      raptor-ready-pounce_0: 8725951944640916102
+      raptor-ready-pounce_1: 1475938371279403478
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

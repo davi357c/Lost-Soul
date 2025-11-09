@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      preview-raptor-on-hit_0: 4263044723137319221
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

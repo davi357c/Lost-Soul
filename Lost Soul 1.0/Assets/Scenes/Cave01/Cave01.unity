@@ -344670,7 +344670,8 @@ GameObject:
   - component: {fileID: 1440920543}
   - component: {fileID: 1440920547}
   - component: {fileID: 1440920546}
-  m_Layer: 0
+  - component: {fileID: 1440920548}
+  m_Layer: 12
   m_Name: Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -344785,10 +344786,25 @@ MonoBehaviour:
   player: {fileID: 0}
   playerTag: Player
   playerLayerName: Player
+  spriteFacesRight: 0
   wakeUpDistance: 8
+  awakeAnimDuration: 1.5
   moveSpeed: 3
-  offsetRange: 3
-  timeBetweenNewTargets: 2
+  idleOffsetRange: 9
+  idleRetargetTime: 1.5
+  hoverHeightOffset: 1.5
+  meleeRange: 2
+  meleeVerticalTolerance: 1.5
+  rangedMinRange: 3
+  rangedMaxRange: 9
+  laserMinRange: 6
+  timeBetweenAttacks: 0.8
+  meleeLockTime: 0.6
+  rangedLockTime: 0.9
+  laserLockTime: 1.3
+  attacksBeforeImmune: 4
+  immuneDuration: 3
+  laserHitbox: {fileID: 0}
 --- !u!50 &1440920547
 Rigidbody2D:
   serializedVersion: 5
@@ -344816,6 +344832,43 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!70 &1440920548
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440920542}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.0054779053, y: 0.016432857}
+  m_Size: {x: 0.4851013, y: 0.507012}
+  m_Direction: 0
 --- !u!1 &1449155571
 GameObject:
   m_ObjectHideFlags: 0

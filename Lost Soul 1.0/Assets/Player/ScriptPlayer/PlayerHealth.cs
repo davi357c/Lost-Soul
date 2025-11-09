@@ -508,10 +508,10 @@ public class PlayerHealth : MonoBehaviour
             float deltaX = deathPosition.x - targetPos.x;
             if (Mathf.Abs(deltaX) > 0.01f)
             {
-                float dirX = Mathf.Sign(deltaX);
+                float dir = Mathf.Sign(deltaX);
                 // se morreu à direita do checkpoint (deltaX > 0) -> empurra respawn pra ESQUERDA
                 // se morreu à esquerda (deltaX < 0) -> empurra respawn pra DIREITA
-                targetPos.x -= dirX * respawnBackOffsetX;
+                targetPos.x -= dir * respawnBackOffsetX;
             }
         }
 
@@ -610,13 +610,17 @@ public class PlayerHealth : MonoBehaviour
         if (animator != null) animator.SetTrigger("Hit");
         StartCoroutine(InvulnerabilityRoutine());
 
-        if (rb != null)
+        if (movement != null)
+            movement.StartKnockback(hitDirection);
+        else if (rb != null)
         {
+            // fallback simples caso não haja PlayerMovement
             rb.linearVelocity = Vector2.zero;
-            rb.AddForce(new Vector2(hitDirection.x * knockbackForce, knockbackForce), ForceMode2D.Impulse);
         }
 
-        if (movement != null) movement.Respawn(0.3f);
+        // Mantém o comportamento antigo de respawn rápido, se você ainda usar este overload
+        if (movement != null)
+            movement.Respawn(0.3f);
     }
 
     public void TakeDamage(int damage, Vector2 hitDirection)
@@ -638,10 +642,11 @@ public class PlayerHealth : MonoBehaviour
 
         StartCoroutine(InvulnerabilityRoutine());
 
-        if (rb != null)
+        if (movement != null)
+            movement.StartKnockback(hitDirection);
+        else if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
-            rb.AddForce(new Vector2(hitDirection.x * knockbackForce, knockbackForce), ForceMode2D.Impulse);
         }
     }
 

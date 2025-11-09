@@ -259,7 +259,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      raptor-dead_0: 4387403850651093004
+      raptor-dead_1: -5639686762123278831
+      raptor-dead_2: -7922179265040268835
+      raptor-dead_3: 7730224478476380289
+      raptor-dead_4: -8110157078191314416
+      raptor-dead_5: -7745242846323263532
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      raptor-scanning5_0: -7577465304966332267
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

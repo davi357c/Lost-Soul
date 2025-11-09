@@ -93,6 +93,13 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask dashThroughWalls;
     private bool isDashing = false;
 
+    [Header("Knockback")]
+    public float knockbackHorizontalForce = 8f;
+    public float knockbackVerticalForce = 6f;
+    public float knockbackDuration = 0.15f;
+    private bool isKnockedBack = false;
+    private float knockbackTimer = 0f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -121,59 +128,73 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isDashing)
         {
-            moveInput = Input.GetAxisRaw("Horizontal");
-            if (!isWallJumping)
-                rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
-
-            if (moveInput > 0 && !isFacingRight) Flip();
-            else if (moveInput < 0 && isFacingRight) Flip();
-
-            if (Input.GetButtonDown("Jump") && isGrounded)
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-
-            if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0)
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
-
-            // SISTEMA DE ATAQUE COM HITBOXES
-            if (Input.GetMouseButtonDown(0) && !isAttacking)
+            if (isKnockedBack)
             {
-                if (Input.GetKey(KeyCode.S) && !isGrounded)
+                // Durante o knockback, não lê input nem aplica movimento manual.
+                knockbackTimer -= Time.deltaTime;
+                if (knockbackTimer <= 0f)
                 {
-                    animator.SetTrigger("DownAttack"); // dispara animação imediatamente
-                    StartCoroutine(DownAttackRoutine());
+                    isKnockedBack = false;
                 }
-                else if (Input.GetKey(KeyCode.W))
-                {
-                    animator.SetTrigger("UpAttack");
-                    StartCoroutine(UpAttackRoutine());
-                }
-                else
-                {
-                    animator.SetTrigger("Attack");
-                    StartCoroutine(AttackRoutine());
-                }
-            }
-
-            HandleLookDown();
-
-            if (Input.GetKeyDown(KeyCode.Q))
-                StartCoroutine(DashRoutine());
-
-            // SÓ PERMITE SLIDE / JUMP EM PAREDE SE O PUZZLE JÁ TIVER SIDO CONCLUÍDO
-            if (canWallClimb)
-            {
-                WallSlideAndJump();
             }
             else
             {
-                // Garante que não fique "grudado" na parede nem com gravidade alterada
-                isWallSliding = false;
+                moveInput = Input.GetAxisRaw("Horizontal");
+
                 if (!isWallJumping)
-                    rb.gravityScale = defaultGravityScale;
+                    rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+
+                if (moveInput > 0 && !isFacingRight) Flip();
+                else if (moveInput < 0 && isFacingRight) Flip();
+
+                if (Input.GetButtonDown("Jump") && isGrounded)
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
+                if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0)
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
+
+                // SISTEMA DE ATAQUE COM HITBOXES
+                if (Input.GetMouseButtonDown(0) && !isAttacking)
+                {
+                    if (Input.GetKey(KeyCode.S) && !isGrounded)
+                    {
+                        animator.SetTrigger("DownAttack"); // dispara animação imediatamente
+                        StartCoroutine(DownAttackRoutine());
+                    }
+                    else if (Input.GetKey(KeyCode.W))
+                    {
+                        animator.SetTrigger("UpAttack");
+                        StartCoroutine(UpAttackRoutine());
+                    }
+                    else
+                    {
+                        animator.SetTrigger("Attack");
+                        StartCoroutine(AttackRoutine());
+                    }
+                }
+
+                HandleLookDown();
+
+                if (Input.GetKeyDown(KeyCode.Q))
+                    StartCoroutine(DashRoutine());
+
+                // SÓ PERMITE SLIDE / JUMP EM PAREDE SE O PUZZLE JÁ TIVER SIDO CONCLUÍDO
+                if (canWallClimb)
+                {
+                    WallSlideAndJump();
+                }
+                else
+                {
+                    // Garante que não fique "grudado" na parede nem com gravidade alterada
+                    isWallSliding = false;
+                    if (!isWallJumping)
+                        rb.gravityScale = defaultGravityScale;
+                }
             }
         }
 
-        animator.SetFloat("Speed", Mathf.Abs(moveInput));
+        float speedParam = Mathf.Abs(isKnockedBack ? rb.linearVelocity.x : moveInput);
+        animator.SetFloat("Speed", speedParam);
         animator.SetBool("isGrounded", isGrounded);
         animator.SetBool("lookDown", isLookingDown);
         animator.SetBool("isWallSliding", isWallSliding);
@@ -299,6 +320,24 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public bool IsDashing() => isDashing;
+
+    public void StartKnockback(Vector2 hitDirection)
+    {
+        if (rb == null) return;
+
+        isKnockedBack = true;
+        knockbackTimer = knockbackDuration;
+
+        hitDirection.Normalize();
+        if (hitDirection == Vector2.zero)
+            hitDirection = isFacingRight ? Vector2.left : Vector2.right;
+
+        rb.linearVelocity = Vector2.zero;
+        rb.linearVelocity = new Vector2(
+            hitDirection.x * knockbackHorizontalForce,
+            knockbackVerticalForce
+        );
+    }
 
     private int LayerMaskToLayer(LayerMask mask)
     {
@@ -485,6 +524,29 @@ public class PlayerMovement : MonoBehaviour
         noAttachTimer = 0f;
         lastWallSide = 0;
         rb.gravityScale = defaultGravityScale;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // Garante que o collider pertence a uma das layers de inimigos configuradas
+        if ((enemyLayer.value & (1 << other.gameObject.layer)) == 0)
+            return;
+
+        // Direção do knockback: do inimigo/boss para o player (empurra pra longe)
+        Vector2 dir = ((Vector2)transform.position - (Vector2)other.transform.position).normalized;
+        if (dir == Vector2.zero)
+            dir = isFacingRight ? Vector2.left : Vector2.right;
+
+        if (PlayerHealth.Instance != null)
+        {
+            PlayerHealth.Instance.TakeDamage(1, dir);
+        }
+        else
+        {
+            PlayerHealth ph = GetComponent<PlayerHealth>();
+            if (ph != null)
+                ph.TakeDamage(1, dir);
+        }
     }
 
 #if UNITY_EDITOR

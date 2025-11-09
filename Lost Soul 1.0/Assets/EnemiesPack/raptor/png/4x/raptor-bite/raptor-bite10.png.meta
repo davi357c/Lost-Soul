@@ -234,7 +234,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      raptor-bite10_0: -8765991002415370448
+      raptor-bite10_1: -4379047621845368582
+      raptor-bite10_2: -2139917085177073638
+      raptor-bite10_3: 9051693013653574714
+      raptor-bite10_4: 7200576999927035544
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

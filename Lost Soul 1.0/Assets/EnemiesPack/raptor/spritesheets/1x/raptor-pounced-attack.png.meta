@@ -309,7 +309,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      raptor-pounced-attack_0: 7409200556719033486
+      raptor-pounced-attack_1: -2834110628428120022
+      raptor-pounced-attack_2: -538335841061748792
+      raptor-pounced-attack_3: -2645030429728916721
+      raptor-pounced-attack_4: 2914195363941650127
+      raptor-pounced-attack_5: 794362400593565737
+      raptor-pounced-attack_6: 5957282239758957286
+      raptor-pounced-attack_7: -1884474846493816241
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

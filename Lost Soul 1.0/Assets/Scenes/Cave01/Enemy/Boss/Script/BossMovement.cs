@@ -1,77 +1,165 @@
 using UnityEngine;
+using System.Collections;
 
-public class BossMovement : MonoBehaviour
+public class BossAI : MonoBehaviour
 {
     [Header("Referências")]
-    public Transform player;                 // Pode arrastar o Player aqui, ou ele acha pelo tag
+    public Transform player;                 // Arrasta o Player aqui ou ele acha pelo Tag
     public string playerTag = "Player";      // Tag do Player
     public string playerLayerName = "Player";// Layer do Player
 
-    [Header("Detecção do Player")]
-    public float wakeUpDistance = 8f;        // Distância para acordar o boss
-
-    [Header("Movimentação")]
-    public float moveSpeed = 3f;             // Velocidade do boss
-    public float offsetRange = 3f;           // Variação aleatória no X em torno do player
-    public float timeBetweenNewTargets = 2f; // Tempo pra trocar de alvo aleatório
-
     private Rigidbody2D rb;
     private Animator anim;
+    private SpriteRenderer sr;
+    private int playerLayer;
+
+    [Header("Sprite / Direção")]
+    [Tooltip("Marque se o sprite padrão está olhando para a DIREITA. Desmarque se ele foi desenhado olhando para a ESQUERDA.")]
+    public bool spriteFacesRight = true;
+
+    [Header("Detecção / Acordar")]
+    public float wakeUpDistance = 8f;        // Distância para acordar
+    public float awakeAnimDuration = 1.5f;   // Usado só como fallback se não tiver Animator
 
     private bool isAwake = false;
-    private Vector2 currentTarget;
-    private float targetTimer;
-    private int playerLayer;
+    private bool isDead = false;
+
+    [Header("Movimento / Idle inteligente (voando)")]
+    public float moveSpeed = 4f;
+    public float idleOffsetRange = 3f;       // Raio em torno do player para onde o boss tenta ir
+    public float idleRetargetTime = 1.5f;    // Tempo para trocar de alvo de voo
+    public float hoverHeightOffset = 1.5f;   // Altura média acima do player
+
+    private Vector2 idleTarget;
+    private float idleTimer;
+    private Vector2 desiredVelocity = Vector2.zero; // direção * velocidade (unidades/segundo)
+
+    // Limite mínimo de Y (posição inicial)
+    private float minY;
+
+    [Header("Alcances de Ataque")]
+    public float meleeRange = 2f;
+    public float meleeVerticalTolerance = 1.5f;
+    public float rangedMinRange = 3f;
+    public float rangedMaxRange = 9f;
+    public float laserMinRange = 6f;
+
+    [Header("Tempos de Ataque (lock de movimento)")]
+    public float timeBetweenAttacks = 0.8f;
+    public float meleeLockTime = 0.6f;
+    public float rangedLockTime = 0.9f;
+    public float laserLockTime = 1.3f;
+
+    [Header("Fase Imune")]
+    public int attacksBeforeImmune = 4;      // Depois de quantos ataques entra em boss_immune
+    public float immuneDuration = 3f;        // Tempo em boss_immune
+
+    private bool isImmune = false;           // estado lógico de imunidade
+    private int attacksCount = 0;
+    private bool isPerformingAction = false; // está em ataque/laser/immune/awake
+    private float attackCooldown = 0f;
+
+    [Header("Laser")]
+    public GameObject laserHitbox;           // Objeto com o collider do laser (desativado por padrão)
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        sr = GetComponentInChildren<SpriteRenderer>();
 
-        // Pega o índice da layer "Player"
         if (!string.IsNullOrEmpty(playerLayerName))
             playerLayer = LayerMask.NameToLayer(playerLayerName);
         else
             playerLayer = -1;
 
-        // Se não tiver referência manual, tenta achar pelo tag "Player"
         if (player == null && !string.IsNullOrEmpty(playerTag))
         {
             GameObject p = GameObject.FindGameObjectWithTag(playerTag);
             if (p != null) player = p.transform;
         }
+
+        desiredVelocity = Vector2.zero;
+
+        // Guarda o Y inicial como limite mínimo
+        minY = transform.position.y;
+
+        // Como o boss está voando, garantimos que a gravidade não puxe ele para o chão
+        if (rb != null)
+        {
+            rb.gravityScale = 0f;
+            rb.freezeRotation = true;
+        }
     }
 
     private void Update()
     {
+        if (isDead)
+        {
+            desiredVelocity = Vector2.zero;
+            return;
+        }
+
         if (!isAwake)
         {
             CheckWakeUp();
+            return;
+        }
+
+        attackCooldown -= Time.deltaTime;
+
+        if (!isPerformingAction && !isImmune)
+        {
+            // Voo em volta do player
+            HandleIdleMovement();
+
+            if (attackCooldown <= 0f && player != null)
+            {
+                DecideNextAction();
+            }
         }
         else
         {
-            UpdateTargetPosition();
+            desiredVelocity = Vector2.zero;
+        }
+
+        // sempre olhar pro player enquanto estiver acordado e vivo
+        if (isAwake && !isDead && player != null)
+        {
+            FacePlayer();
         }
     }
 
     private void FixedUpdate()
     {
-        if (isAwake)
+        if (rb != null)
         {
-            MoveBoss();
+            // MovePosition usa a posição atual + velocidade * deltaTime
+            Vector2 newPos = rb.position + desiredVelocity * Time.fixedDeltaTime;
+
+            // NÃO deixa ir abaixo da posição inicial
+            if (newPos.y < minY)
+                newPos.y = minY;
+
+            rb.MovePosition(newPos);
         }
         else
         {
-            rb.linearVelocity = Vector2.zero;
+            Vector3 newPos = transform.position + (Vector3)(desiredVelocity * Time.fixedDeltaTime);
+
+            if (newPos.y < minY)
+                newPos.y = minY;
+
+            transform.position = newPos;
         }
     }
 
-    // Verifica se o player está perto o suficiente para acordar
+    // --------- ACORDAR ---------
+
     private void CheckWakeUp()
     {
         if (player == null) return;
 
-        // Garante que é mesmo o player na layer certa (Player)
         if (playerLayer != -1 && player.gameObject.layer != playerLayer)
             return;
 
@@ -79,63 +167,303 @@ public class BossMovement : MonoBehaviour
 
         if (dist <= wakeUpDistance)
         {
-            isAwake = true;
+            StartCoroutine(WakeUpRoutine());
+        }
+        else
+        {
+            desiredVelocity = Vector2.zero;
+        }
+    }
 
-            if (anim != null)
+    private IEnumerator WakeUpRoutine()
+    {
+        if (isAwake) yield break;
+
+        isAwake = true;
+        isPerformingAction = true;   // <<< trava movimento ENQUANTO estiver no awake
+        desiredVelocity = Vector2.zero;
+
+        if (anim != null)
+        {
+            anim.SetTrigger("awake"); // Trigger -> estado boss_awake
+
+            // Espera um frame para o Animator processar o trigger
+            yield return null;
+
+            // Espera ENTRAR no estado "boss_awake" (com um timeout curto de segurança)
+            float waitEnter = 0f;
+            while (!anim.GetCurrentAnimatorStateInfo(0).IsName("boss_awake") && waitEnter < 0.5f)
             {
-                anim.SetTrigger("awake");
+                waitEnter += Time.deltaTime;
+                yield return null;
+            }
+
+            // Agora espera SAIR do estado "boss_awake"
+            while (anim.GetCurrentAnimatorStateInfo(0).IsName("boss_awake"))
+            {
+                yield return null;
             }
         }
-    }
-
-    // Alvo "inteligente" e meio aleatório ao redor do player
-    private void UpdateTargetPosition()
-    {
-        if (player == null) return;
-
-        targetTimer -= Time.deltaTime;
-
-        if (targetTimer <= 0f)
+        else
         {
-            float randomOffsetX = Random.Range(-offsetRange, offsetRange);
-
-            // Anda no X do player +- offset, mantendo o Y atual do boss
-            currentTarget = new Vector2(player.position.x + randomOffsetX, rb.position.y);
-
-            targetTimer = timeBetweenNewTargets;
+            // Fallback caso não tenha Animator configurado
+            yield return new WaitForSeconds(awakeAnimDuration);
         }
+
+        isPerformingAction = false;
+        attackCooldown = timeBetweenAttacks;
+        // No Animator, deixe boss_awake voltar pra boss_idle por Exit Time
     }
 
-    // Movimento até o alvo atual
-    private void MoveBoss()
-    {
-        float distanceToTarget = Vector2.Distance(rb.position, currentTarget);
+    // --------- IDLE / VOO INTELIGENTE ---------
 
-        // Se já está bem perto do alvo, para um pouco
-        if (distanceToTarget < 0.2f)
+    private void HandleIdleMovement()
+    {
+        if (player == null)
         {
-            rb.linearVelocity = Vector2.zero;
+            desiredVelocity = Vector2.zero;
             return;
         }
 
-        Vector2 direction = (currentTarget - rb.position).normalized;
-        rb.linearVelocity = direction * moveSpeed;
+        idleTimer -= Time.deltaTime;
 
-        // Flip pra direção que ele está indo
-        if (direction.x > 0.05f)
+        // De tempos em tempos escolhemos um novo ponto de voo em torno do player
+        if (idleTimer <= 0f || Vector2.Distance(transform.position, idleTarget) > idleOffsetRange * 1.5f)
         {
-            transform.localScale = new Vector3(10f, 10f, 10f);
+            // Direção aleatória em um círculo
+            Vector2 randomDir = Random.insideUnitCircle.normalized;
+            if (randomDir == Vector2.zero)
+                randomDir = Vector2.right;
+
+            // Distância moderada para não ir longe demais
+            float randomDist = Random.Range(idleOffsetRange * 0.4f, idleOffsetRange);
+
+            Vector2 offset = randomDir * randomDist;
+
+            // Puxa um pouco pra cima do player
+            offset.y += hoverHeightOffset;
+
+            Vector2 candidate = (Vector2)player.position + offset;
+
+            // Garante que o alvo nunca fique abaixo da posição inicial do boss
+            if (candidate.y < minY)
+                candidate.y = minY;
+
+            idleTarget = candidate;
+            idleTimer = idleRetargetTime;
         }
-        else if (direction.x < -0.05f)
+
+        Vector2 currentPos = rb != null ? rb.position : (Vector2)transform.position;
+        Vector2 toTarget = idleTarget - currentPos;
+        float distance = toTarget.magnitude;
+
+        if (distance < 0.2f)
         {
-            transform.localScale = new Vector3(-10f, 10f, 10f);
+            // Próximo do alvo, pode flutuar quase parado
+            desiredVelocity = Vector2.zero;
+        }
+        else
+        {
+            Vector2 dir = toTarget / distance;
+            desiredVelocity = dir * moveSpeed;
+
+            // ANTES: HandleFlip(dir);
+            // Agora quem manda é sempre o FacePlayer() chamado no Update()
         }
     }
 
-    // Gizmo pra ver o range de wake-up
-    private void OnDrawGizmosSelected()
+    // --------- ESCOLHA DO PRÓXIMO ATAQUE ---------
+
+    private void DecideNextAction()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, wakeUpDistance);
+        if (player == null) return;
+
+        float dist = Vector2.Distance(transform.position, player.position);
+        float verticalDiff = Mathf.Abs(player.position.y - transform.position.y);
+
+        // Primeiro: checa se já é hora de entrar no modo imune
+        if (!isImmune && attacksCount >= attacksBeforeImmune)
+        {
+            StartCoroutine(ImmuneRoutine());
+            return;
+        }
+
+        // Muito perto → melee (precisa estar relativamente alinhado na vertical)
+        if (dist <= meleeRange && verticalDiff <= meleeVerticalTolerance)
+        {
+            StartCoroutine(MeleeRoutine());
+            return;
+        }
+
+        // Distância média → melee ou range
+        if (dist > meleeRange && dist < laserMinRange)
+        {
+            float r = Random.value;
+            if (r < 0.6f)
+                StartCoroutine(RangedRoutine());
+            else
+                StartCoroutine(MeleeRoutine());
+            return;
+        }
+
+        // Distância grande → laser ou range
+        if (dist >= laserMinRange)
+        {
+            float r = Random.value;
+            if (r < 0.7f)
+                StartCoroutine(LaserRoutine());
+            else
+                StartCoroutine(RangedRoutine());
+            return;
+        }
+    }
+
+    // --------- MELEE ---------
+
+    private IEnumerator MeleeRoutine()
+    {
+        isPerformingAction = true;
+        attacksCount++;
+        attackCooldown = timeBetweenAttacks + meleeLockTime;
+
+        FacePlayer();
+        desiredVelocity = Vector2.zero;
+
+        if (anim != null)
+            anim.SetTrigger("melee"); // Trigger -> estado boss_melee
+
+        yield return new WaitForSeconds(meleeLockTime);
+
+        isPerformingAction = false;
+    }
+
+    // --------- RANGE (PROJÉTEIS) ---------
+
+    private IEnumerator RangedRoutine()
+    {
+        isPerformingAction = true;
+        attacksCount++;
+        attackCooldown = timeBetweenAttacks + rangedLockTime;
+
+        FacePlayer();
+        desiredVelocity = Vector2.zero;
+
+        if (anim != null)
+            anim.SetTrigger("rangeAtt"); // Trigger -> estado boss_rangeAttack (param chama rangeAtt)
+
+        // Coloque um Animation Event na animação chamando um método SpawnProjectile()
+
+        yield return new WaitForSeconds(rangedLockTime);
+
+        isPerformingAction = false;
+    }
+
+    // --------- LASER ---------
+
+    private IEnumerator LaserRoutine()
+    {
+        isPerformingAction = true;
+        attacksCount++;
+        attackCooldown = timeBetweenAttacks + laserLockTime;
+
+        FacePlayer();
+        desiredVelocity = Vector2.zero;
+
+        if (anim != null)
+            anim.SetTrigger("laser"); // Trigger -> estado boss_laser
+
+        // Use Animation Events para StartLaserHitbox / StopLaserHitbox
+
+        yield return new WaitForSeconds(laserLockTime);
+
+        isPerformingAction = false;
+    }
+
+    // Chamadas por Animation Event na animação do laser
+    public void StartLaserHitbox()
+    {
+        if (laserHitbox != null)
+            laserHitbox.SetActive(true);
+    }
+
+    public void StopLaserHitbox()
+    {
+        if (laserHitbox != null)
+            laserHitbox.SetActive(false);
+    }
+
+    // --------- IMUNE (BOOL NO ANIMATOR) ---------
+
+    private IEnumerator ImmuneRoutine()
+    {
+        isImmune = true;
+        isPerformingAction = true;
+        desiredVelocity = Vector2.zero;
+
+        if (anim != null)
+            anim.SetBool("immune", true);   // entra em boss_immune
+
+        yield return new WaitForSeconds(immuneDuration);
+
+        if (anim != null)
+            anim.SetBool("immune", false);  // Animator trata a transição pra boss_leavingImmune / boss_idle
+
+        isImmune = false;
+        isPerformingAction = false;
+        attacksCount = 0;
+        attackCooldown = timeBetweenAttacks;
+    }
+
+    // --------- UTILIDADES ---------
+
+    // (Ainda existe, mas não estamos mais usando — pode deletar se quiser)
+    private void HandleFlip(Vector2 dir)
+    {
+        if (sr == null) return;
+
+        if (dir.x > 0.05f)
+        {
+            sr.flipX = !spriteFacesRight;
+        }
+        else if (dir.x < -0.05f)
+        {
+            sr.flipX = spriteFacesRight;
+        }
+    }
+
+    private void FacePlayer()
+    {
+        if (player == null || sr == null) return;
+
+        float dx = player.position.x - transform.position.x;
+
+        if (dx > 0.05f)
+        {
+            sr.flipX = !spriteFacesRight;
+        }
+        else if (dx < -0.05f)
+        {
+            sr.flipX = spriteFacesRight;
+        }
+    }
+
+    // Chame isto pelo script de vida quando a vida chegar a 0
+    public void Die()
+    {
+        if (isDead) return;
+
+        isDead = true;
+        isAwake = true;
+        isPerformingAction = false;
+        desiredVelocity = Vector2.zero;
+
+        if (anim != null)
+            anim.SetTrigger("die"); // Trigger -> estado boss_death
+    }
+
+    // Para o script de vida checar se o boss está imune
+    public bool IsImmune
+    {
+        get { return isImmune; }
     }
 }

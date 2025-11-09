@@ -259,7 +259,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      raptor-walk_0: 4349518597686961627
+      raptor-walk_1: -9022158683444555584
+      raptor-walk_2: 5446028315393049466
+      raptor-walk_3: 5705244220958219938
+      raptor-walk_4: -7895816248653478549
+      raptor-walk_5: -4426590019253709414
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

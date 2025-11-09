@@ -159,7 +159,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      raptor-roar6_0: 4717985020373557890
+      raptor-roar6_1: 3877951656666321420
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -384,7 +384,18 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      raptor-roar4_0: -7418809809574895133
+      raptor-roar4_1: -7111053493109660046
+      raptor-roar4_10: -7497590909281485292
+      raptor-roar4_2: -4003142635732442334
+      raptor-roar4_3: 8877319032011205383
+      raptor-roar4_4: 8926592562371482205
+      raptor-roar4_5: -4267521952906303629
+      raptor-roar4_6: -3903823238081841547
+      raptor-roar4_7: -1398548047632545522
+      raptor-roar4_8: -7595542011440765795
+      raptor-roar4_9: 6273625740582726181
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -59509,6 +59509,10 @@ PrefabInstance:
       propertyPath: respawnBackOffsetX
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2153905889577079749, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
+      propertyPath: knockbackHorizontalForce
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 2369397405886767564, guid: aaac93cdec778444e937aa1bab3f6717, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
