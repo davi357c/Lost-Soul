@@ -24,7 +24,7 @@ public class AttackHitbox : MonoBehaviour
         bool hitEnemy = false;
         Transform enemyTransform = collision.transform;
 
-        // Inimigo "normal"
+        // Inimigo terrestre comum
         EnemyHealth enemy = collision.GetComponent<EnemyHealth>();
         if (enemy != null)
         {
@@ -40,18 +40,28 @@ public class AttackHitbox : MonoBehaviour
                 flyEnemy.TakeDamage(knockbackDirection.normalized, damage);
                 hitEnemy = true;
             }
+            else
+            {
+                // Inimigo veloz
+                VeloEnemyHealth veloEnemy = collision.GetComponent<VeloEnemyHealth>();
+                if (veloEnemy != null)
+                {
+                    veloEnemy.TakeDamage(knockbackDirection.normalized, damage);
+                    hitEnemy = true;
+                }
+            }
         }
 
-        // Se não acertou nenhum inimigo, não faz mais nada
         if (!hitEnemy) return;
 
-        // Se essa hitbox NÃO é a do ataque pra baixo, não tenta pogo
+        // Se não for ataque pra baixo, não tenta pogo
         if (!enablePogoOnHit) return;
         if (player == null) return;
 
-        // Pede pro player tentar fazer o pogo com base nesse inimigo
+        // Faz pogo
         player.OnDownAttackHitEnemy(enemyTransform);
     }
+
 
 
 }

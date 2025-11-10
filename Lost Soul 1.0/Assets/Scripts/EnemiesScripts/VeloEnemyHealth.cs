@@ -1,9 +1,9 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 
 public class VeloEnemyHealth : MonoBehaviour
 {
-    [Header("Configurações de Vida")]
+    [Header("ConfiguraÃ§Ãµes de Vida")]
     public int maxHealth = 3;
     private int currentHealth;
 
@@ -12,8 +12,7 @@ public class VeloEnemyHealth : MonoBehaviour
     public float invulnerableTime = 0.3f;
 
     [Header("Morte")]
-    public GameObject deathEffect; // opcional (partículas)
-    public float destroyDelay = 0.5f;
+    public GameObject deathEffect; // opcional (partÃ­culas)
 
     private Animator anim;
     private Rigidbody2D rb;
@@ -30,10 +29,6 @@ public class VeloEnemyHealth : MonoBehaviour
         enemyAI = GetComponent<EnemyAI>();
     }
 
-    /// <summary>
-    /// Aplica dano ao inimigo, com direção e knockback.
-    /// Chamado pelo Player via AttackHitbox.
-    /// </summary>
     public void TakeDamage(Vector2 hitDirection, int damage)
     {
         if (isDead || isInvulnerable) return;
@@ -61,7 +56,6 @@ public class VeloEnemyHealth : MonoBehaviour
     {
         isInvulnerable = true;
 
-        // feedback visual (piscar)
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         float blinkInterval = 0.1f;
         float timer = 0f;
@@ -86,11 +80,17 @@ public class VeloEnemyHealth : MonoBehaviour
         if (isDead) return;
         isDead = true;
 
+        // para IA e movimento
         if (enemyAI != null)
         {
-            // para IA e animações
             StopAllCoroutines();
             enemyAI.enabled = false;
+        }
+
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.gravityScale = 3f; // pra cair atÃ© o chÃ£o
         }
 
         if (anim != null)
@@ -99,12 +99,23 @@ public class VeloEnemyHealth : MonoBehaviour
         if (deathEffect != null)
             Instantiate(deathEffect, transform.position, Quaternion.identity);
 
-        // desativa o collider pra não interagir mais
+        // desativa o collider pra nÃ£o interagir mais
         Collider2D col = GetComponent<Collider2D>();
         if (col != null)
             col.enabled = false;
 
-        // pequena espera antes de destruir (pra animação tocar)
-        Destroy(gameObject, destroyDelay);
+        // NÃƒO destruir â€” ele fica ali morto
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (isDead && collision.gameObject.CompareTag("Ground"))
+        {
+            if (rb != null)
+            {
+                rb.gravityScale = 0f;
+                rb.linearVelocity = Vector2.zero;
+            }
+        }
     }
 }

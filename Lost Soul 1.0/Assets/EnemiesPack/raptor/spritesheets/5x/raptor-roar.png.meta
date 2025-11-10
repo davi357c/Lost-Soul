@@ -148,7 +148,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -214,12 +214,12 @@ TextureImporter:
       name: raptor-roar_0
       rect:
         serializedVersion: 2
-        x: 164
+        x: 0
         y: 0
-        width: 237
-        height: 156
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 640
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -236,12 +236,12 @@ TextureImporter:
       name: raptor-roar_1
       rect:
         serializedVersion: 2
-        x: 799
+        x: 640
         y: 0
-        width: 227
-        height: 151
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 640
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -258,12 +258,12 @@ TextureImporter:
       name: raptor-roar_2
       rect:
         serializedVersion: 2
-        x: 1439
+        x: 1280
         y: 0
-        width: 227
-        height: 151
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 640
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -280,12 +280,12 @@ TextureImporter:
       name: raptor-roar_3
       rect:
         serializedVersion: 2
-        x: 2079
+        x: 1920
         y: 0
-        width: 277
-        height: 131
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 640
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -302,12 +302,12 @@ TextureImporter:
       name: raptor-roar_4
       rect:
         serializedVersion: 2
-        x: 2719
+        x: 2560
         y: 0
-        width: 277
-        height: 131
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 640
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -324,12 +324,12 @@ TextureImporter:
       name: raptor-roar_5
       rect:
         serializedVersion: 2
-        x: 3064
-        y: 99
-        width: 12
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 3200
+        y: 0
+        width: 640
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -342,715 +342,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: raptor-roar_6
-      rect:
-        serializedVersion: 2
-        x: 3084
-        y: 104
-        width: 12
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 20c962705d6979080800000000000000
-      internalID: -9180703473679295486
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_7
-      rect:
-        serializedVersion: 2
-        x: 3359
-        y: 0
-        width: 277
-        height: 131
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c751398bb3e6f5b70800000000000000
-      internalID: 8889945392231421308
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_8
-      rect:
-        serializedVersion: 2
-        x: 3719
-        y: 99
-        width: 12
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 19785c43d79fbe320800000000000000
-      internalID: 2588436727006070673
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_9
-      rect:
-        serializedVersion: 2
-        x: 3739
-        y: 104
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 16cc653d1af5e96f0800000000000000
-      internalID: -675997745418941343
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_10
-      rect:
-        serializedVersion: 2
-        x: 2349
-        y: 84
-        width: 32
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 47ebe240d652eafc0800000000000000
-      internalID: -3481804311758979468
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_11
-      rect:
-        serializedVersion: 2
-        x: 2389
-        y: 94
-        width: 22
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 075df7c6d34f27da0800000000000000
-      internalID: -5948423613152504464
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_12
-      rect:
-        serializedVersion: 2
-        x: 3044
-        y: 94
-        width: 17
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 771c9a199298b0140800000000000000
-      internalID: 4686990648839618935
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_13
-      rect:
-        serializedVersion: 2
-        x: 2389
-        y: 74
-        width: 17
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 84ecdc38ebc305fe0800000000000000
-      internalID: -1202394311555166648
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_14
-      rect:
-        serializedVersion: 2
-        x: 2409
-        y: 79
-        width: 12
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c00dd0455288d7220800000000000000
-      internalID: 2485292263283740684
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_15
-      rect:
-        serializedVersion: 2
-        x: 3084
-        y: 74
-        width: 17
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 23f487d75fb063c00800000000000000
-      internalID: 879903926197440306
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_16
-      rect:
-        serializedVersion: 2
-        x: 3109
-        y: 74
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 73896ec6a2f420b60800000000000000
-      internalID: 7710812555645982775
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_17
-      rect:
-        serializedVersion: 2
-        x: 3739
-        y: 74
-        width: 12
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4445342d4c6edab40800000000000000
-      internalID: 5453268456831145028
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_18
-      rect:
-        serializedVersion: 2
-        x: 3759
-        y: 74
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2a326f73da9b18240800000000000000
-      internalID: 4792315632118277026
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_19
-      rect:
-        serializedVersion: 2
-        x: 2339
-        y: 34
-        width: 32
-        height: 37
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3bee1281cc88688d0800000000000000
-      internalID: -2844435704478306637
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_20
-      rect:
-        serializedVersion: 2
-        x: 2364
-        y: 59
-        width: 22
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 553ec7a2b4bd188d0800000000000000
-      internalID: -2845752373639584939
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_21
-      rect:
-        serializedVersion: 2
-        x: 2389
-        y: 54
-        width: 12
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 481845e694d301fc0800000000000000
-      internalID: -3526251122638159484
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_22
-      rect:
-        serializedVersion: 2
-        x: 3044
-        y: 54
-        width: 17
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 812ec9cd2f03ba600800000000000000
-      internalID: 480531604886577688
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_23
-      rect:
-        serializedVersion: 2
-        x: 2374
-        y: 44
-        width: 17
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b5711408a019deff0800000000000000
-      internalID: -5188550270052517
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_24
-      rect:
-        serializedVersion: 2
-        x: 3069
-        y: 49
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 683f496c535b75040800000000000000
-      internalID: 4636373583970759558
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_25
-      rect:
-        serializedVersion: 2
-        x: 3714
-        y: 49
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1056f636391cc7b60800000000000000
-      internalID: 7745278297943008513
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_26
-      rect:
-        serializedVersion: 2
-        x: 3724
-        y: 44
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 935df5f6f08392910800000000000000
-      internalID: 1813041963937551673
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_27
-      rect:
-        serializedVersion: 2
-        x: 2394
-        y: 29
-        width: 12
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 40c509336b65453c0800000000000000
-      internalID: -4371773997720773628
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_28
-      rect:
-        serializedVersion: 2
-        x: 3004
-        y: 24
-        width: 12
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4b1581e89baebea90800000000000000
-      internalID: -7283469889667837516
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_29
-      rect:
-        serializedVersion: 2
-        x: 3029
-        y: 34
-        width: 17
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c6b46fbc74f755e10800000000000000
-      internalID: 2185793140499565420
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_30
-      rect:
-        serializedVersion: 2
-        x: 2374
-        y: 14
-        width: 12
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: eab9507398be15390800000000000000
-      internalID: -7831219302454420562
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_31
-      rect:
-        serializedVersion: 2
-        x: 3059
-        y: 19
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2b4b6c7bc1cd394a0800000000000000
-      internalID: -6587679814012455758
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_32
-      rect:
-        serializedVersion: 2
-        x: 3694
-        y: 24
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 05cc5538fe57588f0800000000000000
-      internalID: -538894908839834544
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_33
-      rect:
-        serializedVersion: 2
-        x: 3019
-        y: 14
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 74f2a8976bf84a1f0800000000000000
-      internalID: -1034544000502452409
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_34
-      rect:
-        serializedVersion: 2
-        x: 3664
-        y: 9
-        width: 12
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5463bdca9f1f681a0800000000000000
-      internalID: -6807487732074727867
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_35
-      rect:
-        serializedVersion: 2
-        x: 3709
-        y: 14
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d9a1f1fc4d7598ab0800000000000000
-      internalID: -5005372939325990243
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_36
-      rect:
-        serializedVersion: 2
-        x: 3034
-        y: 4
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f68aab53423df4300800000000000000
-      internalID: 238641457747634287
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: raptor-roar_37
-      rect:
-        serializedVersion: 2
-        x: 3679
-        y: 0
-        width: 7
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: fc98c767c1f1e7730800000000000000
-      internalID: 3998667726258997711
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: c2996cb3d3fe52f4190ab79d601e5f38
     internalID: 0
     vertices: []
     indices: 
@@ -1062,42 +358,10 @@ TextureImporter:
     nameFileIdTable:
       raptor-roar_0: -441125223090920570
       raptor-roar_1: 8287210650505332313
-      raptor-roar_10: -3481804311758979468
-      raptor-roar_11: -5948423613152504464
-      raptor-roar_12: 4686990648839618935
-      raptor-roar_13: -1202394311555166648
-      raptor-roar_14: 2485292263283740684
-      raptor-roar_15: 879903926197440306
-      raptor-roar_16: 7710812555645982775
-      raptor-roar_17: 5453268456831145028
-      raptor-roar_18: 4792315632118277026
-      raptor-roar_19: -2844435704478306637
       raptor-roar_2: -4549560065246453660
-      raptor-roar_20: -2845752373639584939
-      raptor-roar_21: -3526251122638159484
-      raptor-roar_22: 480531604886577688
-      raptor-roar_23: -5188550270052517
-      raptor-roar_24: 4636373583970759558
-      raptor-roar_25: 7745278297943008513
-      raptor-roar_26: 1813041963937551673
-      raptor-roar_27: -4371773997720773628
-      raptor-roar_28: -7283469889667837516
-      raptor-roar_29: 2185793140499565420
       raptor-roar_3: -1457751162420408940
-      raptor-roar_30: -7831219302454420562
-      raptor-roar_31: -6587679814012455758
-      raptor-roar_32: -538894908839834544
-      raptor-roar_33: -1034544000502452409
-      raptor-roar_34: -6807487732074727867
-      raptor-roar_35: -5005372939325990243
-      raptor-roar_36: 238641457747634287
-      raptor-roar_37: 3998667726258997711
       raptor-roar_4: -1780273394478323429
       raptor-roar_5: -2335740274737918145
-      raptor-roar_6: -9180703473679295486
-      raptor-roar_7: 8889945392231421308
-      raptor-roar_8: 2588436727006070673
-      raptor-roar_9: -675997745418941343
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
