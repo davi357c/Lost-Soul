@@ -1464,7 +1464,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 3
   currentHealth: 0
-  knockbackForce: 5
+  knockbackForce: 2
   knockbackDuration: 0.25
   isKnockedBack: 0
   deathDelay: 1.03
@@ -2402,6 +2402,8 @@ MonoBehaviour:
   dialogueText: {fileID: 1186573345}
   speakerNameText: {fileID: 408485895}
   dialogueBox: {fileID: 1460609438}
+  optionsPanel: {fileID: 0}
+  optionButtonPrefab: {fileID: 0}
   voiceFemale: {fileID: 0}
   voiceMale: {fileID: 0}
   typingSpeed: 0.03
@@ -76575,6 +76577,83 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
+--- !u!1 &1241199324
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1241199327}
+  - component: {fileID: 1241199326}
+  - component: {fileID: 1241199325}
+  m_Layer: 5
+  m_Name: OptionsPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1241199325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241199324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
+--- !u!114 &1241199326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241199324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
+--- !u!224 &1241199327
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241199324}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1460609441}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.24285182}
+  m_AnchorMax: {x: 0.5, y: 0.24285182}
+  m_AnchoredPosition: {x: 5.982727, y: 4.0718994}
+  m_SizeDelta: {x: 1811.9653, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1272614670 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5407861781351629824, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
@@ -77565,7 +77644,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 5770251550782387183, guid: 4dac762b3006cba4e9f357ed0b23146d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 0.16, y: 0.31}
@@ -77628,8 +77707,45 @@ MonoBehaviour:
   interactionRange: 3
   interactionUI: {fileID: 1746171526}
   dialogueLines:
-  - speakerName: aaaaaa
-    text: aaaaaaaaa
+  - speakerName: Desonhecido
+    text: "Quem \xE9 voc\xEA?"
+    options:
+    - optionText: aaaaaaaa
+      nextLineIndex: 1
+      onSelected:
+        m_PersistentCalls:
+          m_Calls: []
+    - optionText: aaaaaaaaaa
+      nextLineIndex: 3
+      onSelected:
+        m_PersistentCalls:
+          m_Calls: []
+  - speakerName: Desconhecido
+    text: BBBBBB
+    options:
+    - optionText: aaaaaaaa
+      nextLineIndex: 2
+      onSelected:
+        m_PersistentCalls:
+          m_Calls: []
+    - optionText: aaaaaaaaaa
+      nextLineIndex: 3
+      onSelected:
+        m_PersistentCalls:
+          m_Calls: []
+  - speakerName: Desconhecido
+    text: CCCCCCCC
+    options:
+    - optionText: aaaaaaaa
+      nextLineIndex: 2
+      onSelected:
+        m_PersistentCalls:
+          m_Calls: []
+    - optionText: aaaaaaaaaa
+      nextLineIndex: 3
+      onSelected:
+        m_PersistentCalls:
+          m_Calls: []
   cutsceneAfterDialogue: {fileID: 1450251588}
 --- !u!50 &1450251590
 Rigidbody2D:
@@ -77790,7 +77906,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1460609439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77844,6 +77960,7 @@ RectTransform:
   - {fileID: 1186573343}
   - {fileID: 2051508728}
   - {fileID: 408485893}
+  - {fileID: 1241199327}
   m_Father: {fileID: 1746171527}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
@@ -78271,7 +78388,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 3
   currentHealth: 0
-  knockbackForce: 5
+  knockbackForce: 2
   knockbackDuration: 0.25
   isKnockedBack: 0
   deathDelay: 1.03
@@ -78532,7 +78649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 3
   currentHealth: 0
-  knockbackForce: 5
+  knockbackForce: 2
   knockbackDuration: 0.25
   isKnockedBack: 0
   deathDelay: 1.03
@@ -84237,6 +84354,58 @@ Transform:
   m_Children:
   - {fileID: 593326030}
   m_Father: {fileID: 842476104}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1730369510
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1730369512}
+  - component: {fileID: 1730369511}
+  m_Layer: 0
+  m_Name: DialogueManger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1730369511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730369510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6474c0062c2aa0f4dae49bdc137e95ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueText: {fileID: 1186573345}
+  speakerNameText: {fileID: 408485895}
+  dialogueBox: {fileID: 1460609438}
+  optionsPanel: {fileID: 1241199324}
+  optionButtonPrefab: {fileID: 7961365304668386006, guid: c8506d1442eb9f844a4b2a05f3aafa7a, type: 3}
+  voiceFemale: {fileID: 0}
+  voiceMale: {fileID: 0}
+  typingSpeed: 0.03
+--- !u!4 &1730369512
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730369510}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 905.99994, y: 511.61835, z: 3.8247705}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1739431328
 GameObject:
@@ -92127,7 +92296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1746171527
 RectTransform:
   m_ObjectHideFlags: 0
@@ -97717,7 +97886,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 3
   currentHealth: 0
-  knockbackForce: 5
+  knockbackForce: 2
   knockbackDuration: 0.25
   isKnockedBack: 0
   deathDelay: 1.03
@@ -98512,3 +98681,4 @@ SceneRoots:
   - {fileID: 1436204660}
   - {fileID: 280544213}
   - {fileID: 609808924}
+  - {fileID: 1730369512}

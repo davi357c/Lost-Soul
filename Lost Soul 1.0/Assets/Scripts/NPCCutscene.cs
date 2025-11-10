@@ -157,4 +157,15 @@ public class NPCCutscene : MonoBehaviour
         if (holdTime > 0f)
             yield return new WaitForSeconds(holdTime);
     }
+
+    // dentro da classe NPCCutscene
+    public void StartCutsceneNoArgs()
+    {
+        Transform player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        if (player != null)
+            StartCutscene(player);
+        else
+            Debug.LogWarning("Player não encontrado para StartCutsceneNoArgs");
+    }
+
 }
