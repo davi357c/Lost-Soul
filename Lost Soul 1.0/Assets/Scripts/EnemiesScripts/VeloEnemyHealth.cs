@@ -100,11 +100,16 @@ public class VeloEnemyHealth : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
-            rb.gravityScale = 3f; // pra cair até o chão
+            rb.gravityScale = 3f; // deixa cair até o chão
         }
 
         if (anim != null)
+        {
             anim.SetTrigger("Die");
+            // força a animação “Die” e bloqueia outras animações
+            anim.Play("Die", 0, 0f);
+            anim.Update(0f); // aplica imediatamente
+        }
 
         if (deathEffect != null)
             Instantiate(deathEffect, transform.position, Quaternion.identity);
@@ -114,10 +119,28 @@ public class VeloEnemyHealth : MonoBehaviour
         if (col != null)
             col.enabled = false;
 
-        // Não destruir — ele fica ali morto
-        // Inicia rotina que aparecerá o portal
+        // aguarda o final da animação antes de travar o Rigidbody completamente
+        StartCoroutine(FinalizeDeathRoutine());
         StartCoroutine(SpawnPortalRoutine());
     }
+
+    private IEnumerator FinalizeDeathRoutine()
+    {
+        if (anim != null)
+        {
+            // espera o tempo da animação “Die”
+            float dieLength = anim.runtimeAnimatorController.animationClips[0].length;
+            yield return new WaitForSeconds(dieLength);
+        }
+
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.gravityScale = 0f; // trava no chão
+        }
+    }
+
+
 
     private IEnumerator SpawnPortalRoutine()
     {

@@ -32,6 +32,14 @@ public class EnemyAI : MonoBehaviour
         {
             player = playerObj.transform;
             playerHealth = playerObj.GetComponent<PlayerHealth>();
+
+            // ⚡ Desativa colisão física entre inimigo e player (se quiser que o player não leve dano por contato)
+            Collider2D myCol = GetComponent<Collider2D>();
+            Collider2D playerCol = playerObj.GetComponent<Collider2D>();
+            if (myCol != null && playerCol != null)
+            {
+                Physics2D.IgnoreCollision(myCol, playerCol, true);
+            }
         }
         else
         {
@@ -46,7 +54,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (player == null) return;
 
-        // 🧠 Se o player morreu, reseta o inimigo para o idle e sai
+        // 🧠 Se o player morreu, reseta o inimigo
         if (playerHealth != null && playerHealth.IsDead)
         {
             StopAllCoroutines();
@@ -55,7 +63,6 @@ public class EnemyAI : MonoBehaviour
             anim.ResetTrigger("Attack1");
             anim.ResetTrigger("Attack2");
 
-            // Desativa hitboxes pra garantir
             if (attackHitbox1 != null) attackHitbox1.SetActive(false);
             if (attackHitbox2 != null) attackHitbox2.SetActive(false);
             return;
@@ -65,8 +72,7 @@ public class EnemyAI : MonoBehaviour
 
         FacePlayer();
 
-        if (isAttacking) return;
-
+        // ✅ Sempre perseguir o player se estiver dentro do chaseRange
         if (distance <= chaseRange && distance > attackRange)
         {
             anim.SetBool("isChasing", true);
@@ -77,7 +83,8 @@ public class EnemyAI : MonoBehaviour
             anim.SetBool("isChasing", false);
         }
 
-        if (distance <= attackRange)
+        // Inicia ataque somente se estiver dentro do attackRange e não estiver atacando
+        if (distance <= attackRange && !isAttacking)
         {
             StartCoroutine(AttackRoutine());
         }
