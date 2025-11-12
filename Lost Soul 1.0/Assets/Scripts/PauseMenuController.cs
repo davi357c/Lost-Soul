@@ -1,31 +1,32 @@
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+Ôªøusing UnityEngine;
 
 public class PauseMenuController : MonoBehaviour
 {
-    [Header("ReferÍncias UI")]
+    [Header("Painel do Menu de Pausa (Canvas ou Panel)")]
     public GameObject pauseMenuPanel;
-    public Slider volumeSlider;
-    public Slider brightnessSlider;
-
-    [Header("Valores Padr„o")]
-    public float defaultVolume = 1f;
-    public float defaultBrightness = 0.5f;
 
     private bool isPaused = false;
+    private static PauseMenuController instance;
+
+    void Awake()
+    {
+        // Singleton leve para persistir entre cenas
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     void Start()
     {
-        pauseMenuPanel.SetActive(false);
-
-        // Inicializa sliders com valores atuais
-        volumeSlider.value = defaultVolume;
-        brightnessSlider.value = defaultBrightness;
-
-        // Aplica os valores iniciais no jogo
-        SetVolume(volumeSlider.value);
-        SetBrightness(brightnessSlider.value);
+        if (pauseMenuPanel != null)
+            pauseMenuPanel.SetActive(false);
+        else
+            Debug.LogWarning("‚ö†Ô∏è PauseMenuPanel n√£o atribu√≠do no inspector!");
     }
 
     void Update()
@@ -41,15 +42,19 @@ public class PauseMenuController : MonoBehaviour
 
     public void PauseGame()
     {
-        pauseMenuPanel.SetActive(true);
-        Time.timeScale = 0f; // pausa o jogo
+        if (pauseMenuPanel != null)
+            pauseMenuPanel.SetActive(true);
+
+        Time.timeScale = 0f;
         isPaused = true;
     }
 
     public void ResumeGame()
     {
-        pauseMenuPanel.SetActive(false);
-        Time.timeScale = 1f; // continua o jogo
+        if (pauseMenuPanel != null)
+            pauseMenuPanel.SetActive(false);
+
+        Time.timeScale = 1f;
         isPaused = false;
     }
 
@@ -57,28 +62,5 @@ public class PauseMenuController : MonoBehaviour
     {
         Application.Quit();
         Debug.Log("Exit Game chamado!");
-    }
-
-    // Chamado pelo slider de volume
-    public void SetVolume(float value)
-    {
-        AudioListener.volume = value; // ajusta o volume global
-    }
-
-    // Chamado pelo slider de brightness
-    public void SetBrightness(float value)
-    {
-        RenderSettings.ambientLight = new Color(value, value, value);
-    }
-
-    // Bot„o de reset para valores padr„o
-    public void ResetDefaults()
-    {
-        volumeSlider.value = defaultVolume;
-        brightnessSlider.value = defaultBrightness;
-
-        // Aplica imediatamente
-        SetVolume(volumeSlider.value);
-        SetBrightness(brightnessSlider.value);
     }
 }
