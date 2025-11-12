@@ -20,7 +20,7 @@ TagManager:
   - Ball
   - Enemy
   - LaserHit
-  - 
+  - EnemyHitbox
   - 
   - 
   - 
