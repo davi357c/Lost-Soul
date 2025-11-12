@@ -50,6 +50,16 @@ public class PlayerHealth : MonoBehaviour
     private const string defaultFadeObjectName = "FadeImage";
     // -------------------------------------------------------
 
+    [Header("Dano por contato (Boss / Laser)")]
+    public string enemyLayerName = "Enemy";
+    public string laserHitLayerName = "LaserHit";
+    public int enemyTouchDamage = 1;   // dano ao encostar no boss
+    public int laserTouchDamage = 2;   // dano ao encostar no laser
+
+    private int enemyLayer;
+    private int laserHitLayer;
+
+
     void Awake()
     {
         // singleton robusto
@@ -85,10 +95,50 @@ public class PlayerHealth : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         movement = GetComponent<PlayerMovement>();
 
+        // guarda os índices das layers configuradas pelo nome
+        enemyLayer = LayerMask.NameToLayer(enemyLayerName);
+        laserHitLayer = LayerMask.NameToLayer(laserHitLayerName);
+
+
         // tenta localizar os animators de coração de forma tolerante
         StartCoroutine(LocateHeartsAndUpdate());
         Debug.Log($"[PlayerHealth] Start - currentLives={currentLives}, heartsArrayLength={hearts?.Length ?? 0}");
     }
+
+    private void HandleDamageCollider(Collider2D other)
+    {
+        if (isInvulnerable || isDead) return;
+
+        int otherLayer = other.gameObject.layer;
+
+        // Dano ao encostar no boss (layer Enemy)
+        if (otherLayer == enemyLayer)
+        {
+            Vector2 hitDir = (transform.position - other.transform.position).normalized;
+            TakeDamage(enemyTouchDamage, hitDir);
+            return;
+        }
+
+        // Dano ao encostar na hitbox do laser (layer LaserHit)
+        if (otherLayer == laserHitLayer)
+        {
+            Vector2 hitDir = (transform.position - other.transform.position).normalized;
+            TakeDamage(laserTouchDamage, hitDir);
+            return;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        HandleDamageCollider(other);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        HandleDamageCollider(collision.collider);
+    }
+
+
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
