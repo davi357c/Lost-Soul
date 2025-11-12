@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CastleSwamp.unity
     guid: 55b9f4cf6f886ae49bb508c5253422a4
+  - enabled: 1
+    path: Assets/Scenes/PortalSceneEnd.unity
+    guid: 95d1e143c45f6a6449db16d6875fe457
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

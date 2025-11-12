@@ -14,6 +14,16 @@ public class VeloEnemyHealth : MonoBehaviour
     [Header("Morte")]
     public GameObject deathEffect; // opcional (partículas)
 
+    [Header("Portal que aparece ao morrer")]
+    [Tooltip("Arraste um GameObject de portal já presente na cena (deixe desativado)")]
+    public GameObject portalToEnable;    // opção A: habilitar portal já presente
+    [Tooltip("OU arraste um prefab de portal para ser instanciado")]
+    public GameObject portalPrefab;      // opção B: instanciar prefab
+    [Tooltip("Se instanciar prefab, ponto onde ele aparece (opcional)")]
+    public Transform portalSpawnPoint;
+    [Tooltip("Aguardar X segundos após a morte antes do portal aparecer")]
+    public float portalDelay = 1.0f;
+
     private Animator anim;
     private Rigidbody2D rb;
     private bool isDead = false;
@@ -90,11 +100,16 @@ public class VeloEnemyHealth : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
-            rb.gravityScale = 3f; // pra cair até o chão
+            rb.gravityScale = 3f; // deixa cair até o chão
         }
 
         if (anim != null)
+        {
             anim.SetTrigger("Die");
+            // força a animação “Die” e bloqueia outras animações
+            anim.Play("Die", 0, 0f);
+            anim.Update(0f); // aplica imediatamente
+        }
 
         if (deathEffect != null)
             Instantiate(deathEffect, transform.position, Quaternion.identity);
@@ -104,7 +119,46 @@ public class VeloEnemyHealth : MonoBehaviour
         if (col != null)
             col.enabled = false;
 
-        // NÃO destruir — ele fica ali morto
+        // aguarda o final da animação antes de travar o Rigidbody completamente
+        StartCoroutine(FinalizeDeathRoutine());
+        StartCoroutine(SpawnPortalRoutine());
+    }
+
+    private IEnumerator FinalizeDeathRoutine()
+    {
+        if (anim != null)
+        {
+            // espera o tempo da animação “Die”
+            float dieLength = anim.runtimeAnimatorController.animationClips[0].length;
+            yield return new WaitForSeconds(dieLength);
+        }
+
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.gravityScale = 0f; // trava no chão
+        }
+    }
+
+
+
+    private IEnumerator SpawnPortalRoutine()
+    {
+        yield return new WaitForSeconds(portalDelay);
+
+        // Opção A: habilitar portal já existente
+        if (portalToEnable != null)
+        {
+            portalToEnable.SetActive(true);
+            yield break;
+        }
+
+        // Opção B: instanciar prefab
+        if (portalPrefab != null)
+        {
+            Vector3 pos = portalSpawnPoint != null ? portalSpawnPoint.position : transform.position;
+            Instantiate(portalPrefab, pos, Quaternion.identity);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
