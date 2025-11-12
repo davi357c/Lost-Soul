@@ -77,11 +77,13 @@ public class PlayerMovement : MonoBehaviour
     [Header("Ataque")]
     public float attackRange = 1f;
     public float downAttackRange = 0.5f;
-    public LayerMask enemyLayer;
-    public LayerMask laserHitLayer;
+    public LayerMask enemyLayer;        // corpo do inimigo / boss
+    public LayerMask enemyHitboxLayer;  // NOVO: layer "EnemyHitbox"
+    public LayerMask laserHitLayer;     // laser / projéteis
     public int attackDamage = 1;
     public float knockbackForce = 5f;
     public int pogoForce = 8;
+
 
     [Tooltip("Referências para os Hitboxes de ataque")]
     public GameObject AttackHitboxFront;
@@ -531,25 +533,29 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Collider2D bodyCollider;     // arraste o collider do CORPO do player (não a hitbox)
 
     // ...
+
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // Checa em qual layer o "other" está
         bool hitEnemy = (enemyLayer.value & (1 << other.gameObject.layer)) != 0;
+        bool hitEnemyHitbox = (enemyHitboxLayer.value & (1 << other.gameObject.layer)) != 0;
         bool hitLaser = (laserHitLayer.value & (1 << other.gameObject.layer)) != 0;
 
-        if (!hitEnemy && !hitLaser)
+        // Se não for nenhuma layer de dano, ignora
+        if (!hitEnemy && !hitEnemyHitbox && !hitLaser)
             return;
 
-        // Só machuca se o inimigo estiver tocando o corpo (layer Player)
-        // Se você informar o bodyCollider, usamos a checagem direta.
-        // Se não, usamos a checagem por layer.
+        // Só machuca se o collider que bateu estiver encostando no CORPO do player
         if ((bodyCollider != null && !other.IsTouching(bodyCollider)) ||
             (bodyCollider == null && !other.IsTouchingLayers(playerBodyLayer)))
         {
             return;
         }
 
+        // Dano: laser = 2, resto = 1
         int damage = hitLaser ? 2 : 1;
 
+        // Calcula direção do knockback (sempre empurrando pra longe do que bateu)
         Vector2 dir = ((Vector2)transform.position - (Vector2)other.transform.position).normalized;
         if (dir == Vector2.zero)
             dir = isFacingRight ? Vector2.left : Vector2.right;
@@ -557,6 +563,7 @@ public class PlayerMovement : MonoBehaviour
         if (PlayerHealth.Instance != null)
             PlayerHealth.Instance.TakeDamage(damage, dir);
     }
+
 
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()

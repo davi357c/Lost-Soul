@@ -125,6 +125,7 @@ MonoBehaviour:
   damage: 1
   knockbackForce: 5
   knockbackDirection: {x: 3, y: 0}
+  enablePogoOnHit: 0
 --- !u!1 &839482563078281228
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,6 +220,7 @@ MonoBehaviour:
   damage: 1
   knockbackForce: 5
   knockbackDirection: {x: 1, y: 0}
+  enablePogoOnHit: 0
 --- !u!1 &1186355928279310315
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,6 +346,7 @@ MonoBehaviour:
   damage: 1
   knockbackForce: 5
   knockbackDirection: {x: 1, y: 0}
+  enablePogoOnHit: 0
 --- !u!1 &4210760208956389422
 GameObject:
   m_ObjectHideFlags: 0
@@ -727,13 +730,18 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   wallNoAttachTime: 0.15
+  canWallClimb: 1
   respawnOffset: {x: -1, y: 0.5}
   edgePadding: 0.3
+  respawnBackOffsetX: 1.5
   attackRange: 6
   downAttackRange: 6
   enemyLayer:
     serializedVersion: 2
     m_Bits: 4096
+  laserHitLayer:
+    serializedVersion: 2
+    m_Bits: 8192
   attackDamage: 1
   knockbackForce: 5
   pogoForce: 12
@@ -745,6 +753,13 @@ MonoBehaviour:
   dashThroughWalls:
     serializedVersion: 2
     m_Bits: 256
+  knockbackHorizontalForce: 16
+  knockbackVerticalForce: 6
+  knockbackDuration: 0.15
+  playerBodyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  bodyCollider: {fileID: 0}
 --- !u!50 &8827162856331174155
 Rigidbody2D:
   serializedVersion: 5
@@ -895,6 +910,7 @@ MonoBehaviour:
   fadeImage: {fileID: 0}
   fadeDuration: 3
   fadeInAfterRespawn: 2
+  respawnBackOffsetX: 1
 --- !u!70 &5663195781222956821
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -947,6 +963,7 @@ MonoBehaviour:
   fireballPrefab: {fileID: 644811535168773907, guid: b88f8f123302a134bb57b05fd0c9eaca, type: 3}
   firePoint: {fileID: 5250427816252408509}
   cooldown: 10
+  fireballUnlocked: 0
 --- !u!1001 &1659939016987817355
 PrefabInstance:
   m_ObjectHideFlags: 0

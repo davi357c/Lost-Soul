@@ -18,6 +18,10 @@ public class BossLaserAim : MonoBehaviour
     [Tooltip("Objeto que tem o Collider2D de dano do laser (ex: LaserHitbox).")]
     public GameObject laserHitboxObject;
 
+    [Header("Hitbox Melee")]
+    [Tooltip("Objeto que tem o Collider2D do ataque corpo a corpo (ex: MeleeHitbox).")]
+    public GameObject meleeHitboxObject;
+
     [Header("Target do Laser")]
     public GameObject targetSpriteObject;
 
@@ -49,7 +53,7 @@ public class BossLaserAim : MonoBehaviour
             Debug.LogWarning("[BossLaserAim] Awake -> laserSpriteObject NÃO atribuído no Inspector!");
         }
 
-        // Começa com a hitbox desligada também
+        // Começa com a hitbox de laser desligada
         if (laserHitboxObject != null)
         {
             Debug.Log("[BossLaserAim] Awake -> Desativando laserHitboxObject.");
@@ -58,6 +62,17 @@ public class BossLaserAim : MonoBehaviour
         else
         {
             Debug.LogWarning("[BossLaserAim] Awake -> laserHitboxObject NÃO atribuído no Inspector!");
+        }
+
+        // Começa com a hitbox melee desligada
+        if (meleeHitboxObject != null)
+        {
+            Debug.Log("[BossLaserAim] Awake -> Desativando meleeHitboxObject.");
+            meleeHitboxObject.SetActive(false);
+        }
+        else
+        {
+            Debug.LogWarning("[BossLaserAim] Awake -> meleeHitboxObject NÃO atribuído no Inspector!");
         }
 
         // Target começa desligado
@@ -103,8 +118,12 @@ public class BossLaserAim : MonoBehaviour
 
         laserPoint.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-        Debug.Log("[BossLaserAim] AimLaserAtPlayer -> Rotacionou laserPoint para ângulo " + angle);
+        Debug.Log("[BossLaserAim] AimLaserAtPlayer] -> Rotacionou laserPoint para ângulo " + angle);
     }
+
+    // ================================
+    //  LASER VISUAL
+    // ================================
 
     // Chamar num Animation Event quando o LASER VISUAL deve APARECER
     public void ShowLaser()
@@ -163,6 +182,38 @@ public class BossLaserAim : MonoBehaviour
         else
         {
             Debug.LogWarning("[BossLaserAim] HideLaserHitbox -> laserHitboxObject NÃO atribuído.");
+        }
+    }
+
+    // ================================
+    //  HITBOX MELEE
+    // ================================
+
+    // Chamar num Animation Event quando o ataque melee começa a poder bater
+    public void ShowMeleeHitbox()
+    {
+        if (meleeHitboxObject != null)
+        {
+            meleeHitboxObject.SetActive(true);
+            Debug.Log("[BossLaserAim] ShowMeleeHitbox -> Ativou meleeHitboxObject.");
+        }
+        else
+        {
+            Debug.LogWarning("[BossLaserAim] ShowMeleeHitbox -> meleeHitboxObject NÃO atribuído.");
+        }
+    }
+
+    // Chamar num Animation Event quando o ataque melee termina
+    public void HideMeleeHitbox()
+    {
+        if (meleeHitboxObject != null)
+        {
+            meleeHitboxObject.SetActive(false);
+            Debug.Log("[BossLaserAim] HideMeleeHitbox -> Desativou meleeHitboxObject.");
+        }
+        else
+        {
+            Debug.LogWarning("[BossLaserAim] HideMeleeHitbox -> meleeHitboxObject NÃO atribuído.");
         }
     }
 
