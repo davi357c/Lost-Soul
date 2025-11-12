@@ -60,31 +60,46 @@ public class SceneTransition : MonoBehaviour
 
     private IEnumerator FadeOut()
     {
-        fadeCanvasGroup.blocksRaycasts = true; // Bloqueia interações
+        if (fadeCanvasGroup == null) yield break; // segurança
+
+        fadeCanvasGroup.blocksRaycasts = true;
 
         float t = 0f;
         while (t < fadeDuration)
         {
             t += Time.deltaTime;
+
+            // Verifica se o objeto ainda existe antes de usar
+            if (fadeCanvasGroup == null)
+                yield break;
+
             fadeCanvasGroup.alpha = Mathf.Lerp(0f, 1f, t / fadeDuration);
             yield return null;
         }
 
-        fadeCanvasGroup.alpha = 1f;
+        if (fadeCanvasGroup != null)
+            fadeCanvasGroup.alpha = 1f;
     }
 
     private IEnumerator FadeIn()
     {
-        fadeCanvasGroup.blocksRaycasts = false; // Libera interações
+        if (fadeCanvasGroup == null) yield break; // segurança
+
+        fadeCanvasGroup.blocksRaycasts = false;
 
         float t = 0f;
         while (t < fadeDuration)
         {
             t += Time.deltaTime;
+
+            if (fadeCanvasGroup == null)
+                yield break;
+
             fadeCanvasGroup.alpha = Mathf.Lerp(1f, 0f, t / fadeDuration);
             yield return null;
         }
 
-        fadeCanvasGroup.alpha = 0f;
+        if (fadeCanvasGroup != null)
+            fadeCanvasGroup.alpha = 0f;
     }
 }
