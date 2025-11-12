@@ -96,6 +96,11 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask dashThroughWalls;
     private bool isDashing = false;
 
+    // === NOVO: cooldown do dash (intervalo entre dashes) ===
+    [Tooltip("Intervalo mínimo entre dois dashes consecutivos (em segundos)")]
+    public float dashCooldown = 1f;
+    private float lastDashTime = -Mathf.Infinity;
+
     [Header("Knockback")]
     public float knockbackHorizontalForce = 8f;
     public float knockbackVerticalForce = 6f;
@@ -179,7 +184,14 @@ public class PlayerMovement : MonoBehaviour
                 HandleLookDown();
 
                 if (Input.GetKeyDown(KeyCode.Q))
-                    StartCoroutine(DashRoutine());
+                {
+                    // Verifica cooldown antes de iniciar o dash
+                    if (Time.time - lastDashTime >= dashCooldown)
+                    {
+                        StartCoroutine(DashRoutine());
+                        lastDashTime = Time.time; // registra quando o dash começou
+                    }
+                }
 
                 // SÓ PERMITE SLIDE / JUMP EM PAREDE SE O PUZZLE JÁ TIVER SIDO CONCLUÍDO
                 if (canWallClimb)

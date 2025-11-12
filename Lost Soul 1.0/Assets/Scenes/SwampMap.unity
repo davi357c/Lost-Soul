@@ -104353,6 +104353,202 @@ PrefabInstance:
       propertyPath: interactionUI
       value: 
       objectReference: {fileID: 1746171526}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[0].text
+      value: "Eu... matei voc\xEA."
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[1].text
+      value: Eu sei.
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[2].text
+      value: "Ent\xE3o por que veio?"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[3].text
+      value: Pra te perdoar.
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[4].text
+      value: "Eu n\xE3o mere\xE7o isso."
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[5].text
+      value: "Mesmo assim, voc\xEA tem."
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[6].text
+      value: "...Eu n\xE3o aguento mais."
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[7].text
+      value: "Espera\u2014"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[8].text
+      value: Obrigado...
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[0].speakerName
+      value: Carlos
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[1].speakerName
+      value: Alma
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[2].speakerName
+      value: Carlos
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[3].speakerName
+      value: Alma
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[4].speakerName
+      value: Carlos
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[5].speakerName
+      value: Alma
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[6].speakerName
+      value: Carlos
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[7].speakerName
+      value: Alma
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[8].speakerName
+      value: Alma
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[3].options.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[4].options.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[5].options.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[6].options.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[7].options.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[8].options.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[3].options.Array.data[0].optionText
+      value: aaaaaaaa
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[3].options.Array.data[1].optionText
+      value: aaaaaaaaaa
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[4].options.Array.data[0].optionText
+      value: aaaaaaaa
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[4].options.Array.data[1].optionText
+      value: aaaaaaaaaa
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[5].options.Array.data[0].optionText
+      value: aaaaaaaa
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[5].options.Array.data[1].optionText
+      value: aaaaaaaaaa
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[6].options.Array.data[0].optionText
+      value: aaaaaaaa
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[6].options.Array.data[1].optionText
+      value: aaaaaaaaaa
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[7].options.Array.data[0].optionText
+      value: aaaaaaaa
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[7].options.Array.data[1].optionText
+      value: aaaaaaaaaa
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[8].options.Array.data[0].optionText
+      value: aaaaaaaa
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[8].options.Array.data[1].optionText
+      value: aaaaaaaaaa
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[3].options.Array.data[0].nextLineIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[3].options.Array.data[1].nextLineIndex
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[4].options.Array.data[0].nextLineIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[4].options.Array.data[1].nextLineIndex
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[5].options.Array.data[0].nextLineIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[5].options.Array.data[1].nextLineIndex
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[6].options.Array.data[0].nextLineIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[6].options.Array.data[1].nextLineIndex
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[7].options.Array.data[0].nextLineIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[7].options.Array.data[1].nextLineIndex
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[8].options.Array.data[0].nextLineIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
+      propertyPath: dialogueLines.Array.data[8].options.Array.data[1].nextLineIndex
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

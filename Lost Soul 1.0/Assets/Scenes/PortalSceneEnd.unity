@@ -6835,11 +6835,20 @@ MonoBehaviour:
   dialogueCanvas: {fileID: 655389808}
   spaceIconUI: {fileID: 1990984035}
   dialogueLines:
-  - speakerName: Alma
-    text: "Finalmente achei voc\xEA!!"
+  - speakerName: Carlos
+    text: Eu... eu sei o que fiz.
     options: []
-  - speakerName: ???
-    text: "Eu n\xE3o queria fazer aquilo."
+  - speakerName: Alma
+    text: "Voc\xEA me tirou tudo."
+    options: []
+  - speakerName: Carlos
+    text: Me perdoa, por favor.
+    options: []
+  - speakerName: Alma
+    text: "J\xE1 tentei perdoar."
+    options: []
+  - speakerName: Alma
+    text: "\xC9 tarde demais."
     options: []
   warningText: {fileID: 1170088712}
   warningArea: {fileID: 171166062}
