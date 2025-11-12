@@ -62,6 +62,10 @@ public class BossAI : MonoBehaviour
     [Header("Laser")]
     public GameObject laserHitbox;           // Objeto com o collider do laser (desativado por padrão)
 
+    [Header("Câmera")]
+    public CameraFollow cameraFollow;        // arrasta aqui ou ele acha sozinho
+    private Transform previousCameraTarget;  // pra devolver a câmera depois do awake
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -89,6 +93,14 @@ public class BossAI : MonoBehaviour
         {
             rb.gravityScale = 0f;
             rb.freezeRotation = true;
+        }
+
+        // Tenta achar a câmera automaticamente
+        if (cameraFollow == null)
+        {
+            Camera cam = Camera.main;
+            if (cam != null)
+                cameraFollow = cam.GetComponent<CameraFollow>();
         }
     }
 
@@ -183,6 +195,14 @@ public class BossAI : MonoBehaviour
         isPerformingAction = true;   // <<< trava movimento ENQUANTO estiver no awake
         desiredVelocity = Vector2.zero;
 
+        // *** NOVO: foca a câmera no boss durante o awake ***
+        if (cameraFollow != null)
+        {
+            // guardamos o target atual (normalmente o player)
+            previousCameraTarget = player;
+            cameraFollow.SetTarget(transform);
+        }
+
         if (anim != null)
         {
             anim.SetTrigger("awake"); // Trigger -> estado boss_awake
@@ -208,6 +228,15 @@ public class BossAI : MonoBehaviour
         {
             // Fallback caso não tenha Animator configurado
             yield return new WaitForSeconds(awakeAnimDuration);
+        }
+
+        // *** NOVO: devolve a câmera pro player depois do awake ***
+        if (cameraFollow != null)
+        {
+            if (previousCameraTarget != null)
+                cameraFollow.SetTarget(previousCameraTarget);
+            else if (player != null)
+                cameraFollow.SetTarget(player);
         }
 
         isPerformingAction = false;
@@ -267,7 +296,6 @@ public class BossAI : MonoBehaviour
             Vector2 dir = toTarget / distance;
             desiredVelocity = dir * moveSpeed;
 
-            // ANTES: HandleFlip(dir);
             // Agora quem manda é sempre o FacePlayer() chamado no Update()
         }
     }
@@ -416,7 +444,6 @@ public class BossAI : MonoBehaviour
 
     // --------- UTILIDADES ---------
 
-    // (Ainda existe, mas não estamos mais usando — pode deletar se quiser)
     private void HandleFlip(Vector2 dir)
     {
         if (sr == null) return;

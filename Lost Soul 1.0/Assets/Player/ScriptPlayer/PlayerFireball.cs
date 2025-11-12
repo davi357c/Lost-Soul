@@ -11,11 +11,11 @@ public class PlayerFireball : MonoBehaviour
     private float lastFireTime = -Mathf.Infinity;
 
     [Header("Desbloqueio")]
-    public bool fireballUnlocked = false; // 🔥 só pode atirar se tiver desbloqueado
+    public bool fireballUnlocked = false; // só pode atirar se tiver desbloqueado
 
     void Update()
     {
-        if (!fireballUnlocked) return; // ❌ ainda não desbloqueou
+        if (!fireballUnlocked) return; // ainda não desbloqueou
 
         if (Input.GetKeyDown(KeyCode.R) && Time.time - lastFireTime >= cooldown)
         {
@@ -43,10 +43,10 @@ public class PlayerFireball : MonoBehaviour
         }
     }
 
-    // 🔓 Função chamada quando o item é coletado
+    // Função chamada quando o item é coletado
     public void UnlockFireball()
     {
         fireballUnlocked = true;
-        Debug.Log("🔥 Fireball desbloqueada!");
+        Debug.Log("Fireball desbloqueada!");
     }
 }

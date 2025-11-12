@@ -78,6 +78,7 @@ public class PlayerMovement : MonoBehaviour
     public float attackRange = 1f;
     public float downAttackRange = 0.5f;
     public LayerMask enemyLayer;
+    public LayerMask laserHitLayer;
     public int attackDamage = 1;
     public float knockbackForce = 5f;
     public int pogoForce = 8;
@@ -526,27 +527,35 @@ public class PlayerMovement : MonoBehaviour
         rb.gravityScale = defaultGravityScale;
     }
 
+    [SerializeField] private LayerMask playerBodyLayer;   // defina como "Player" no Inspector
+    [SerializeField] private Collider2D bodyCollider;     // arraste o collider do CORPO do player (não a hitbox)
+
+    // ...
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Garante que o collider pertence a uma das layers de inimigos configuradas
-        if ((enemyLayer.value & (1 << other.gameObject.layer)) == 0)
+        bool hitEnemy = (enemyLayer.value & (1 << other.gameObject.layer)) != 0;
+        bool hitLaser = (laserHitLayer.value & (1 << other.gameObject.layer)) != 0;
+
+        if (!hitEnemy && !hitLaser)
             return;
 
-        // Direção do knockback: do inimigo/boss para o player (empurra pra longe)
+        // Só machuca se o inimigo estiver tocando o corpo (layer Player)
+        // Se você informar o bodyCollider, usamos a checagem direta.
+        // Se não, usamos a checagem por layer.
+        if ((bodyCollider != null && !other.IsTouching(bodyCollider)) ||
+            (bodyCollider == null && !other.IsTouchingLayers(playerBodyLayer)))
+        {
+            return;
+        }
+
+        int damage = hitLaser ? 2 : 1;
+
         Vector2 dir = ((Vector2)transform.position - (Vector2)other.transform.position).normalized;
         if (dir == Vector2.zero)
             dir = isFacingRight ? Vector2.left : Vector2.right;
 
         if (PlayerHealth.Instance != null)
-        {
-            PlayerHealth.Instance.TakeDamage(1, dir);
-        }
-        else
-        {
-            PlayerHealth ph = GetComponent<PlayerHealth>();
-            if (ph != null)
-                ph.TakeDamage(1, dir);
-        }
+            PlayerHealth.Instance.TakeDamage(damage, dir);
     }
 
 #if UNITY_EDITOR
