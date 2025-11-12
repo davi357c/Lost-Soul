@@ -6,45 +6,56 @@ public class SceneTransition : MonoBehaviour
 {
     public static SceneTransition instance;
 
+    [Header("Fade")]
     public CanvasGroup fadeCanvasGroup;
     public float fadeDuration = 0.2f; // Tempo do fade
 
     private bool isFading = false;
 
-    void Awake()
+    private void Awake()
     {
-        // Singleton: só 1 instance em todas as cenas
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
+        // Singleton seguro
+        if (instance != null && instance != this)
         {
             Destroy(gameObject);
             return;
         }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        // Se esquecer de arrastar, tenta achar automaticamente
+        if (fadeCanvasGroup == null)
+            fadeCanvasGroup = GetComponentInChildren<CanvasGroup>();
     }
 
-    void Start()
+    private void OnDestroy()
     {
-        StartCoroutine(FadeIn());
+        if (instance == this)
+            instance = null;
     }
+
+    private void Start()
+    {
+        if (fadeCanvasGroup != null)
+            StartCoroutine(Fade(1f, 0f));  // fade de preto (1) pra transparente (0)
+    }
+
 
     public void FadeToScene(string sceneName)
     {
-        if (!isFading)
-        {
-            StartCoroutine(FadeAndSwitchScenes(sceneName));
-        }
+        if (isFading) return;
+        if (fadeCanvasGroup == null) return;
+
+        StartCoroutine(FadeAndSwitchScenes(sceneName));
     }
 
     private IEnumerator FadeAndSwitchScenes(string sceneName)
     {
         isFading = true;
 
-        // Começa o fade out (escurecer)
-        yield return StartCoroutine(FadeOut());
+        // Fade out (escurecer)
+        yield return StartCoroutine(Fade(0f, 1f));
 
         // Troca de cena
         SceneManager.LoadScene(sceneName);
@@ -52,55 +63,50 @@ public class SceneTransition : MonoBehaviour
         // Espera 1 frame pra garantir que a cena carregou
         yield return null;
 
-        // Começa o fade in (clarear)
-        yield return StartCoroutine(FadeIn());
+        // Garante que ainda temos um CanvasGroup válido
+        if (fadeCanvasGroup == null)
+            fadeCanvasGroup = GetComponentInChildren<CanvasGroup>();
+
+        // Fade in (clarear)
+        if (fadeCanvasGroup != null)
+            yield return StartCoroutine(Fade(1f, 0f));
 
         isFading = false;
     }
 
-    private IEnumerator FadeOut()
+    private IEnumerator Fade(float from, float to)
     {
-        if (fadeCanvasGroup == null) yield break; // segurança
+        if (fadeCanvasGroup == null)
+            yield break;
 
-        fadeCanvasGroup.blocksRaycasts = true;
+        // Se estiver quase totalmente visível, bloqueia raycasts
+        fadeCanvasGroup.blocksRaycasts = (from < to);
 
         float t = 0f;
         while (t < fadeDuration)
         {
-            t += Time.deltaTime;
-
-            // Verifica se o objeto ainda existe antes de usar
-            if (fadeCanvasGroup == null)
+            if (fadeCanvasGroup == null) // se foi destruído no meio, sai
                 yield break;
 
-            fadeCanvasGroup.alpha = Mathf.Lerp(0f, 1f, t / fadeDuration);
+            t += Time.deltaTime;
+            float a = Mathf.Lerp(from, to, t / fadeDuration);
+            fadeCanvasGroup.alpha = a;
             yield return null;
         }
 
         if (fadeCanvasGroup != null)
-            fadeCanvasGroup.alpha = 1f;
+        {
+            fadeCanvasGroup.alpha = to;
+            fadeCanvasGroup.blocksRaycasts = (to > 0.99f);
+        }
     }
 
-    private IEnumerator FadeIn()
+    // Opcional: chamar pra garantir que o fade comece transparente
+    public void ResetFade()
     {
-        if (fadeCanvasGroup == null) yield break; // segurança
+        if (fadeCanvasGroup == null) return;
 
+        fadeCanvasGroup.alpha = 0f;
         fadeCanvasGroup.blocksRaycasts = false;
-
-        float t = 0f;
-        while (t < fadeDuration)
-        {
-            t += Time.deltaTime;
-
-            if (fadeCanvasGroup == null)
-                yield break;
-
-            fadeCanvasGroup.alpha = Mathf.Lerp(1f, 0f, t / fadeDuration);
-            yield return null;
-        }
-
-        if (fadeCanvasGroup != null)
-            fadeCanvasGroup.alpha = 0f;
     }
-
 }
