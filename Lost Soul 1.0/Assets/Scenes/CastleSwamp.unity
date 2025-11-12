@@ -4225,10 +4225,6 @@ MonoBehaviour:
   interactionUI: {fileID: 0}
   interactKey: 101
   items:
-  - name: Mapa
-    description: Esse item serve para visualizar o mapa todo
-    price: 5
-    icon: {fileID: -5164599079202685034, guid: f765ecc051a62fc41bb57f1eba4c8245, type: 3}
   - name: "Po\xE7\xE3o de Vida"
     description: "Cure 2 cora\xE7\xF5es com essa po\xE7\xE3o ao usa-la, pode ser
       usada no meio de uma batalha quando estiver com pouca vida!!"
@@ -4943,7 +4939,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 186183379}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.9999951
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
