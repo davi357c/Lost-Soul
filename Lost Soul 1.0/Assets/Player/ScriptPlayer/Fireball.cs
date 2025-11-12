@@ -43,15 +43,27 @@ public class Fireball : MonoBehaviour
         // debug pra testar
         Debug.Log($"Fireball colidiu com {other.name} (Layer: {LayerMask.LayerToName(other.gameObject.layer)})");
 
-        // inimigo
+        // inimigo (inclui boss, desde que esteja em uma das layers do enemyLayer)
         if ((enemyLayer.value & otherLayer) != 0)
         {
-            Debug.Log("🔥 Fireball atingiu inimigo!");
-            EnemyHealth enemy = other.GetComponentInParent<EnemyHealth>();
-            if (enemy != null)
+            Debug.Log("Fireball atingiu inimigo/boss!");
+
+            Vector2 hitDir = (other.transform.position - transform.position).normalized;
+
+            // 1º tenta BossHealth
+            BossHealth boss = other.GetComponentInParent<BossHealth>();
+            if (boss != null)
             {
-                Vector2 hitDir = (other.transform.position - transform.position).normalized;
-                enemy.TakeDamage(hitDir, damage);
+                boss.TakeDamage(hitDir, damage);
+            }
+            else
+            {
+                // se não for boss, tenta EnemyHealth normal
+                EnemyHealth enemy = other.GetComponentInParent<EnemyHealth>();
+                if (enemy != null)
+                {
+                    enemy.TakeDamage(hitDir, damage);
+                }
             }
 
             Destroy(gameObject);
@@ -61,7 +73,7 @@ public class Fireball : MonoBehaviour
         // chão / obstáculo
         if ((groundLayers.value & otherLayer) != 0)
         {
-            Debug.Log("💥 Fireball atingiu chão/obstáculo!");
+            Debug.Log("Fireball atingiu chão/obstáculo!");
             Destroy(gameObject);
         }
     }

@@ -9,7 +9,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: rangeAttack
+    m_ConditionEvent: rangeAtt
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2242341036501229818}
@@ -207,16 +207,16 @@ AnimatorStateMachine:
     m_Position: {x: 30, y: 370, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3309341370618799276}
-    m_Position: {x: 30, y: 290, z: 0}
+    m_Position: {x: 30, y: 250, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2242341036501229818}
-    m_Position: {x: 320, y: 370, z: 0}
+    m_Position: {x: 300, y: 370, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -682138565217732968}
     m_Position: {x: -240, y: 370, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 296487435786564926}
-    m_Position: {x: -240, y: 450, z: 0}
+    m_Position: {x: -210, y: 460, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5181781599515824443}
     m_Position: {x: 30, y: 490, z: 0}
@@ -225,19 +225,19 @@ AnimatorStateMachine:
     m_Position: {x: 270, y: 460, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 894786488457486778}
-    m_Position: {x: -290, y: 220, z: 0}
+    m_Position: {x: -210, y: 280, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3381717336019416325}
-    m_Position: {x: 30, y: 210, z: 0}
+    m_Position: {x: 30, y: 130, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: 8141168552884001959}
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: -270, y: 150, z: 0}
-  m_EntryPosition: {x: 50, y: 120, z: 0}
-  m_ExitPosition: {x: 800, y: 120, z: 0}
+  m_AnyStatePosition: {x: -190, y: 210, z: 0}
+  m_EntryPosition: {x: 50, y: 50, z: 0}
+  m_ExitPosition: {x: 320, y: 50, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 3381717336019416325}
 --- !u!1102 &-973555164396250842
@@ -324,7 +324,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: rangeAttack
+  - m_Name: rangeAtt
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -577,9 +577,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
-  m_ExitTime: 0.8214286
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0.4089913
+  m_ExitTime: 1
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0

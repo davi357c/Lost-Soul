@@ -22,32 +22,46 @@ public class AttackHitbox : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         bool hitEnemy = false;
-        Transform enemyTransform = collision.transform;
+        Transform targetTransform = collision.transform;
 
-        // Inimigo terrestre comum
-        EnemyHealth enemy = collision.GetComponent<EnemyHealth>();
-        if (enemy != null)
+        // 1) BOSS – procura BossHealth no objeto OU nos pais
+        BossHealth boss = collision.GetComponentInParent<BossHealth>();
+        if (boss != null)
         {
-            enemy.TakeDamage(knockbackDirection.normalized, damage);
+            boss.TakeDamage(knockbackDirection.normalized, damage);
+            targetTransform = boss.transform;
             hitEnemy = true;
         }
         else
         {
-            // Inimigo voador
-            FlyEnemyHealth flyEnemy = collision.GetComponent<FlyEnemyHealth>();
-            if (flyEnemy != null)
+            // 2) INIMIGO terrestre comum
+            EnemyHealth enemy = collision.GetComponentInParent<EnemyHealth>();
+            if (enemy != null)
             {
-                flyEnemy.TakeDamage(knockbackDirection.normalized, damage);
+                enemy.TakeDamage(knockbackDirection.normalized, damage);
+                targetTransform = enemy.transform;
                 hitEnemy = true;
             }
             else
             {
-                // Inimigo veloz
-                VeloEnemyHealth veloEnemy = collision.GetComponent<VeloEnemyHealth>();
-                if (veloEnemy != null)
+                // 3) INIMIGO voador
+                FlyEnemyHealth flyEnemy = collision.GetComponentInParent<FlyEnemyHealth>();
+                if (flyEnemy != null)
                 {
-                    veloEnemy.TakeDamage(knockbackDirection.normalized, damage);
+                    flyEnemy.TakeDamage(knockbackDirection.normalized, damage);
+                    targetTransform = flyEnemy.transform;
                     hitEnemy = true;
+                }
+                else
+                {
+                    // 4) INIMIGO veloz
+                    VeloEnemyHealth veloEnemy = collision.GetComponentInParent<VeloEnemyHealth>();
+                    if (veloEnemy != null)
+                    {
+                        veloEnemy.TakeDamage(knockbackDirection.normalized, damage);
+                        targetTransform = veloEnemy.transform;
+                        hitEnemy = true;
+                    }
                 }
             }
         }
@@ -58,10 +72,7 @@ public class AttackHitbox : MonoBehaviour
         if (!enablePogoOnHit) return;
         if (player == null) return;
 
-        // Faz pogo
-        player.OnDownAttackHitEnemy(enemyTransform);
+        // Faz pogo no alvo acertado (boss ou inimigo)
+        player.OnDownAttackHitEnemy(targetTransform);
     }
-
-
-
 }
