@@ -551,37 +551,6 @@ public class PlayerMovement : MonoBehaviour
 
     // ...
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        // Checa em qual layer o "other" está
-        bool hitEnemy = (enemyLayer.value & (1 << other.gameObject.layer)) != 0;
-        bool hitEnemyHitbox = (enemyHitboxLayer.value & (1 << other.gameObject.layer)) != 0;
-        bool hitLaser = (laserHitLayer.value & (1 << other.gameObject.layer)) != 0;
-
-        // Se não for nenhuma layer de dano, ignora
-        if (!hitEnemy && !hitEnemyHitbox && !hitLaser)
-            return;
-
-        // Só machuca se o collider que bateu estiver encostando no CORPO do player
-        if ((bodyCollider != null && !other.IsTouching(bodyCollider)) ||
-            (bodyCollider == null && !other.IsTouchingLayers(playerBodyLayer)))
-        {
-            return;
-        }
-
-        // Dano: laser = 2, resto = 1
-        int damage = hitLaser ? 2 : 1;
-
-        // Calcula direção do knockback (sempre empurrando pra longe do que bateu)
-        Vector2 dir = ((Vector2)transform.position - (Vector2)other.transform.position).normalized;
-        if (dir == Vector2.zero)
-            dir = isFacingRight ? Vector2.left : Vector2.right;
-
-        if (PlayerHealth.Instance != null)
-            PlayerHealth.Instance.TakeDamage(damage, dir);
-    }
-
-
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {

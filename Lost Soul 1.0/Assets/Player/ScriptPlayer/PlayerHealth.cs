@@ -6,6 +6,9 @@ using System.IO;
 
 public class PlayerHealth : MonoBehaviour
 {
+    [Header("Collider do Corpo do Player (obrigatório para contato)")]
+    [SerializeField] private Collider2D bodyCollider; // arraste aqui o collider do corpo (NÃO as hitboxes)
+
     [Header("Vidas")]
     public int maxLives = 5;
     public int currentLives = -1; // inicia com -1 pra sabermos se já foi inicializado
@@ -109,6 +112,17 @@ public class PlayerHealth : MonoBehaviour
     {
         if (isInvulnerable || isDead) return;
 
+        // Sem referência do corpo? Evita falso positivo (ex.: hitbox de ataque)
+        if (bodyCollider == null)
+        {
+            Debug.LogWarning("[PlayerHealth] bodyCollider não definido. Arraste o collider do corpo no Inspector.");
+            return;
+        }
+
+        // Garante que o 'other' esteja, de fato, encostando no COLLIDER DO CORPO (não em hitboxes do player)
+        if (!other.IsTouching(bodyCollider))
+            return;
+
         int otherLayer = other.gameObject.layer;
 
         // Dano ao encostar no boss (layer Enemy)
@@ -127,6 +141,7 @@ public class PlayerHealth : MonoBehaviour
             return;
         }
     }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
