@@ -1,14 +1,14 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using System.Collections;
 
 public class NPCInteractionWithCutscene : MonoBehaviour
 {
-    [Header("InteraÁ„o com NPC")]
+    [Header("Intera√ß√£o com NPC")]
     public float interactionRange = 3f;
     public GameObject interactionUI;
     public DialogueLine[] dialogueLines;
 
-    [Header("Cutscene apÛs di·logo (opcional)")]
+    [Header("Cutscene ap√≥s di√°logo (opcional)")]
     public NPCCutscene cutsceneAfterDialogue;
 
     private Transform player;
@@ -29,7 +29,7 @@ public class NPCInteractionWithCutscene : MonoBehaviour
     {
         if (player == null) return;
 
-        // Dist‚ncia do jogador
+        // Dist√¢ncia do jogador
         float distance = Vector3.Distance(player.position, transform.position);
         bool isNear = distance <= interactionRange;
 
@@ -47,7 +47,7 @@ public class NPCInteractionWithCutscene : MonoBehaviour
                 interactionUI.SetActive(false);
         }
 
-        // InteraÁ„o
+        // Intera√ß√£o
         if (playerInRange && Input.GetKeyDown(KeyCode.E) && !dialogueStarted)
         {
             if (dialogueManager != null && !dialogueManager.IsDialogueActive())
@@ -61,7 +61,7 @@ public class NPCInteractionWithCutscene : MonoBehaviour
 
     private IEnumerator WaitForDialogueEnd()
     {
-        // Espera atÈ o di·logo terminar
+        // Espera at√© o di√°logo terminar
         while (dialogueManager.IsDialogueActive())
         {
             yield return null;

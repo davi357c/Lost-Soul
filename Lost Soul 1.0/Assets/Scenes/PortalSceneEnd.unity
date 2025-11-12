@@ -6851,6 +6851,7 @@ MonoBehaviour:
   stopOffsetFromNpc: 1.5
   arriveEpsilon: 0.05
   moveTimeout: 10
+  nextSceneName: MenuScene
   deathRotateAngle: -70
   deathRotateDuration: 2
   deathRotateDelay: 0.1
