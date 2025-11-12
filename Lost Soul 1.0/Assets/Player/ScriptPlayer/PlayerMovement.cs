@@ -531,15 +531,20 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (rb != null) rb.linearVelocity = Vector2.zero;
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.gravityScale = defaultGravityScale;
+        }
+
         isWallSliding = false;
         isWallJumping = false;
         wallStickTimer = 0f;
         wallSlideElapsed = 0f;
         noAttachTimer = 0f;
         lastWallSide = 0;
-        rb.gravityScale = defaultGravityScale;
     }
+
 
     [SerializeField] private LayerMask playerBodyLayer;   // defina como "Player" no Inspector
     [SerializeField] private Collider2D bodyCollider;     // arraste o collider do CORPO do player (não a hitbox)
