@@ -606,23 +606,30 @@ public class PlayerMovement : MonoBehaviour
             Gizmos.DrawWireSphere(AttackHitboxDown.transform.position, downAttackRange);
         }
     }
+#endif
 
     public void ApplyAgilityBoost(float multiplier, float duration)
     {
-        if (agilityCoroutine != null) StopCoroutine(agilityCoroutine);
+        if (agilityCoroutine != null)
+            StopCoroutine(agilityCoroutine);
+
         agilityCoroutine = StartCoroutine(AgilityBoostRoutine(multiplier, duration));
     }
 
     private IEnumerator AgilityBoostRoutine(float multiplier, float duration)
     {
         isAgilityBoosted = true;
+
         float originalSpeed = moveSpeed;
         moveSpeed *= multiplier;
+
         Debug.Log($"[PlayerMovement] Agilidade aumentada para {moveSpeed} por {duration}s!");
+
         yield return new WaitForSeconds(duration);
+
         moveSpeed = originalSpeed;
         isAgilityBoosted = false;
         Debug.Log("[PlayerMovement] Agilidade voltou ao normal.");
     }
-#endif
 }
+
