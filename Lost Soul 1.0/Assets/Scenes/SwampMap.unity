@@ -456,67 +456,6 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
---- !u!1001 &65853709
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2050277556215687226, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_Name
-      value: PortaCanva (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 73.51
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 43.14
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.02310978
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5407861781351629824, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
 --- !u!1 &74588985
 GameObject:
   m_ObjectHideFlags: 0
@@ -87570,11 +87509,6 @@ RectTransform:
   m_AnchoredPosition: {x: 5.982727, y: 4.0718994}
   m_SizeDelta: {x: 1811.9653, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1272614670 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5407861781351629824, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-  m_PrefabInstance: {fileID: 6951943166679220632}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1301764347
 GameObject:
   m_ObjectHideFlags: 0
@@ -109818,7 +109752,7 @@ PrefabInstance:
       objectReference: {fileID: 1746171526}
     - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
       propertyPath: dialogueLines.Array.size
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
       propertyPath: dialogueLines.Array.data[0].text
@@ -109826,7 +109760,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
       propertyPath: dialogueLines.Array.data[1].text
-      value: Eu sei.
+      value: "Sim, voc\xEA matou."
       objectReference: {fileID: 0}
     - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
       propertyPath: dialogueLines.Array.data[2].text
@@ -109834,7 +109768,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
       propertyPath: dialogueLines.Array.data[3].text
-      value: Pra te perdoar.
+      value: Vim te perdoar.
       objectReference: {fileID: 0}
     - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
       propertyPath: dialogueLines.Array.data[4].text
@@ -109842,15 +109776,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
       propertyPath: dialogueLines.Array.data[5].text
-      value: "Mesmo assim, voc\xEA tem."
+      value: "Isso n\xE3o \xE9 voc\xEA quem decide."
       objectReference: {fileID: 0}
     - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
       propertyPath: dialogueLines.Array.data[6].text
-      value: "...Eu n\xE3o aguento mais."
+      value: "N\xE3o consigo continuar vivendo depois do que fiz..."
       objectReference: {fileID: 0}
     - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
       propertyPath: dialogueLines.Array.data[7].text
-      value: "Espera\u2014"
+      value: ESPERA...
       objectReference: {fileID: 0}
     - target: {fileID: 8842167684363944424, guid: a619cdb759f6d654285975beda3a04ff, type: 3}
       propertyPath: dialogueLines.Array.data[8].text
@@ -110072,69 +110006,12 @@ PrefabInstance:
     - target: {fileID: 9099737740052929500, guid: 217e184d50bb2c742941afea319b5095, type: 3}
       propertyPath: interactionUI
       value: 
-      objectReference: {fileID: 1272614670}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 217e184d50bb2c742941afea319b5095, type: 3}
---- !u!1001 &6951943166679220632
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2050277556215687226, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_Name
-      value: PortaCanva
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 40.17
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 43.14
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.02310978
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2838068716365680448, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1e570283b612ace49be164fd27ef25a6, type: 3}
 --- !u!1001 &8529622415867774219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -110201,8 +110078,6 @@ SceneRoots:
   - {fileID: 1143522114}
   - {fileID: 1834472917}
   - {fileID: 3693489278148336831}
-  - {fileID: 6951943166679220632}
-  - {fileID: 65853709}
   - {fileID: 1758091757}
   - {fileID: 178192504}
   - {fileID: 581584799}
